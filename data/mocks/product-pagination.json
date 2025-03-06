@@ -1,0 +1,247 @@
+{
+    "content": [
+        {
+            "id": "677906ff4cd880081b2a8cb6",
+            "slug": "/thung-24-lon-bia-hanoi-330ml",
+            "barcode": "8934822813344",
+            "productName": "Thùng 24 Lon Bia Hà Nội 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1733028974/8934588012426-1_1.jpg_t4uzza.png",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 370000.0,
+            "importPrice": 350000.0,
+            "stock": 110,
+            "sold": 150,
+            "isActive": true,
+            "description": "",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                },
+                {
+                    "k": "Loại Bia",
+                    "v": "Lager"
+                },
+                {
+                    "k": "Nồng Độ Cồn",
+                    "v": "4.5%"
+                },
+                {
+                    "k": "Xuất Xứ",
+                    "v": "Việt Nam"
+                },
+                {
+                    "k": "Hạn Sử Dụng",
+                    "v": "12 tháng"
+                },
+                {
+                    "k": "Quy Cách Đóng Gói",
+                    "v": "Thùng 24 lon"
+                }
+            ]
+        },
+        {
+            "id": "677906ff4cd880081b7a8cb6",
+            "slug": "/thung-24-lon-bia-binh-duong-330ml",
+            "barcode": "8934822813344",
+            "productName": "Thùng 24 Lon Bia Bình Dương 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1733028974/8934588012426-1_1.jpg_t4uzza.png",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 370000.0,
+            "importPrice": 350000.0,
+            "stock": 110,
+            "sold": 150,
+            "isActive": true,
+            "description": "",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                },
+                {
+                    "k": "Loại Bia",
+                    "v": "Lager"
+                },
+                {
+                    "k": "Nồng Độ Cồn",
+                    "v": "4.5%"
+                },
+                {
+                    "k": "Xuất Xứ",
+                    "v": "Việt Nam"
+                },
+                {
+                    "k": "Hạn Sử Dụng",
+                    "v": "12 tháng"
+                },
+                {
+                    "k": "Quy Cách Đóng Gói",
+                    "v": "Thùng 24 lon"
+                }
+            ]
+        },
+        {
+            "id": "677906ff4cd880081b2a8cb7",
+            "slug": "/thung-24-lon-bia-larue-330ml",
+            "barcode": "8934822813345",
+            "productName": "Thùng 24 Lon Bia Larue 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 360000.0,
+            "importPrice": 340000.0,
+            "stock": 130,
+            "sold": 170,
+            "isActive": true,
+            "description": "Bia Larue - Hương vị nhẹ nhàng, dễ uống, phù hợp với mọi đối tượng.",
+            "unit": "thùng",
+            "specs": []
+        },
+        {
+            "id": "677906ff4cd880081b2a8cb8",
+            "slug": "/thung-24-lon-bia-tiger-nau-330ml",
+            "barcode": "8934822813346",
+            "productName": "Thùng 24 Lon Bia Tiger Nâu 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 430000.0,
+            "importPrice": 410000.0,
+            "stock": 150,
+            "sold": 200,
+            "isActive": true,
+            "description": "Bia Tiger Nâu - Đậm đà và mạnh mẽ, là lựa chọn hoàn hảo cho những ai yêu thích bia nặng.",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                }
+            ]
+        },
+        {
+            "id": "677906ff4cd880081b2a8cb9",
+            "slug": "/thung-24-lon-bia-stella-330ml",
+            "barcode": "8934822813347",
+            "productName": "Thùng 24 Lon Bia Stella Artois 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 550000.0,
+            "importPrice": 530000.0,
+            "stock": 100,
+            "sold": 130,
+            "isActive": true,
+            "description": "Bia Stella Artois - Thương hiệu bia cao cấp với hương vị tinh tế, thanh lịch.",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                }
+            ]
+        },
+        {
+            "id": "677906ff4cd880081a2a8cb9",
+            "slug": "/thung-24-lon-bia-binh-dinh-330ml",
+            "barcode": "8934822813347",
+            "productName": "Thùng 24 Lon Bia Bình Đình 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 550000.0,
+            "importPrice": 530000.0,
+            "stock": 100,
+            "sold": 130,
+            "isActive": true,
+            "description": "Bia Stella Artois - Thương hiệu bia cao cấp với hương vị tinh tế, thanh lịch.",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                }
+            ]
+        },
+        {
+            "id": "677906ff4cd880081b2a8cba",
+            "slug": "/thung-24-lon-bia-corona-330ml",
+            "barcode": "8934822813348",
+            "productName": "Thùng 24 Lon Bia Corona Extra 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 620000.0,
+            "importPrice": 600000.0,
+            "stock": 90,
+            "sold": 100,
+            "isActive": true,
+            "description": "Bia Corona Extra - Hương vị nhẹ nhàng, thường được kết hợp với chanh để tăng thêm phần thú vị.",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                }
+            ]
+        },
+        {
+            "id": "677906ff8cd880081b2a8cba",
+            "slug": "/thung-24-lon-bia-huda-330ml",
+            "barcode": "8934822813348",
+            "productName": "Thùng 24 Lon Bia Huda 330ml",
+            "productThumb": "https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg",
+            "category": "Bia",
+            "categoryUrl": "/bia",
+            "salePrice": 620000.0,
+            "importPrice": 600000.0,
+            "stock": 90,
+            "sold": 100,
+            "isActive": true,
+            "description": "Bia Corona Extra - Hương vị nhẹ nhàng, thường được kết hợp với chanh để tăng thêm phần thú vị.",
+            "unit": "thùng",
+            "specs": [
+                {
+                    "k": "Thương Hiệu",
+                    "v": "Bia Hà Nội"
+                },
+                {
+                    "k": "Dung tích",
+                    "v": "330ml"
+                }
+            ]
+        }
+    ],
+    "totalElements": 10,
+    "totalPages": 2,
+    "size": 5,
+    "number": 1
+}

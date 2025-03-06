@@ -1,0 +1,175 @@
+export enum ErrorType {
+  NOT_FOUND = "Not Found!",
+  PERMISSOIN_DENIED = "Permission Denied!",
+  // Add more error types here
+}
+
+
+export enum ErrorInput{
+    INPUT_INVALID = "Nhập thông tin không hợp lệ.",
+    NAME_INVALID = "Tên không được chứa số hoặc khoảng trắng.",
+    INPUT_WRONG_FORMAT = "Nhập thông tin sai định dạng.",
+    NOT_FULL_FIELD = "Vui lòng không được bỏ trống.",
+    FIELD_MISSING = "bạn nhập thiếu ",
+    PHONE_NUMBER_ERROR = "Số điện thoại phải có đúng 10 chữ số.",
+    EMAIL_ERROR = "Nhập Email chưa đúng.",
+    PASSWORD_ERROR = "Mật khẩu phải đủ 8 kí tự.",
+    NUMBER_ERROR = "Vui lòng không nhập số.",
+    STRING_ERROR = "Vui lòng không nhập text.",
+    MAX_ERROR = "Không nhập quá ",
+    MIN_ERROR = "Phải nhập đủ tối thiểu",
+    NOT_SELECT_FIELD = "Vui lòng chọn ",
+    LENGTH_ERROR = "Yêu cầu phải đủ",
+    EMAIL_NOT_FOUND = "Không tìm thấy email.",
+    EMAIL_INVALID = "Email không hợp lệ.",
+
+}
+
+export enum AuthError{
+  LOGIN_FAILED = "Đăng nhập thất bại."
+}
+
+
+export enum SystemError{
+  INTERNAL_SERVER_ERROR = "Internal server error.",
+  CONNECT_ERROR = "Kết nối thất bại.",
+  FETCH_DATA_ERROR = 'Failed to fetch data',
+}
+
+export enum MiddlewareError{
+  TOKEN_MISSING = "Bạn thiếu token.",
+  TOKEN_INVALID = "Token của bạn hết hạn khoặc không hợp lệ.",
+}
+
+export enum UnknownError{
+  SOMETHING_WRONG = 'Something went wrong.'
+}
+
+export enum AuthExceptionMessages {
+  PASSWORD_WRONG = 'Bạn nhập sai mật khẩu.',
+  LOGIN_INVAILD = 'Email hoặc Password của bạn không hợp lệ.',
+  LOGIN_FAILED = 'Đăng nhập thất bại',
+  EMAIL_EXIST = 'Email đã tồn tại.',
+  VERIFY_MAIL_FAILED = 'Xác thực email thất bại.',
+  SEND_MAIL_FAILED = 'Gửi mail thất bại.',
+  REGISTER_EMPLOYEE_FAILED = 'Đăng ký Tài khoản nhân viên thất bại.',
+  REGISTER_CUSTOMER_FAILED = 'Đăng ký thất bại.',
+}
+
+
+export enum ProductError{
+  PRODUCT_ERROR = "Something went wrong.",
+  PRODUCT_CREATE_FAILED = "Tạo mới một sản phẩm thất bại.",
+  CHECK_INPUT_PRICE = "Giá nhập không thể lớn hơn giá bán.",
+  IMAGE_WRONG_FAIL ="Ảnh sai định dạng.",
+  PRODUCT_DUPLICATE = "Model Sản phẩm đã tồn tại.",
+  PRODUCT_NAME_MISSING = "Product Name is required",
+  PRODUCT_LINE_MISSING = "Product Line is required",
+  PRODUCT_SPECS_MISSING = "ProductSpecs is required",
+  DESCRIPTION_MISSING = "Description is required",
+  CATEGORY_ID_MISSING = "Category Id is required",
+  BRAND_ID_MISSING = "Brand Id is required",
+  SUPPLIER_ID_MISSING = "Supplier Id is required",
+  IMAGES_MISSING = "Images is required",
+}
+
+
+export enum SkuError{
+  SKU_ERROR = "Something went wrong.",
+  SKU_CREATE_FAILED = "Tạo mới một sản phẩm thất bại.",
+  SKU_NO_MISSING = "SKU NO is required",
+  BARCODE_MISSING = "BARCODE is required",
+  SKU_NAME_MISSING = "SKU Name is required",
+  SKU_DESCRIPTION_MISSING = "SKU Description is required",
+  SKU_ATTRIBUTES_MISSING = "Sku Attributes is required",
+  IMAGE_MISSING = "Image is required"
+}
+
+export enum PriceError {
+  BEGIN_AT_MISSING= "Begin at is required",
+  UNIT_PRICE_MISSING = "Unit Price is required",
+  IMPORT_PRICE_MISSING = "Import Price is required"
+}
+
+export enum InventoryError {
+  CHECK_AT_MISSING = "Check At is required",
+  STOCK_MISSING = "Stock is required, Stock must be at least 1.",
+  DEFECTIVE_MISSING = "Defective is required, Defective must be at least 0.",
+  SOLD_MISSING = "Sold is required, Sold must be at least 0.",
+  CONVERSION_FACTOR_MISSING = "Conversion Factor is required and must be at least 0.",
+  UNIT_MISING = "UNIT is Required",
+  WHOLESALE_MISSING = "Wholesale is required"
+}
+
+export enum StatusCode{
+  FORBIDDEN_403 = "403 Truy cập bị từ chối vì quyền hạn không đủ.",
+  UNAUTHORIZED_401 = "401 Yêu cầu không được xác thực.",
+
+}
+
+
+export enum OrderError {
+  CREATE_ORDER_ONLINE_ERROR = 'Tạo đơn hàng online thất bại.',
+  CREATE_ORDER_OFFLINE_ERROR = 'Tạo đơn hàng offline thất bại.',
+  ORDER_NOT_FOUND = 'Không tìm thấy đơn hàng theo yêu cầu.',
+  CANCELED_ORDER_DUPLICATE = 'Đơn hàng đã được hủy.',
+  CANCELED_ORDER_FAILED = 'Đơn hàng không được hủy.',
+  CANCELED_ORDER_NOT_UPDATE = 'Đơn hàng không thể hủy vui lòng yêu cầu khác.',
+  CANCELED_FOR_CONFIRMED_ORDER = 'Đơn hàng của bạn đã xác nhận nên không thể hủy.',
+  INPROGRESS_FOR_CONFIRMED_ORDER = 'Không thể xác nhận khi đang giao',
+  INPROGRESS_FOR_CANCELED_ORDER = 'Không thể hủy khi đang giao',
+  COMPLETED_FOR_CONFIRMED_ORDER = 'Đơn hàng đã hoàn thành không thể xác nhận.',
+  REFUNDED_FOR_CONFIRMED_ORDER = 'Đơn hàng đã hoàn trả không thể xác nhận.',
+  CONFIRMED_ORDER_FAILED = 'Đơn hàng của bạn đã được xác nhận.',
+  CONFIRMED_ORDER_DUPLICATE = 'Đơn hàng đã được xác nhận.',
+  CONFIRMED_FOR_CANCELED_ORDER = 'Đơn hàng của bạn đã hủy nên không thể xác nhận.',
+  INPROGRESS_ORDER_NOT_UPDATE = 'Đơn hàng đang vận chuyển không thể thay đổi trạng thái.',
+  CONFIRMED_FOR_COMPLETED_ORDER = 'Vui giao hàng trước khi xác nhận hoàn tất.', 
+  INPROGRESS_ORDER_DUPLICATE = 'Đơn hàng đang được giao.',
+  COMPLETED_FOR_INPROGRESS_ORDER = 'Đơn hàng đã hoàn tất.',
+  COMPLETE_FOR_CANCELED_ORDER = 'Đơn hàng đã hủy không thể hoàn tất.',
+  COMPLETED_ORDER_FAILED = 'Đơn hàng đã hoàn thành không được thay đổi trạng thái.',
+  REFUNDED_ORDER_FAILED = 'Đơn hàng đã hoàn trả không được thay đổi trạng thái.',
+  NOT_YET_CONFIRM = 'Đơn hàng chưa được duyệt.',
+  UPDATE_STATUS_ORDER_FAILED = 'Cập nhật trạng thái thất bại.',
+}
+
+
+export enum BrandError {
+    NAME_MISSING  = "Name is required",
+    DESCRIPTION_MISSING  = "DESCRIPTION is required",
+    STORE_ID_MISSING = "Store id is required",
+}
+
+
+export enum DiscountError {
+  DISCOUNT_NAME_MISSING = "Name is required",
+  PROMO_CODE_MISSING = "Promo code is required",
+  DISCOUNT_PERCENT_MISSING = "Discount percent is required",
+  DESCRIPTION_MISSING = "Description is required",
+  BEGIN_AT_MISSING = "Begin date is required",
+  END_AT_MISSING = "End date is required",
+}
+
+export enum VoucherError {
+  VOUCHER_CODE_MISSING = "VOUCHER CODE is required",
+  VOUCHER_VALUE_MISSING = "Promo code is required",
+  DESCRIPTION_MISSING = "Description is required",
+  BEGIN_AT_MISSING = "Begin date is required",
+  END_AT_MISSING = "End date is required",
+}
+
+
+export enum CategoryError {
+    CATEGORY_NAME_MISSING  = "Category Name is required",
+    PARENT_ID_MISSING = "Parent Category id is required",
+}
+
+export enum SupplierError {
+    SUPPLIER_NAME_MISSING  = "Supplier Name is required",
+    ADDRESS_MISSING = "ADDRESS id is required",
+    PHONE_NUMBER_MISSING = "Phone Number id is required",
+    EMAIL_MISSING = "Email is required",
+    CONTACT_PERSON_MISSING = "Contact Person is required",
+    DESCRIPTION_MISSING = "description is required",
+}
