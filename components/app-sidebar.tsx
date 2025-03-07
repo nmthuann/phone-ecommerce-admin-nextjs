@@ -9,7 +9,9 @@ import {
   PackagePlus,
   PieChart,
   Settings,
-  UserCheck2
+  TabletSmartphone,
+  UserCheck2,
+  Warehouse
 } from 'lucide-react'
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
@@ -45,7 +47,7 @@ const data = {
     {
       title: 'Products',
       url: '#',
-      icon: PackagePlus,
+      icon: TabletSmartphone,
       isActive: true,
       items: [
         {
@@ -53,19 +55,57 @@ const data = {
           url: '/products'
         },
         {
-          title: 'Check Inventory',
+          title: 'Skus Management',
           url: '#'
         },
         {
-          title: 'Build the Category',
+          title: 'Brands Management',
           url: '#'
         },
         {
-          title: 'Trancking Price',
+          title: 'Categories Management',
+          url: '#'
+        }
+      ]
+    },
+    {
+      title: 'Inventories',
+      url: '#',
+      icon: Warehouse,
+      items: [
+        {
+          title: 'Purchase Orders',
+          url: '/purchaseOrders'
+        },
+        {
+          title: 'Warehouse Receipts',
           url: '#'
         },
         {
-          title: 'Analysis and statistics',
+          title: 'Inventory',
+          url: '#'
+        },
+        {
+          title: 'Suppliers',
+          url: '#'
+        }
+      ]
+    },
+    {
+      title: 'Orders',
+      url: '#',
+      icon: PackagePlus,
+      items: [
+        {
+          title: 'Orders Management',
+          url: '/purchaseOrders'
+        },
+        {
+          title: 'Invoices Management',
+          url: '#'
+        },
+        {
+          title: 'Warranties Management',
           url: '#'
         }
       ]
@@ -76,19 +116,11 @@ const data = {
       icon: UserCheck2,
       items: [
         {
+          title: 'Customer Management',
+          url: '#'
+        },
+        {
           title: 'Admin Management',
-          url: '#'
-        },
-        {
-          title: 'User Management',
-          url: '#'
-        },
-        {
-          title: 'Statistical Report',
-          url: '#'
-        },
-        {
-          title: 'Private, Permission',
           url: '#'
         }
       ]
