@@ -92,7 +92,6 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-4 space-y-4 md:space-y-0'>
         <Heading title={`Purchase Orders (${length})`} description='Manage Purchase Orders for your store' />
         <div className='flex flex-nowrap items-center space-x-2 overflow-x-auto'>
-          {/* <CategoryCombobox data={categories} onSelectCategory={handleFilterByCategory} /> */}
           <Popover>
             <PopoverTrigger asChild>
               <Button

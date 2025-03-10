@@ -20,7 +20,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
-import { PurchaseOrderResponse, Supplier } from '@/types/inventories.type'
+import { PurchaseOrder, Supplier } from '@/types/inventories.type'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react'
@@ -36,7 +36,7 @@ const formSchema = z.object({
 type PurchaseOrderFormValues = z.infer<typeof formSchema>
 
 interface PurchaseOrderFormProps {
-  initialData?: PurchaseOrderResponse | null
+  initialData?: PurchaseOrder | null
   suppliers: Supplier[]
 }
 
@@ -114,10 +114,64 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({ initialDat
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between  m-2'>
         <Heading title={title} description={description} />
       </div>
+
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full p-4'>
           <div className='lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {/* Supplier */}
+            <FormField
+              control={form.control}
+              name='supplierId'
+              render={({ field }) => (
+                <FormItem className='flex flex-col'>
+                  <FormLabel>Supplier</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant='outline'
+                          // role='combobox'
+                          className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                        >
+                          {field.value
+                            ? suppliers.find(supplier => supplier.id === field.value)?.id
+                            : 'Select Supplier'}
+                          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-[200px] p-0'>
+                      <Command>
+                        <CommandInput placeholder='Search language...' />
+                        <CommandList>
+                          <CommandEmpty>No Supplier found.</CommandEmpty>
+                          <CommandGroup>
+                            {suppliers.map(supplier => (
+                              <CommandItem
+                                value={String(supplier.id)}
+                                key={supplier.id}
+                                onSelect={() => {
+                                  form.setValue('supplierId', supplier.id)
+                                }}
+                              >
+                                {supplier.name}
+                                <Check
+                                  className={cn('ml-auto', supplier.id === field.value ? 'opacity-100' : 'opacity-0')}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>This is the language that will be used in the dashboard.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name='orderDate'
@@ -154,59 +208,6 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({ initialDat
                   <FormDescription>
                     Your date of sale is used to calculate your expired time of discount.
                   </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Supplier */}
-            <FormField
-              control={form.control}
-              name='supplierId'
-              render={({ field }) => (
-                <FormItem className='flex flex-col'>
-                  <FormLabel>Supplier</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant='outline'
-                          role='combobox'
-                          className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
-                        >
-                          {field.value
-                            ? suppliers.find(supplier => supplier.id === field.value)?.id
-                            : 'Select Supplier'}
-                          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-[200px] p-0'>
-                      <Command>
-                        <CommandInput placeholder='Search language...' />
-                        <CommandList>
-                          <CommandEmpty>No Supplier found.</CommandEmpty>
-                          <CommandGroup>
-                            {suppliers.map(supplier => (
-                              <CommandItem
-                                value={String(supplier.id)}
-                                key={supplier.id}
-                                onSelect={() => {
-                                  form.setValue('supplierId', supplier.id)
-                                }}
-                              >
-                                {supplier.name}
-                                <Check
-                                  className={cn('ml-auto', supplier.id === field.value ? 'opacity-100' : 'opacity-0')}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                  <FormDescription>This is the language that will be used in the dashboard.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

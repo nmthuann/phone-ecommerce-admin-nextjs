@@ -41,15 +41,15 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
             <Copy />
             Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`purchaseOrder/${dataRow.id}`)}>
+          <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}`)}>
             <Edit />
             Edit Purchase Order
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`purchaseOrder/${dataRow.id}/details`)}>
+          <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}/details`)}>
             <List />
             View Detail
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`purchaseOrder/${dataRow.id}/warehouseReceipts`)}>
+          <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}/warehouseReceipts`)}>
             <FilePlus2 />
             Import Warehouse Receipt
           </DropdownMenuItem>

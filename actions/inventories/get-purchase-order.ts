@@ -2,7 +2,7 @@ import { SystemError } from '@/constants/errors/errors'
 import { PurchaseOrder } from '@/types/inventories.type'
 
 export async function getPurchaseOrderById(id: number): Promise<PurchaseOrder | null> {
-  const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/purchaseOrder/${id}`
+  const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/purchaseOrders/${id}`
   const options = {
     method: 'GET',
     next: { revalidate: 0 }
