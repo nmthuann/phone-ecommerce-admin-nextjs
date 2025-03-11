@@ -6,7 +6,7 @@ import { PurchaseOrdersClient } from './components/client'
 import ErrorComponent from '@/components/errors/error-component'
 
 export const metadata: Metadata = {
-  title: 'Purchase Orders Pgae',
+  title: 'Purchase Orders Page',
   description: 'Purchase Orders Management Table.'
 }
 

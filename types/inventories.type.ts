@@ -43,3 +43,34 @@ export type Supplier = {
   phone: string
   email: string
 }
+
+export type WarehouseReceiptResponse = {
+  id: number
+  receiptNumber: string
+  purchaseOrder: PurchaseOrderDto
+  employeeId: number
+  receiptDate: Date
+  createdAt: Date
+}
+
+export type PurchaseOrderDto = {
+  id: number
+  orderNumber: string
+  orderDate: Date
+  createdAt: Date
+}
+
+export type ProductSerialResponse = {
+  id: string
+  serialNumber: string
+  dateManufactured: Date
+  warehouseReceipt: WarehouseReceipt
+  sku: Sku
+}
+
+export type WarehouseReceipt = {
+  id: number
+  receiptNumber: string
+  receiptDate: Date
+  createdAt: Date
+}

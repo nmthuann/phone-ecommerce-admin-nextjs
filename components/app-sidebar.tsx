@@ -79,7 +79,7 @@ const data = {
         },
         {
           title: 'Warehouse Receipts',
-          url: '#'
+          url: '/warehouseReceipts'
         },
         {
           title: 'Inventory',

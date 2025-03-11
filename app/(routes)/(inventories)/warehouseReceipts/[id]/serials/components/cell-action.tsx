@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, Edit, FilePlus2, MoreHorizontal } from 'lucide-react'
+import { Barcode, Copy, Edit, MoreHorizontal } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 
@@ -12,17 +12,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { PurchaseOrderDetailColumn } from './columns'
+import { WarehouseReceiptColumn } from './columns'
 
 interface CellActionProps {
-  data: PurchaseOrderDetailColumn
+  data: WarehouseReceiptColumn
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter()
+
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
-    toast.success('Category ID copied to clipboard.')
+    toast.success('Warehouse Receipt ID copied to clipboard.')
   }
 
   return (
@@ -36,15 +37,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.orderNumber)}>
-            <Copy className='mr-2 h-4 w-4' /> Copy order Number
+          <DropdownMenuItem onClick={() => onCopy(data.id)}>
+            <Copy className='mr-2 h-4 w-4' /> Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Edit className='mr-2 h-4 w-4' /> Update Detail
+          <DropdownMenuItem onClick={() => router.push(`/warehouseReceipts/${data.id}`)}>
+            <Edit className='mr-2 h-4 w-4' /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`/warehouseReceipts`)}>
-            <FilePlus2 />
-            Import Warehouse Receipt
+          <DropdownMenuItem onClick={() => router.push(`/warehouseReceipts/${data.id}/serials`)}>
+            <Barcode className='mr-2 h-4 w-4' /> Product Serials
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

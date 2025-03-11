@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, Edit, Ellipsis, FilePlus2, List } from 'lucide-react'
+import { Copy, Edit, Ellipsis, List } from 'lucide-react'
 
 import toast from 'react-hot-toast'
 import { Messages } from '@/constants/notifications/message'
@@ -48,10 +48,6 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}/details`)}>
             <List />
             View Detail
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}/warehouseReceipts`)}>
-            <FilePlus2 />
-            Import Warehouse Receipt
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

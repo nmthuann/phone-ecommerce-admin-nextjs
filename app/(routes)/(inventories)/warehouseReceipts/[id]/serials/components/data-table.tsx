@@ -18,8 +18,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
-import { SkuRow } from './columns'
 import { Attribute } from '@/types/product.type'
+import { SkuRow } from './columns'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
