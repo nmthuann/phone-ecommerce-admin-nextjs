@@ -13,7 +13,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { DataTable } from '@/components/ui/data-table'
+import { DataTable } from './data-table'
 
 interface WarehouseReceiptClientProps {
   data: WarehouseReceiptColumn[]
@@ -40,10 +40,7 @@ export const WarehouseReceiptClient: React.FC<WarehouseReceiptClientProps> = ({ 
         </Breadcrumb>
       </div>
       <div className='flex items-center justify-between '>
-        <Heading
-          title={`Purchase Order Details (${length})`}
-          description='Manage Purchase Order Details for your store'
-        />
+        <Heading title={`Warehouse Receipts (${length})`} description='Manage Warehouse Receipts for your store' />
         <div className='flex space-x-2'>
           <Button
             onClick={() => console.log('onClick Add New')}
@@ -66,7 +63,7 @@ export const WarehouseReceiptClient: React.FC<WarehouseReceiptClientProps> = ({ 
       </div>
       <Separator />
       <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
-        <DataTable searchKey='receiptNumber' columns={columns} data={data} />
+        <DataTable searchKey='receiptNumber' columns={columns} defaultData={data} />
       </div>
     </div>
   )

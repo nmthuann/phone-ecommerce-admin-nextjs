@@ -6,7 +6,7 @@ import { WarehouseReceiptColumn } from './components/columns'
 import { WarehouseReceiptClient } from './components/client'
 
 export const metadata: Metadata = {
-  title: 'Warehouse Receipts Pgae',
+  title: 'Warehouse Receipts Page',
   description: 'Warehouse Receipts Management Table.'
 }
 
@@ -16,7 +16,10 @@ const WarehouseReceiptsPage = async () => {
     console.log(res)
     if (!res) {
       return (
-        <ErrorComponent page='Purchase Orders Page' message='Failed to load Purchase Orders. Please try again later.' />
+        <ErrorComponent
+          page='Warehouse Receipts Page'
+          message='Failed to load Warehouse Receipts. Please try again later.'
+        />
       )
     }
     const formattedData: WarehouseReceiptColumn[] | undefined = res.data.map((item: WarehouseReceiptResponse) => ({

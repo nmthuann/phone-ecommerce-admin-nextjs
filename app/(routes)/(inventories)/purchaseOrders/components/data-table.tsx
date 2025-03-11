@@ -37,17 +37,17 @@ export function DataTable<TValue>({ columns, defaultData }: Readonly<DataTablePr
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 1,
+    pageIndex: 0,
     pageSize: 10
   })
 
   async function getAllData(pagination: PaginationState): Promise<Page<PurchaseOrderResponse>> {
-    const res = await axios.get(`/api/purchaseOrders?page=${pagination.pageIndex}&take=${pagination.pageSize}`)
+    const res = await axios.get(`/api/purchaseOrders?page=${pagination.pageIndex + 1}&take=${pagination.pageSize}`)
     return res.data
   }
 
   const dataQuery = useQuery({
-    queryKey: ['data', pagination],
+    queryKey: ['get-purchase-orders', pagination],
     queryFn: () => getAllData(pagination),
     placeholderData: keepPreviousData
   })

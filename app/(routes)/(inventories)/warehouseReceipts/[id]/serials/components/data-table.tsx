@@ -9,38 +9,83 @@ import {
   getExpandedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  PaginationState,
   Row,
   useReactTable
 } from '@tanstack/react-table'
 import Image from 'next/image'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { Attribute } from '@/types/product.type'
-import { SkuRow } from './columns'
+import { ProductSerialColumn, SkuRow } from './columns'
+import { DataTablePagination } from './data-table-pagination'
+import axios from 'axios'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { Page } from '@/types/responses/page.type'
+import { ProductSerialResponse } from '@/types/inventories.type'
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+interface DataTableProps<TValue> {
+  columns: ColumnDef<ProductSerialColumn, TValue>[]
+  defaultData: ProductSerialColumn[]
   searchKey: string
+  currentParam: string
 }
 
-export function DataTable<TData, TValue>({ columns, data, searchKey }: Readonly<DataTableProps<TData, TValue>>) {
+export function DataTable<TValue>({ columns, defaultData, searchKey, currentParam }: Readonly<DataTableProps<TValue>>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10
+  })
+
+  async function getAllData(pagination: PaginationState): Promise<Page<ProductSerialResponse>> {
+    const res = await axios.get(
+      `/api/productSerials?warehouseReceiptId=${currentParam}&page=${pagination.pageIndex + 1}&take=${
+        pagination.pageSize
+      }`
+    )
+    return res.data
+  }
+
+  const dataQuery = useQuery({
+    queryKey: ['get-product-serials', pagination],
+    queryFn: () => getAllData(pagination),
+    placeholderData: keepPreviousData
+  })
+
+  const formattedData: ProductSerialColumn[] | undefined =
+    dataQuery.data?.data.map((item: ProductSerialResponse) => ({
+      id: item.id,
+      serialNumber: item.serialNumber,
+      dateManufactured: String(item.dateManufactured),
+      productSkuId: String(item.sku.id),
+      barcode: item.sku.barcode,
+      skuNo: item.sku.skuNo,
+      skuName: item.sku.skuName,
+      image: item.sku.image,
+      status: item.sku.status,
+      skuAttributes: item.sku.skuAttributes,
+      slug: item.sku.slug
+    })) ?? []
+
   const table = useReactTable({
-    data,
+    data: formattedData ?? defaultData,
     columns,
+    rowCount: dataQuery.data?.meta.itemCount ?? 0,
+    state: {
+      pagination,
+      columnFilters
+    },
+    onPaginationChange: setPagination, // Update pagination state
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      columnFilters
-    },
-    getRowCanExpand: () => true // Cho phép tất cả hàng có thể mở rộng
+    getRowCanExpand: () => true, // Cho phép tất cả hàng có thể mở rộng
+    manualPagination: true, // Server-side pagination
+    debugTable: true
   })
 
   return (
@@ -98,16 +143,7 @@ export function DataTable<TData, TValue>({ columns, data, searchKey }: Readonly<
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <Button variant='outline' size='sm' onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          <ChevronLeftIcon className='h-4 w-4' />
-          Previous
-        </Button>
-        <Button variant='outline' size='sm' onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next
-          <ChevronRightIcon className='h-4 w-4' />
-        </Button>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   )
 }

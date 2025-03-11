@@ -73,7 +73,7 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({ data, 
       </div>
       <Separator />
       <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
-        <DataTable searchKey='serialNumber' columns={columns} data={data} />
+        <DataTable searchKey='serialNumber' columns={columns} defaultData={data} currentParam={currentParam} />
       </div>
     </div>
   )
