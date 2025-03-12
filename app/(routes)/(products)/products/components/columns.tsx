@@ -38,10 +38,8 @@ export const columns: ColumnDef<ProductColumn>[] = [
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
-      if (row.original.status) {
-        return <Switch aria-label='Product Status ON' disabled />
-      }
-      return <Switch aria-label='Product Status OFF' color='success' disabled />
+      const isActive = row.original.status
+      return <Switch checked={isActive} aria-label={`Product Status ${isActive ? 'ON' : 'OFF'}`} disabled />
     }
   },
   {

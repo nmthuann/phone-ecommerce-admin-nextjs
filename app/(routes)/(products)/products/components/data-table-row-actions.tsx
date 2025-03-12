@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, Edit, Ellipsis, List } from 'lucide-react'
+import { Barcode, Copy, Edit, Ellipsis, List } from 'lucide-react'
 
 import toast from 'react-hot-toast'
 import { Messages } from '@/constants/notifications/message'
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { ProductColumn } from './columns'
 import ProductDetailDialog from './product-detail-dialog'
 import { useState } from 'react'
@@ -25,6 +25,7 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsProps>) {
   const router = useRouter()
+  const pathname = usePathname()
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success(`Purchase Order ${Messages.COPY_ID}`)
@@ -40,7 +41,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           <Ellipsis className='w-4 h-4' />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Purchase Order Options </DropdownMenuLabel>
+          <DropdownMenuLabel>Product Options </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => onCopy(dataRow.id)}>
             <Copy />
@@ -48,11 +49,15 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}`)}>
             <Edit />
-            Edit Purchase Order
+            Edit Product
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleOnClickViewDetail}>
             <List />
             View Detail
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push(`${pathname}/${dataRow.id}/skus`)}>
+            <Barcode />
+            View Sku List
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -60,6 +65,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
       <ProductDetailDialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        productName={dataRow.productName}
         specs={dataRow.productSpecs}
         description={dataRow.description}
       />

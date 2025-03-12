@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Copy, Edit, HandCoins, ListCollapseIcon, MoreHorizontal, Package } from 'lucide-react'
+import { Copy, Edit, HandCoins, ListCollapseIcon, MoreHorizontal } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { usePathname, useRouter } from 'next/navigation'
 
@@ -30,7 +30,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     navigator.clipboard.writeText(id)
     toast.success('SKU ID copied to clipboard.')
   }
-  const handleClickViewSkuDetail = () => {}
+  const handleClickViewSkuDetail = () => {
+    setIsOpen(true)
+  }
   return (
     <div>
       <DropdownMenu>
@@ -46,20 +48,22 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Copy className='mr-2 h-4 w-4' /> Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}`)}>
-            <Edit className='mr-2 h-4 w-4' /> Update
+            <Edit className='mr-2 h-4 w-4' /> Update Sku
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}/prices`)}>
             <HandCoins className='mr-2 h-4 w-4' /> Set up Prices
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}/inventories`)}>
-            <Package className='mr-2 h-4 w-4' /> Set up Inventory
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleClickViewSkuDetail()}>
             <ListCollapseIcon className='mr-2 h-4 w-4' /> View SKU Detail
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <SkuAttributeDialog isOpen={isOpen} onClose={() => setIsOpen(false)} attrs={data.skuAttributes} />
+      <SkuAttributeDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        skuName={data.skuName}
+        attrs={data.skuAttributes}
+      />
     </div>
   )
 }

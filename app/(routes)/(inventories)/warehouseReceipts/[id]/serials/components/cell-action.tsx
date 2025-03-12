@@ -12,10 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { WarehouseReceiptColumn } from '../../../components/columns'
+import { ProductSerialColumn } from './columns'
 
 interface CellActionProps {
-  data: WarehouseReceiptColumn
+  data: ProductSerialColumn
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {

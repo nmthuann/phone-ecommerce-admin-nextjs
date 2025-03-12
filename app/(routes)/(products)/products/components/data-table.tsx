@@ -41,7 +41,7 @@ export function DataTable<TValue>({ columns, defaultData }: Readonly<DataTablePr
   })
 
   async function getAllData(pagination: PaginationState): Promise<Page<ProductResponse>> {
-    const res = await axios.get(`/api/products?page=${pagination.pageIndex}&size=${pagination.pageSize}`)
+    const res = await axios.get(`/api/products?page=${pagination.pageIndex + 1}&size=${pagination.pageSize}`)
 
     return res.data
   }

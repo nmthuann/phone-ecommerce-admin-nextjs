@@ -1,8 +1,8 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { CellAction } from './cell-action'
 import { Attribute } from '@/types/products.type'
+import { CellAction } from './cell-action'
 
 export type ProductSerialColumn = {
   id: string

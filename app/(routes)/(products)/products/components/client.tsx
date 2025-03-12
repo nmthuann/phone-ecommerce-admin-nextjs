@@ -18,7 +18,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from './data-table'
-import { getProductsByPage } from '@/actions/products/get-products'
+import { getProductsByBrandUrl } from '@/actions/products/get-products'
 import { Brand, ProductResponse } from '@/types/products.type'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
@@ -45,9 +45,10 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
         setLoading(false)
         return
       }
-
-      const products = await getProductsByPage(1, 10)
-      console.log('purchaseOrders:::', products)
+      console.log('brandUrl', brandUrl)
+      const products = await getProductsByBrandUrl(brandUrl, 1, 10)
+      // const products = await axios.get('/api/products')
+      console.log('Product:::', products)
       if (products.data.length === 0) {
         setFilteredProducts([])
       } else {
@@ -68,7 +69,7 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
         setFilteredProducts(formattedData)
       }
     } catch (error: unknown) {
-      toastSonner('Failed to load Purchase order. Please try again.')
+      toastSonner('Failed to load Products. Please try again.')
       console.log(error)
     } finally {
       setLoading(false)
@@ -92,7 +93,7 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
       </div>
 
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-4 space-y-4 md:space-y-0'>
-        <Heading title={`Purchase Orders (${length})`} description='Manage Purchase Orders for your store' />
+        <Heading title={`Products (${length})`} description='Manage Products for your store' />
         <div className='flex flex-nowrap items-center space-x-2 overflow-x-auto'>
           <Select onValueChange={value => handleFilterByBrand(value)}>
             <SelectTrigger className='w-[180px]'>
@@ -100,7 +101,7 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
             </SelectTrigger>
             <SelectContent>
               {brands.map((brand: Brand) => (
-                <SelectItem key={brand.id} value='brandUrl'>
+                <SelectItem key={brand.id} value={brand.brandUrl}>
                   {brand.brandName}
                 </SelectItem>
               ))}
