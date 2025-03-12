@@ -1,4 +1,4 @@
-import { Attribute } from './product.type'
+import { Attribute } from './products.type'
 
 export type PurchaseOrderResponse = {
   id: number

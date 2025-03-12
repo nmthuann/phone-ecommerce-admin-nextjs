@@ -17,7 +17,7 @@ import Image from 'next/image'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
-import { Attribute } from '@/types/product.type'
+import { Attribute } from '@/types/products.type'
 import { ProductSerialColumn, SkuRow } from './columns'
 import { DataTablePagination } from './data-table-pagination'
 import axios from 'axios'

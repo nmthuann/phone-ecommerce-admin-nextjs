@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { SkuRow } from './columns'
-import { Attribute } from '@/types/product.type'
+import { Attribute } from '@/types/products.type'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

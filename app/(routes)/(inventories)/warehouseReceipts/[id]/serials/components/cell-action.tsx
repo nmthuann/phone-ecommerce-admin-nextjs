@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { WarehouseReceiptColumn } from './columns'
+import { WarehouseReceiptColumn } from '../../../components/columns'
 
 interface CellActionProps {
   data: WarehouseReceiptColumn

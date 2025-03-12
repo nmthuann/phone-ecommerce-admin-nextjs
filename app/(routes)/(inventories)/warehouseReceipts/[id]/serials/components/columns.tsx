@@ -2,7 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from './cell-action'
-import { Attribute } from '@/types/product.type'
+import { Attribute } from '@/types/products.type'
 
 export type ProductSerialColumn = {
   id: string
