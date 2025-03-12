@@ -65,3 +65,11 @@ export type ProductSkuResponse = {
   skuAttributes: Attribute[]
   stock: number
 }
+
+export type PriceResponse = {
+  productSkuId: number
+  beginAt: Date
+  sellingPrice: number
+  displayPrice: number
+  createdAt: Date
+}

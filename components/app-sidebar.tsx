@@ -54,17 +54,14 @@ const data = {
           title: 'Product Management',
           url: '/products'
         },
-        {
-          title: 'Skus Management',
-          url: '#'
-        },
+
         {
           title: 'Brands Management',
-          url: '#'
+          url: '/brands'
         },
         {
           title: 'Categories Management',
-          url: '#'
+          url: '/categories'
         }
       ]
     },
@@ -81,13 +78,10 @@ const data = {
           title: 'Warehouse Receipts',
           url: '/warehouseReceipts'
         },
-        {
-          title: 'Inventory',
-          url: '#'
-        },
+
         {
           title: 'Suppliers',
-          url: '#'
+          url: '/suppliers'
         }
       ]
     },
