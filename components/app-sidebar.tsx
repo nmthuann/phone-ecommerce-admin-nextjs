@@ -92,15 +92,15 @@ const data = {
       items: [
         {
           title: 'Orders Management',
-          url: '/purchaseOrders'
+          url: '/orders'
         },
         {
           title: 'Invoices Management',
-          url: '#'
+          url: '/invoices'
         },
         {
           title: 'Warranties Management',
-          url: '#'
+          url: '/warranties'
         }
       ]
     },
