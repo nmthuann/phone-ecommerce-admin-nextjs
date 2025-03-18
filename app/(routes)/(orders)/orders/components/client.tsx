@@ -26,25 +26,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { OrderStatus } from '@/constants/enums/order-status.enum'
 
 interface OrderClientProps {
-  formattedData: OrderColumn[]
+  initialData: OrderColumn[]
   length: number
 }
 
-export const OrdersClient: React.FC<OrderClientProps> = ({ formattedData, length }) => {
+export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }) => {
   const router = useRouter()
-  // const [date, setDate] = useState<Date>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [filteredOrders, setFilteredOrders] = useState<OrderColumn[]>(formattedData)
+  const [filteredOrders, setFilteredOrders] = useState<OrderColumn[]>(initialData)
 
   const exportExcel = () => {
     toastSonner('Download excel file successfully.')
   }
 
   const handleFilterByStatus = async (status: string) => {
+    // console.log('status:::', status)
     setLoading(true)
     try {
       if (!status) {
-        setFilteredOrders(formattedData)
+        setFilteredOrders(initialData)
         setLoading(false)
         return
       }
@@ -60,7 +60,6 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ formattedData, length
           employeeId: String(item.employeeId),
           status: item.status,
           orderType: item.orderType,
-          note: item.note,
           shippingAddress: item.shippingAddress,
           contactPhone: item.contactPhone,
           shippingMethod: item.shippingMethod,
@@ -80,7 +79,7 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ formattedData, length
       setLoading(false)
     }
   }
-
+  console.log('f::', filteredOrders)
   return (
     <div>
       <div>
@@ -144,44 +143,4 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ formattedData, length
       <LoadingOverlay loading={loading} text='Please wait...' />
     </div>
   )
-}
-
-{
-  /* <div className='flex flex-nowrap items-center space-x-2 overflow-x-auto'>
-          <Select onValueChange={value => handleFilterByStatus(value)}>
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='Select a brand?' />
-            </SelectTrigger>
-            <SelectContent>
-              {brands.map((brand: Brand) => (
-                <SelectItem key={brand.id} value={brand.brandUrl}>
-                  {brand.brandName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button
-            onClick={() => {
-              setLoading(true)
-              router.push(`/products/new`)
-            }}
-            disabled={loading}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500 
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
-          >
-            <PlusCircle className='h-5 w-5' />
-            <span className='hidden sm:block ml-2'>Add New</span>
-          </Button>
-
-          <Button
-            onClick={exportExcel}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500  
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
-          >
-            <DownloadCloudIcon className='h-5 w-5' />
-            <span className='hidden sm:block ml-2'>Export File</span>
-          </Button>
-        </div> */
 }

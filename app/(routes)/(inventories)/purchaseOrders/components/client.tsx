@@ -96,7 +96,10 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
             <PopoverTrigger asChild>
               <Button
                 variant={'outline'}
-                className={cn('w-[280px] justify-start text-left font-normal', !date && 'text-muted-foreground')}
+                className={cn(
+                  'w-[280px] justify-start text-left font-normal cursor-pointer',
+                  !date && 'text-muted-foreground'
+                )}
               >
                 <CalendarIcon />
                 {date ? format(date, 'PPP') : <span>Chọn ngày tạo</span>}
@@ -120,21 +123,19 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
               router.push(`/products/new`)
             }}
             disabled={loading}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500 
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'
           >
-            <PlusCircle className='h-5 w-5' />
+            <PlusCircle className='h-6 w-6' />
             <span className='hidden sm:block ml-2'>Add New</span>
           </Button>
 
           <Button
             onClick={exportExcel}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500  
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
+            className='  
+                   sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'
           >
-            <DownloadCloudIcon className='h-5 w-5' />
+            <DownloadCloudIcon className='h-6 w-6' />
             <span className='hidden sm:block ml-2'>Export File</span>
           </Button>
         </div>

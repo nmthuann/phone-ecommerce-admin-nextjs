@@ -8,6 +8,17 @@ export type SkuResponse = {
   displayPrice?: number
 }
 
+export type Sku = {
+  id: number
+  skuNo: string
+  barcode: string
+  skuName: string
+  image: string
+  status: boolean
+  skuAttributes: Attribute[]
+  slug: string
+}
+
 export type ProductResponse = {
   id: number
   productName: string

@@ -113,9 +113,8 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
               router.push(`/products/new`)
             }}
             disabled={loading}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500 
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1 '
           >
             <PlusCircle className='h-5 w-5' />
             <span className='hidden sm:block ml-2'>Add New</span>
@@ -123,9 +122,8 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
 
           <Button
             onClick={exportExcel}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500  
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1'
           >
             <DownloadCloudIcon className='h-5 w-5' />
             <span className='hidden sm:block ml-2'>Export File</span>

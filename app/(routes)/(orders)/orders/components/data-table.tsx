@@ -51,23 +51,25 @@ export function DataTable<TValue>({ columns, defaultData }: Readonly<DataTablePr
     placeholderData: keepPreviousData
   })
 
-  const formattedData: OrderColumn[] | undefined = dataQuery.data?.data.map((item: OrderResponse) => ({
-    id: String(item.id),
-    userId: item.userId,
-    employeeId: String(item.employeeId),
-    status: item.status,
-    orderType: item.orderType,
-    note: item.note,
-    shippingAddress: item.shippingAddress,
-    contactPhone: item.contactPhone,
-    shippingMethod: item.shippingMethod,
-    paymentMethod: item.paymentMethod,
-    shippingFee: String(item.shippingFee),
-    discount: String(item.discount),
-    postcode: item.postcode,
-    createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss'),
-    updatedAt: format(parseISO(String(item.updatedAt)), 'yyyy-MM-dd HH:mm:ss')
-  }))
+  const formattedData: OrderColumn[] | undefined = dataQuery.data?.data
+    ? dataQuery.data.data.map((item: OrderResponse) => ({
+        id: String(item.id),
+        userId: item.userId,
+        employeeId: String(item.employeeId),
+        status: item.status,
+        orderType: item.orderType,
+        note: item.note,
+        shippingAddress: item.shippingAddress,
+        contactPhone: item.contactPhone,
+        shippingMethod: item.shippingMethod,
+        paymentMethod: item.paymentMethod,
+        shippingFee: String(item.shippingFee),
+        discount: String(item.discount),
+        postcode: item.postcode,
+        createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss'),
+        updatedAt: format(parseISO(String(item.updatedAt)), 'yyyy-MM-dd HH:mm:ss')
+      }))
+    : []
 
   const table = useReactTable({
     data: formattedData ?? defaultData,

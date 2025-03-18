@@ -52,20 +52,12 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({ data, 
       <div className='flex items-center justify-between '>
         <Heading title={`Product Serials  (${length})`} description='Manage Product Serials for your store' />
         <div className='flex space-x-2'>
-          <Button
-            onClick={() => console.log('onClick Add New')}
-            className='bg-white text-black dark:bg-slate-950 dark:text-white hover:text-white hover:bg-slate-500 
-                        sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
-          >
+          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
             <PlusCircle />
             Add New
           </Button>
 
-          <Button
-            onClick={exportExcel}
-            className='bg-white text-black dark:bg-slate-950 dark:text-white hover:text-white hover:bg-slate-500  
-                        sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
-          >
+          <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
             <DownloadCloudIcon />
             Export File
           </Button>

@@ -74,3 +74,10 @@ export type WarehouseReceipt = {
   receiptDate: Date
   createdAt: Date
 }
+
+export type ProductSerial = {
+  id: string
+  serialNumber: string
+  dateManufactured: Date
+  sku: Sku
+}
