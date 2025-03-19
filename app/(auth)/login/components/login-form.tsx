@@ -10,11 +10,11 @@ import toast from 'react-hot-toast'
 import * as z from 'zod'
 import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
-import { AuthExceptionMessages, ErrorInput } from '@/constants/errors.enum'
-import { Button } from '@heroui/react'
 import axios from 'axios'
-import { Messages } from '@/constants/messages.enum'
+import { AuthExceptionMessages, ErrorInput } from '@/constants/errors/errors'
 import { useAuthContext } from '@/providers/auth-provider'
+import { Messages } from '@/constants/notifications/message'
+import { Button } from '@/components/ui/button'
 
 export const LoginForm: React.FC = () => {
   const [onBtnLoad, setOnBtnLoad] = useState(false)
@@ -35,12 +35,16 @@ export const LoginForm: React.FC = () => {
       const res = await axios.post(`/api/auth/login`, values)
       if (res.data.message) {
         setOnBtnLoad(false)
+
+        console.log('res.data.message:::', res.data.message)
+
         toast.error(res.data.message)
       } else {
         setOnBtnLoad(false)
         toast.success(Messages.LOGIN_SUCCESS)
         setUserCallback(res.data)
         router.push('/')
+        router.refresh()
       }
     } catch (error: unknown) {
       console.log('error:::', error)

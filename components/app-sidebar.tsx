@@ -19,13 +19,14 @@ import { TeamSwitcher } from './team-switcher'
 import { NavProjects } from './nav-projects'
 import { NavUser } from './nav-user'
 import { NavMain } from './nav-main'
+import { User } from '@/types/users.type'
 
 const data = {
-  user: {
-    name: 'Nguyen Minh Thuan',
-    email: 'm@example.com',
-    avatar: 'https://res.cloudinary.com/dhvwulfgc/image/upload/v1699110210/e0tc6lzq7cgx2lrbmzj5.jpg'
-  },
+  // user: {
+  //   name: 'Nguyen Minh Thuan',
+  //   email: 'm@example.com',
+  //   avatar: 'https://res.cloudinary.com/dhvwulfgc/image/upload/v1699110210/e0tc6lzq7cgx2lrbmzj5.jpg'
+  // },
   teams: [
     {
       name: 'Acme Inc',
@@ -139,7 +140,7 @@ const data = {
   ]
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: { user: User } & React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
@@ -150,7 +151,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={{
+            name: user.firstName + ' ' + user.lastName,
+            email: user.email,
+            avatar: user.avatarUrl
+          }}
+        />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

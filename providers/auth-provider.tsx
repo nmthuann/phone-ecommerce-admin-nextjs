@@ -5,14 +5,14 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 interface AuthContextProps {
   user: User | null
-  setUser: (user: User | null) => void
+  setUserCallback: (user: User | null) => void
   isAuthenticated: boolean
   handleLogout: () => void
 }
 
 const AuthContext = createContext<AuthContextProps>({
   user: null,
-  setUser: () => {},
+  setUserCallback: () => {},
   isAuthenticated: false,
   handleLogout: () => {}
 })
@@ -49,15 +49,15 @@ export default function AuthProvider({
     }
   }, [])
 
-  // optimize with useMemo
+  // Memoize the value to prevent re-renders
   const value = useMemo(
     () => ({
       user,
-      setUser: setUserCallback,
+      setUserCallback,
       isAuthenticated: !!user,
       handleLogout
     }),
-    [user, setUserCallback, handleLogout]
+    [user, setUserCallback, handleLogout] // Dependencies
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -30,6 +30,9 @@ export async function POST(req: Request) {
       avatarUrl: data.avatarUrl,
       phone: data.phone
     }
+
+    console.log('user:::', user)
+
     const FIFTEEN_MINUTES = 15 * 60 * 1000
     const cookieExpiration = new Date(Date.now() + FIFTEEN_MINUTES)
     const cookieStore = await cookies()
