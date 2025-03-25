@@ -12,3 +12,194 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// PRODUCTS
+
+model Brand {
+  id                Int       @id @default(autoincrement())
+  brandName         String    @unique @map("brand_name") @db.VarChar(50)
+  brandUrl          String    @unique @map("brand_url") @db.VarChar(255)
+  description       String    @db.Text
+  brandAbbreviation String    @unique @map("brand_abbreviation") @db.VarChar(10)
+  Product           Product[]
+
+  @@map("brands")
+}
+
+model Product {
+  id           Int     @id @default(autoincrement())
+  productName  String  @unique @map("product_name") @db.VarChar(255)
+  slug         String  @unique @db.VarChar(100)
+  productLine  String  @map("product_line") @db.VarChar(100)
+  description  String  @db.Text
+  status       Boolean
+  productSpecs Json?   @map("product_specs")
+  brandId      Int?    @map("brand_id")
+
+  brand         Brand?          @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  SpuSkuMapping SpuSkuMapping[]
+
+  @@map("products")
+}
+
+model ProductSku {
+  id                  Int                   @id @default(autoincrement())
+  skuNo               String                @unique @map("sku_no") @db.VarChar(32)
+  barcode             String                @db.VarChar(32)
+  skuName             String                @map("sku_name") @db.VarChar(150)
+  image               String                @db.VarChar(255)
+  status              Boolean               @default(true)
+  skuAttributes       Json                  @map("sku_attributes")
+  slug                String                @unique @db.VarChar(255)
+  SpuSkuMapping       SpuSkuMapping[]
+  Price               Price[]
+  PurchaseOrderDetail PurchaseOrderDetail[]
+  ProductSerial       ProductSerial[]
+
+  @@map("product_skus")
+}
+
+model SpuSkuMapping {
+  id    Int @id @default(autoincrement())
+  spuId Int @map("spu_id")
+  skuId Int @map("sku_id")
+
+  product    Product    @relation(fields: [spuId], references: [id], onDelete: Cascade)
+  productSku ProductSku @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@unique([spuId, skuId]) // Unique constraint giống UK_SPu_SKU
+  @@map("spu_sku_mapping") // Map với bảng trong PostgreSQL
+}
+
+model Price {
+  productSkuId Int      @map("product_sku_id")
+  beginAt      DateTime @map("begin_at")
+  sellingPrice Decimal  @map("selling_price")
+  displayPrice Decimal  @map("display_price")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  productSku ProductSku @relation(fields: [productSkuId], references: [id], onDelete: Cascade)
+
+  @@id([productSkuId, beginAt])
+  @@map("prices")
+}
+
+// INVENTORIES
+model Supplier {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  address       String          @db.Text
+  phone         String          @db.VarChar(15)
+  email         String          @db.VarChar(100)
+  PurchaseOrder PurchaseOrder[]
+
+  @@map("suppliers")
+}
+
+model PurchaseOrder {
+  id                  Int                   @id @default(autoincrement())
+  orderNumber         String                @unique @map("order_number") @db.VarChar(50)
+  supplierId          Int                   @map("supplier_id")
+  createdAt           DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
+  orderDate           DateTime              @map("order_date") @db.Date
+  employeeId          String                @map("employee_id") @db.VarChar(100) // email admin 
+  supplier            Supplier              @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  PurchaseOrderDetail PurchaseOrderDetail[]
+  WarehouseReceipt    WarehouseReceipt?
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderDetail {
+  purchaseOrderId Int     @map("purchase_order_id")
+  skuId           Int     @map("sku_id")
+  quantity        Int
+  unitPrice       Decimal @map("unit_price") @db.Decimal(10, 2)
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  sku           ProductSku    @relation(fields: [skuId], references: [id], onDelete: Cascade)
+
+  @@id([purchaseOrderId, skuId])
+  @@map("purchase_order_details")
+}
+
+model WarehouseReceipt {
+  id              Int       @id @default(autoincrement())
+  receiptNumber   String    @unique @map("receipt_number") @db.VarChar(50)
+  purchaseOrderId Int       @unique @map("purchase_order_id")
+  createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamp(0)
+  receiptDate     DateTime? @map("receipt_date") @db.Date
+  employeeId      String    @map("employee_id") @db.VarChar(100) // email admin 
+
+  purchaseOrder PurchaseOrder   @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  ProductSerial ProductSerial[]
+
+  @@map("warehouse_receipts")
+}
+
+model ProductSerial {
+  id                 String   @id @default(uuid()) @db.Uuid
+  serialNumber       String   @unique @map("serial_number") @db.VarChar(100)
+  dateManufactured   DateTime @map("date_manufactured") @db.Date
+  productSkuId       Int      @map("product_sku_id")
+  warehouseReceiptId Int      @map("warehouse_receipt_id")
+
+  productSku       ProductSku       @relation(fields: [productSkuId], references: [id], onDelete: Cascade)
+  warehouseReceipt WarehouseReceipt @relation(fields: [warehouseReceiptId], references: [id], onDelete: Cascade)
+  OrderDetail      OrderDetail[]
+
+  @@map("product_serials")
+}
+
+// ORDERS
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  employeeId      String        @map("employee_id") @db.VarChar(100) // email admin 
+  firstName       String        @map("first_name") @db.VarChar(255)
+  lastName        String        @map("last_name") @db.VarChar(255)
+  email           String        @map("email") @db.VarChar(255)
+  contactPhone    String        @map("contact_phone") @db.VarChar(15)
+  shippingAddress String        @map("shipping_address")
+  postcode        String?       @map("postcode")
+  status          String        @default("PENDING") @map("status")
+  orderType       Boolean       @default(true) @map("order_type")
+  shippingMethod  String        @map("shipping_method") @db.VarChar(50)
+  paymentMethod   String        @map("payment_method") @db.VarChar(50)
+  note            String?       @map("note")
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamp(0)
+  shippingFee     Decimal       @default(0.00) @map("shipping_fee") @db.Decimal(10, 2)
+  discount        Decimal       @default(0) @map("discount") @db.Decimal(10, 2)
+  OrderDetail     OrderDetail[]
+  Invoice         Invoice[]
+
+  @@map("orders")
+}
+
+model OrderDetail {
+  orderId         Int     @map("order_id")
+  productSerialId String  @map("product_serial_id") @db.Uuid
+  unitPrice       Decimal @default(0.0) @map("unit_price") @db.Decimal(10, 2)
+  tax             Decimal @default(0.0) @map("tax") @db.Decimal(5, 2)
+
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productSerial ProductSerial @relation(fields: [productSerialId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, productSerialId])
+  @@map("order_details")
+}
+
+model Invoice {
+  id          Int      @id @default(autoincrement())
+  invoiceCode String   @unique @map("invoice_code") @db.VarChar(50)
+  orderId     Int      @map("order_id")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  taxCode     String   @map("tax_code") @db.VarChar(20)
+  employeeId  String   @map("employee_id") @db.VarChar(100) // email admin 
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}

@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar'
+import { useClerk } from '@clerk/nextjs'
 
 export function NavUser({
   user
@@ -24,7 +25,7 @@ export function NavUser({
   }
 }>) {
   const { isMobile } = useSidebar()
-
+  const { signOut } = useClerk()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -86,7 +87,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

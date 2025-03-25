@@ -17,16 +17,11 @@ import {
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from '@/components/ui/sidebar'
 import { TeamSwitcher } from './team-switcher'
 import { NavProjects } from './nav-projects'
-import { NavUser } from './nav-user'
 import { NavMain } from './nav-main'
-import { User } from '@/types/users.type'
+import { SignInButton, useUser } from '@clerk/nextjs'
+import { NavUser } from './nav-user'
 
 const data = {
-  // user: {
-  //   name: 'Nguyen Minh Thuan',
-  //   email: 'm@example.com',
-  //   avatar: 'https://res.cloudinary.com/dhvwulfgc/image/upload/v1699110210/e0tc6lzq7cgx2lrbmzj5.jpg'
-  // },
   teams: [
     {
       name: 'Acme Inc',
@@ -59,10 +54,6 @@ const data = {
         {
           title: 'Brands Management',
           url: '/brands'
-        },
-        {
-          title: 'Categories Management',
-          url: '/categories'
         }
       ]
     },
@@ -140,7 +131,9 @@ const data = {
   ]
 }
 
-export function AppSidebar({ user, ...props }: { user: User } & React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser()
+
   return (
     <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
@@ -151,13 +144,19 @@ export function AppSidebar({ user, ...props }: { user: User } & React.ComponentP
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser
-          user={{
-            name: user.firstName + ' ' + user.lastName,
-            email: user.email,
-            avatar: user.avatarUrl
-          }}
-        />
+        {user ? (
+          <NavUser
+            user={{
+              name: `${user?.firstName} ${user?.lastName}`,
+              email: `${user?.primaryEmailAddress?.emailAddress}`,
+              avatar: `${user?.imageUrl}`
+            }}
+          />
+        ) : (
+          <div>
+            <SignInButton />
+          </div>
+        )}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

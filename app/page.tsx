@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 }
 export default function HomePage() {
   return (
-    <div className='pl-10 pr-10 mb-10 -mt-4'>
+    <div className='pl-10 pr-10 mb-10 -mt-5'>
       <HeaderDashboard />
       <TabsSection />
     </div>

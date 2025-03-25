@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import './globals.css'
-// import { ToastProvider } from '@/providers/toast-provider'
-// import { ReactQueryClientProvider } from '@/providers/react-query-client-provider'
-// import { Toaster } from '@/components/ui/sonner'
-// import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-// import { AppSidebar } from '@/components/app-sidebar'
-import { getUser } from '@/actions/get-profile'
-import { ClerkProvider, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+
+import { ClerkProvider } from '@clerk/nextjs'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/app-sidebar'
+import { ToastProvider } from '@/providers/toast-provider'
+import { Toaster } from 'react-hot-toast'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,33 +23,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const user = await getUser()
-  console.log('user:::', user)
   return (
     <ClerkProvider>
       <html lang='en'>
         <body className={geistSans.className} suppressHydrationWarning={true}>
-          {/* <ReactQueryClientProvider>
-            <ToastProvider />
-            <Toaster />
-            <SidebarProvider>
-              {user && <AppSidebar user={user} />}
-              <main className='w-full'>
-                <SidebarTrigger />
-                {children}
-              </main>
-            </SidebarProvider>
-          </ReactQueryClientProvider> */}
-          <header className='flex justify-end items-center p-4 gap-4 h-16'>
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-          {children}
+          <ToastProvider />
+          <Toaster />
+          <SidebarProvider>
+            <AppSidebar />
+            <main className='w-full'>
+              <SidebarTrigger />
+              {children}
+            </main>
+          </SidebarProvider>
         </body>
       </html>
     </ClerkProvider>
