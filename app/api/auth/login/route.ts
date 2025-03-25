@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import axios from 'axios'
 import { User } from '@/types/users.type'
-import { AuthExceptionMessages, ErrorInput } from '@/constants/errors/errors'
+import { AuthExceptionMessages, ErrorInput } from '@/constants/errors.enum'
 import { LoginResponse } from '@/types/responses/auth.response.dto'
 
 const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`

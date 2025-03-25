@@ -1,4 +1,4 @@
-import { SystemError } from '@/constants/errors/errors'
+import { SystemError } from '@/constants/errors.enum'
 import { PriceResponse } from '@/types/products.type'
 
 export async function getPricesBySkuId(skuId: number): Promise<PriceResponse[]> {

@@ -1,4 +1,4 @@
-import { SystemError } from '@/constants/errors/errors'
+import { SystemError } from '@/constants/errors.enum'
 import { ProductSkuResponse } from '@/types/products.type'
 
 export async function getProductSkusByProductId(productId: number): Promise<ProductSkuResponse[]> {

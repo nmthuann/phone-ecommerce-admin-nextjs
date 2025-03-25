@@ -1,5 +1,5 @@
-import { OrderBy } from '@/constants/enums/order-by.enum'
-import { SystemError } from '@/constants/errors/errors'
+import { OrderBy } from '@/constants/order-by.enum'
+import { SystemError } from '@/constants/errors.enum'
 import { WarehouseReceiptResponse } from '@/types/inventories.type'
 import { Page } from '@/types/responses/page.type'
 

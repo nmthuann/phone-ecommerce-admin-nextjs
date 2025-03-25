@@ -3,7 +3,7 @@
 import { Barcode, Copy, Edit, Ellipsis, List } from 'lucide-react'
 
 import toast from 'react-hot-toast'
-import { Messages } from '@/constants/notifications/message'
+import { Messages } from '@/constants/message.enum'
 
 import {
   DropdownMenu,

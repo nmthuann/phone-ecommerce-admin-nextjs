@@ -1,6 +1,6 @@
 'use server'
 
-import { SystemError } from '@/constants/errors/errors'
+import { SystemError } from '@/constants/errors.enum'
 import { Brand } from '@/types/products.type'
 
 export async function getBrands(): Promise<Brand[]> {

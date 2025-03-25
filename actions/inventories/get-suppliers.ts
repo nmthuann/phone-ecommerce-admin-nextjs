@@ -1,5 +1,5 @@
 'use server'
-import { SystemError } from '@/constants/errors/errors'
+import { SystemError } from '@/constants/errors.enum'
 import { Supplier } from '@/types/inventories.type'
 
 export async function getSuppliers(): Promise<Supplier[]> {

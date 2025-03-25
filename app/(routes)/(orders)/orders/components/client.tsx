@@ -23,7 +23,7 @@ import { DataTable } from './data-table'
 import { OrderResponse } from '@/types/orders.type'
 import { getOrdersByStatus } from '@/actions/orders/get-orders'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { OrderStatus } from '@/constants/enums/order-status.enum'
+import { OrderStatus } from '@/constants/order-status.enum'
 
 interface OrderClientProps {
   initialData: OrderColumn[]

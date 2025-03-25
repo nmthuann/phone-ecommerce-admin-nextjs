@@ -1,4 +1,4 @@
-import { SystemError } from '@/constants/errors/errors'
+import { SystemError } from '@/constants/errors.enum'
 import { WarehouseReceiptResponse } from '@/types/inventories.type'
 
 export async function getWarehouseReceiptById(id: number): Promise<WarehouseReceiptResponse | null> {

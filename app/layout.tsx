@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import './globals.css'
-import { ToastProvider } from '@/providers/toast-provider'
-import { ReactQueryClientProvider } from '@/providers/react-query-client-provider'
-import { Toaster } from '@/components/ui/sonner'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/app-sidebar'
+// import { ToastProvider } from '@/providers/toast-provider'
+// import { ReactQueryClientProvider } from '@/providers/react-query-client-provider'
+// import { Toaster } from '@/components/ui/sonner'
+// import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+// import { AppSidebar } from '@/components/app-sidebar'
 import { getUser } from '@/actions/get-profile'
+import { ClerkProvider, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,20 +27,32 @@ export default async function RootLayout({
   const user = await getUser()
   console.log('user:::', user)
   return (
-    <html lang='en'>
-      <body className={geistSans.className} suppressHydrationWarning={true}>
-        <ReactQueryClientProvider>
-          <ToastProvider />
-          <Toaster />
-          <SidebarProvider>
-            {user && <AppSidebar user={user} />}
-            <main className='w-full'>
-              <SidebarTrigger />
-              {children}
-            </main>
-          </SidebarProvider>
-        </ReactQueryClientProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang='en'>
+        <body className={geistSans.className} suppressHydrationWarning={true}>
+          {/* <ReactQueryClientProvider>
+            <ToastProvider />
+            <Toaster />
+            <SidebarProvider>
+              {user && <AppSidebar user={user} />}
+              <main className='w-full'>
+                <SidebarTrigger />
+                {children}
+              </main>
+            </SidebarProvider>
+          </ReactQueryClientProvider> */}
+          <header className='flex justify-end items-center p-4 gap-4 h-16'>
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }

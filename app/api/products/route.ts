@@ -1,4 +1,4 @@
-import { OrderBy } from '@/constants/enums/order-by.enum'
+import { OrderBy } from '@/constants/order-by.enum'
 import { ProductResponse } from '@/types/products.type'
 import { Page } from '@/types/responses/page.type'
 import { NextRequest, NextResponse } from 'next/server'
