@@ -1,9 +1,9 @@
 import { ProductSkuColumn } from './components/columns'
 import ErrorComponent from '@/components/errors/error-component'
 import { Metadata } from 'next'
-import { ProductSkuResponse } from '@/types/products.type'
-import { getProductSkusByProductId } from '@/actions/products/get-product-skus'
 import { ProductSkuClient } from './components/client'
+import prisma from '@/lib/prisma'
+import { mapAttributes } from '@/utils/map'
 export const metadata: Metadata = {
   title: 'SKUs',
   description: 'Skus Management Table.'
@@ -13,18 +13,31 @@ const ProductSkusPage = async ({ params }: { params: Promise<{ id: string }> }) 
   const { id } = await params
 
   try {
-    const productSkus = await getProductSkusByProductId(parseInt(id, 10))
-    const formattedData: ProductSkuColumn[] | undefined = productSkus.map((item: ProductSkuResponse) => ({
-      id: String(item.id),
-      skuNo: item.skuNo,
-      barcode: item.barcode,
-      skuName: item.skuName,
-      image: item.image,
-      status: item.status,
-      slug: item.slug,
-      skuAttributes: item.skuAttributes,
-      stock: item.stock
-    }))
+    const page: number = 1
+    const pageSize: number = 10
+
+    const productSkus = await prisma.spuSkuMapping.findMany({
+      where: { spuId: parseInt(id) },
+      include: {
+        productSku: true
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize
+    })
+
+    const formattedData: ProductSkuColumn[] = await Promise.all(
+      productSkus.map(async item => ({
+        id: String(item.productSku.id),
+        skuNo: item.productSku.skuNo,
+        barcode: item.productSku.barcode,
+        skuName: item.productSku.skuName,
+        image: item.productSku.image,
+        status: item.productSku.status,
+        slug: item.productSku.slug,
+        skuAttributes: mapAttributes(item.productSku.skuAttributes as Record<string, unknown>),
+        stock: await getStock(item.productSku.id)
+      }))
+    )
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>
@@ -39,3 +52,12 @@ const ProductSkusPage = async ({ params }: { params: Promise<{ id: string }> }) 
 }
 
 export default ProductSkusPage
+
+export const getStock = async (skuId: number) => {
+  const stock = await prisma.productSerial.count({
+    where: {
+      productSkuId: skuId
+    }
+  })
+  return stock
+}

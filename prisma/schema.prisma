@@ -33,10 +33,10 @@ model Product {
   productLine  String  @map("product_line") @db.VarChar(100)
   description  String  @db.Text
   status       Boolean
-  productSpecs Json?   @map("product_specs")
-  brandId      Int?    @map("brand_id")
+  productSpecs Json    @map("product_specs")
+  brandId      Int     @map("brand_id")
 
-  brand         Brand?          @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  brand         Brand           @relation(fields: [brandId], references: [id], onDelete: NoAction)
   SpuSkuMapping SpuSkuMapping[]
 
   @@map("products")

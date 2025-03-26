@@ -1,38 +1,46 @@
 import { Metadata } from 'next'
 import ErrorComponent from '@/components/errors/error-component'
-import { getProductsByPage } from '@/actions/products/get-products'
 import { ProductColumn } from './components/columns'
-import { ProductResponse } from '@/types/products.type'
 import { ProductsClient } from './components/client'
-import { getBrands } from '@/actions/products/get-brands'
+import prisma from '@/lib/prisma'
+import { mapAttributes } from '@/utils/map'
 export const metadata: Metadata = {
   title: 'Products',
   description: 'Products Management Table.'
 }
 
 const ProductsPage = async () => {
+  const page = 1
+  const pageSize = 10
+  const products = await prisma.product.findMany({
+    include: {
+      brand: true
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize
+  })
+
+  const totalProducts = await prisma.product.count()
+
+  const brands = await prisma.brand.findMany()
+
   try {
-    const res = await getProductsByPage(1, 10)
-    const brands = await getBrands()
-    const formattedData: ProductColumn[] | undefined = res.data.map((item: ProductResponse) => ({
+    const formattedData: ProductColumn[] = products.map(item => ({
       id: String(item.id),
       productName: item.productName,
       productLine: item.productLine,
       status: item.status,
       slug: item.slug,
       description: item.description,
-      productSpecs: item.productSpecs,
-      categoryName: item.categoryName,
-      categoryUrl: item.categoryUrl,
-      brandName: item.brandName,
-      brandUrl: item.brandUrl
-      // skus: item.skus
+      productSpecs: mapAttributes(item.productSpecs as Record<string, unknown>),
+      brandName: item.brand.brandName,
+      brandUrl: item.brand.brandUrl
     }))
 
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6'>
-          <ProductsClient formattedData={formattedData} length={res.meta.itemCount} brands={brands} />
+          <ProductsClient formattedData={formattedData} length={totalProducts} brands={brands} />
         </div>
       </div>
     )

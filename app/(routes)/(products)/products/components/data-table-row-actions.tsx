@@ -28,7 +28,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
   const pathname = usePathname()
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
-    toast.success(`Purchase Order ${Messages.COPY_ID}`)
+    toast.success(`Products ${Messages.COPY_ID}`)
   }
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const handleOnClickViewDetail = () => {
@@ -47,7 +47,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
             <Copy />
             Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}`)}>
+          <DropdownMenuItem onClick={() => router.push(`products/${dataRow.id}`)}>
             <Edit />
             Edit Product
           </DropdownMenuItem>

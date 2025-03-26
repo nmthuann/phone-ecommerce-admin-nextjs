@@ -18,9 +18,8 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from './data-table'
-import { getProductsByBrandUrl } from '@/actions/products/get-products'
-import { Brand, ProductResponse } from '@/types/products.type'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Brand } from '@prisma/client'
 
 interface ProductsClientProps {
   formattedData: ProductColumn[]
@@ -46,28 +45,25 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
         return
       }
       console.log('brandUrl', brandUrl)
-      const products = await getProductsByBrandUrl(brandUrl, 1, 10)
-      // const products = await axios.get('/api/products')
-      console.log('Product:::', products)
-      if (products.data.length === 0) {
-        setFilteredProducts([])
-      } else {
-        const formattedData: ProductColumn[] | undefined = products.data.map((item: ProductResponse) => ({
-          id: String(item.id),
-          productName: item.productName,
-          productLine: item.productLine,
-          status: item.status,
-          slug: item.slug,
-          description: item.description,
-          productSpecs: item.productSpecs,
-          categoryName: item.categoryName,
-          categoryUrl: item.categoryUrl,
-          brandName: item.brandName,
-          brandUrl: item.brandUrl
-          // skus: item.skus
-        }))
-        setFilteredProducts(formattedData)
-      }
+      // const products = await getProductsByBrandUrl(brandUrl)
+      // const products: ProductResponse[] = await axios.get(`/api/products?brandUrl=${brandUrl}&page=${1}&size=${10}`)
+      // console.log('Product:::', products)
+      // if (products.length === 0) {
+      //   setFilteredProducts([])
+      // } else {
+      //   const formattedData: ProductColumn[] = products.map((item: ProductResponse) => ({
+      //     id: String(item.id),
+      //     productName: item.productName,
+      //     productLine: item.productLine,
+      //     status: item.status,
+      //     slug: item.slug,
+      //     description: item.description,
+      //     productSpecs: item.productSpecs,
+      //     brandName: item.brandName,
+      //     brandUrl: item.brandUrl
+      //   }))
+      //   setFilteredProducts(formattedData)
+      // }
     } catch (error: unknown) {
       toastSonner('Failed to load Products. Please try again.')
       console.log(error)

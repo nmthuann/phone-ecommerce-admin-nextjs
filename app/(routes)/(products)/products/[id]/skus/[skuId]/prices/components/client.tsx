@@ -15,19 +15,26 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from '@/components/ui/data-table'
+import { useState } from 'react'
+import PriceModal from './price-modal'
+import { PurchaseOrderDetail } from '@prisma/client'
 
 interface PriceClientProps {
   data: PriceColumn[]
   length: number
   previousParam: string
   currentParam: string
+  poDetail: PurchaseOrderDetail
 }
 
-export const PriceClient: React.FC<PriceClientProps> = ({ data, length, previousParam, currentParam }) => {
+export const PriceClient: React.FC<PriceClientProps> = ({ data, length, previousParam, currentParam, poDetail }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
   console.log('previousParam:::', previousParam, 'currentParam:::', currentParam)
+
   return (
     <div>
       <div>
@@ -62,10 +69,11 @@ export const PriceClient: React.FC<PriceClientProps> = ({ data, length, previous
       <div className='flex items-center justify-between '>
         <Heading title={`Prices (${length})`} description='Manage Prices for your store' />
         <div className='flex space-x-2'>
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
+          <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1'>
             <PlusCircle />
             Add New
           </Button>
+          <PriceModal isOpen={isOpen} onClose={() => setIsOpen(false)} data={poDetail} />
 
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
             <DownloadCloudIcon />

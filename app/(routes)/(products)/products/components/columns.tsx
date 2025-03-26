@@ -14,11 +14,8 @@ export type ProductColumn = {
   slug: string
   description: string
   productSpecs: Attribute[]
-  categoryName: string
-  categoryUrl: string
   brandName: string
   brandUrl: string
-  //   skus: SkuResponse[]
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -41,10 +38,6 @@ export const columns: ColumnDef<ProductColumn>[] = [
       const isActive = row.original.status
       return <Switch checked={isActive} aria-label={`Product Status ${isActive ? 'ON' : 'OFF'}`} disabled />
     }
-  },
-  {
-    accessorKey: 'categoryName',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Category' />
   },
   {
     accessorKey: 'brandName',
