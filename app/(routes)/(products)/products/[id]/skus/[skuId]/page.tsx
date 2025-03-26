@@ -1,15 +1,21 @@
 import ErrorComponent from '@/components/errors/error-component'
 import prisma from '@/lib/prisma'
 import { SkuForm } from './components/sku-form'
-
+import { Metadata } from 'next'
+export const metadata: Metadata = {
+  title: 'SKU',
+  description: 'SKU Management Table.'
+}
 const ProductSkuPage = async ({ params }: { params: Promise<{ id: string; skuId: string }> }) => {
   const { id, skuId } = await params
-
-  const productSku = await prisma.productSku.findFirst({
-    where: {
-      id: parseInt(skuId)
-    }
-  })
+  let productSku = null
+  if (skuId !== 'new') {
+    productSku = await prisma.productSku.findFirst({
+      where: {
+        id: parseInt(skuId)
+      }
+    })
+  }
 
   try {
     return (

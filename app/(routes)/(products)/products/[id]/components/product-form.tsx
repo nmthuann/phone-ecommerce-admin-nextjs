@@ -24,15 +24,13 @@ import {
 } from '@/components/ui/breadcrumb'
 import { ProductDetail, ProductDetailSheet } from './product-detail-sheet'
 import { Attribute } from '@/types/products.type'
-import { mapAttributes } from '@/utils/map'
 import { Checkbox } from '@/components/ui/checkbox'
+import { convertJsonToAttributes } from '@/utils/convert'
 
 const formSchema = z.object({
   productName: z.string().min(1),
   productLine: z.string().min(1),
-  description: z.string().min(1),
   status: z.boolean().default(false).optional(),
-  productSpecs: z.record(z.unknown()).optional(),
   brandId: z.coerce.number().min(1)
 })
 
@@ -64,9 +62,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, brands })
     : {
         productName: '',
         productLine: '',
-        status: false,
-        description: '',
-        productSpecs: {}
+        status: true,
+        description: ''
       }
 
   const form = useForm<ProductFormValues>({
@@ -93,7 +90,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, brands })
         console.log(`Submit ${JSON.stringify(payload, null, 2)} `)
         await axios.post(`/api/products`, payload)
       }
-
       router.push(`/products`)
       router.refresh()
       toast.success(toastMessage)
@@ -107,7 +103,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, brands })
 
   const productDetail: ProductDetail = initialData
     ? {
-        productSpecs: mapAttributes(initialData.productSpecs as Record<string, unknown>),
+        productSpecs: convertJsonToAttributes(initialData.productSpecs as Record<string, string>),
         description: initialData.description
       }
     : {
@@ -152,82 +148,83 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, brands })
 
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
-          <div className='md:grid md:grid-cols-3 gap-8'>
-            <FormField
-              control={form.control}
-              name='productName'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='Product name' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='max-w-md mx-auto space-y-6 p-6 bg-white shadow-md border-1 rounded-lg mt-5'
+        >
+          <FormField
+            control={form.control}
+            name='productName'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Name</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder='Product name' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name='productLine'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Line</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='Product Line' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name='productLine'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Line</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder='Product Line' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name='brandId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Brand</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={String(field.value)}
-                    defaultValue={String(field.value)}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue defaultValue={field.value} placeholder='Select a Brand' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {brands.map(brand => (
-                        <SelectItem key={brand.id} value={String(brand.id)}>
-                          {brand.brandName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='status'
-              render={({ field }) => (
-                <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
+          <FormField
+            control={form.control}
+            name='brandId'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Brand</FormLabel>
+                <Select
+                  disabled={loading}
+                  onValueChange={field.onChange}
+                  value={String(field.value)}
+                  defaultValue={String(field.value)}
+                >
                   <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    <SelectTrigger className='w-full'>
+                      <SelectValue defaultValue={field.value} placeholder='Select a Brand' />
+                    </SelectTrigger>
                   </FormControl>
-                  <div className='space-y-1 leading-none'>
-                    <FormLabel>Satus</FormLabel>
-                    <FormDescription>This product will appear on the home page</FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className='ml-auto' type='submit'>
+                  <SelectContent>
+                    {brands.map(brand => (
+                      <SelectItem key={brand.id} value={String(brand.id)}>
+                        {brand.brandName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='status'
+            render={({ field }) => (
+              <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className='space-y-1 leading-none'>
+                  <FormLabel>Satus</FormLabel>
+                  <FormDescription>This product will appear on the home page</FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          <Button disabled={loading} className='ml-auto w-full' type='submit'>
             {action}
           </Button>
         </form>

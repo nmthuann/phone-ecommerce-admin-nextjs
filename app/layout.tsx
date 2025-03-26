@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 import { ToastProvider } from '@/providers/toast-provider'
 import { Toaster } from 'react-hot-toast'
+import { ReactQueryClientProvider } from '@/providers/react-query-client-provider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +34,7 @@ export default async function RootLayout({
             <AppSidebar />
             <main className='w-full'>
               <SidebarTrigger />
-              {children}
+              <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
             </main>
           </SidebarProvider>
         </body>

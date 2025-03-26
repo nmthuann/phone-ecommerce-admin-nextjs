@@ -15,6 +15,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from '@/components/ui/data-table'
+import { useRouter } from 'next/navigation'
 
 interface ProductSkuClientProps {
   skus: ProductSkuColumn[]
@@ -23,6 +24,7 @@ interface ProductSkuClientProps {
 }
 
 export const ProductSkuClient: React.FC<ProductSkuClientProps> = ({ skus, length, currentParam }) => {
+  const router = useRouter()
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
@@ -52,7 +54,10 @@ export const ProductSkuClient: React.FC<ProductSkuClientProps> = ({ skus, length
       <div className='flex items-center justify-between '>
         <Heading title={`Product Skus (${length})`} description='Manage Product Skus for your store' />
         <div className='flex space-x-2'>
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
+          <Button
+            onClick={() => router.push(`/products/${currentParam}/skus/new`)}
+            className='sm:px-4 sm:py-2 px-2 py-1'
+          >
             <PlusCircle />
             Add New
           </Button>

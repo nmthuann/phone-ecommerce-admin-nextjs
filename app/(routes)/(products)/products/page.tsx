@@ -3,7 +3,7 @@ import ErrorComponent from '@/components/errors/error-component'
 import { ProductColumn } from './components/columns'
 import { ProductsClient } from './components/client'
 import prisma from '@/lib/prisma'
-import { mapAttributes } from '@/utils/map'
+import { convertJsonToAttributes } from '@/utils/convert'
 export const metadata: Metadata = {
   title: 'Products',
   description: 'Products Management Table.'
@@ -32,7 +32,7 @@ const ProductsPage = async () => {
       status: item.status,
       slug: item.slug,
       description: item.description,
-      productSpecs: mapAttributes(item.productSpecs as Record<string, unknown>),
+      productSpecs: convertJsonToAttributes(item.productSpecs as Record<string, string>),
       brandName: item.brand.brandName,
       brandUrl: item.brand.brandUrl
     }))

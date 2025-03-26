@@ -47,7 +47,7 @@ export type Product = {
 
 export type Attribute = {
   key: string
-  value: unknown
+  value: string
 }
 
 export type Category = {

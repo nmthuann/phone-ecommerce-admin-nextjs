@@ -104,19 +104,19 @@ export const ProductDetailSheet: React.FC<ProductDetailSheetProps> = ({
                             inputField: {
                               id: Key | null | undefined
                             },
-                            index: unknown // TODO: re-check type
+                            index: number
                           ) => (
                             <div key={inputField.id} className='flex space-x-4 items-center'>
                               <Input
                                 type='text'
                                 className='max-w-xs'
-                                {...form.register(`productSpecs.${index as number}.key` as const)}
+                                {...form.register(`productSpecs.${index}.key` as const)}
                               />
 
                               <Input
                                 type='text'
                                 className='max-w-xs'
-                                {...form.register(`productSpecs.${index as number}.value` as const)}
+                                {...form.register(`productSpecs.${index}.value` as const)}
                               />
 
                               <div className='flex items-center space-x-2'>
@@ -124,7 +124,7 @@ export const ProductDetailSheet: React.FC<ProductDetailSheetProps> = ({
                                   aria-label='remove'
                                   onClick={() => {
                                     if (fields.length > 1) {
-                                      remove(index as number)
+                                      remove(index)
                                     }
                                   }}
                                   disabled={fields.length <= 1}

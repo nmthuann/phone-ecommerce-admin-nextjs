@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ImagePlus, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 export type ImageOptions = {
   maxFileSize: number // Kích thước file tối đa 300 KB
@@ -24,18 +25,15 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ disabled, onChange, onRemove, value, imageOptions }) => {
   const [isMounted, setIsMounted] = useState(false)
-
+  const defaultUrl = 'https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg'
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  const handleSuccess = async (results: {
-    info: {
-      secure_url: unknown
-    }
-  }) => {
-    console.log(results.info.secure_url)
-    onChange(results.info.secure_url as string)
+  const handleSuccess = async (results: unknown) => {
+    const result = results as { info: { secure_url: string } }
+    console.log(result.info.secure_url)
+    onChange(result.info.secure_url)
   }
 
   if (!isMounted) {
@@ -47,11 +45,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ disabled, onChange, onRemove,
       <div className='mb-4 flex items-center gap-4'>
         {value.map(imageUrl => (
           <div key={imageUrl} className='relative w-[200px] h-[200px] rounded-md overflow-hidden'>
-            <div className='z-10 absolute top-2 right-2'>
-              <Button type='button' onClick={() => onRemove(imageUrl)} variant='destructive' size='sm'>
-                <Trash className='h-4 w-4' />
-              </Button>
-            </div>
+            {imageUrl !== defaultUrl ? (
+              <div className='z-10 absolute top-2 right-2'>
+                <Button type='button' onClick={() => onRemove(imageUrl)} variant='destructive' size='sm'>
+                  <Trash className='h-4 w-4' />
+                </Button>
+              </div>
+            ) : (
+              <div className='z-10 absolute top-2 right-2'>
+                <Badge>Default for Product Thumb</Badge>
+              </div>
+            )}
             <Image fill className='object-cover' alt='Image' src={imageUrl} />
           </div>
         ))}

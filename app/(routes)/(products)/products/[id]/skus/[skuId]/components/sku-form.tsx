@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast'
 import { useParams, useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { Heading } from '@/components/ui/heading'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -23,8 +23,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { SkuDetailSheet } from './sku-detail-sheet'
+import { SkuDetail, SkuDetailSheet } from './sku-detail-sheet'
 import ImageUpload from '@/components/modules/cloudinary/image-upload'
+import { convertJsonToAttributes } from '@/utils/convert'
 
 const formSchema = z.object({
   skuNo: z.string().min(1),
@@ -60,7 +61,7 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
       skuNo: '',
       barcode: '',
       skuName: '',
-      image: '',
+      image: 'https://res.cloudinary.com/ddyreawwf/image/upload/v1732779960/no-image_ur9qsg.jpg',
       status: true
     }
   })
@@ -72,7 +73,8 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
     }
     const payload = {
       ...data,
-      skuAttributes: skuAttributes // Ensure correct format
+      productId: parseInt(productId),
+      skuAttributes: skuAttributes
     }
     console.log('submit payload', payload)
     try {
@@ -80,7 +82,7 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
       if (initialData) {
         await axios.put(`/api/skus/${params.id}`, payload)
       } else {
-        await axios.post(`/api/products/${params.id}/skus`, payload)
+        await axios.post(`/api/skus`, payload)
       }
 
       router.push(`/products/${params.id}/skus`)
@@ -103,6 +105,19 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
       setLoading(false)
     }
   }
+
+  const skuDetail: SkuDetail = initialData
+    ? {
+        skuAttributes: convertJsonToAttributes(initialData.skuAttributes as Record<string, string>)
+      }
+    : {
+        skuAttributes: [
+          {
+            key: '',
+            value: ''
+          }
+        ]
+      }
 
   return (
     <div>
@@ -128,15 +143,18 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
 
       <div className='flex flex-row items-center justify-between mt-2 mb-2 l'>
         <Heading title={title} description={description} />
-        <SkuDetailSheet setSkuAttributesForm={setSkuAttributes} data={skuAttributes} />
+        <SkuDetailSheet setSkuAttributesForm={setSkuAttributes} initDetail={skuDetail} />
       </div>
 
       <Separator className='mb-5' />
 
       <div>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
-            <div className=''>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='max-w-md mx-auto p-6 bg-white shadow-md border-1 rounded-lg mt-5'
+          >
+            <div className='space-y-6'>
               <FormField
                 control={form.control}
                 name='image'
@@ -206,12 +224,14 @@ export const SkuForm: React.FC<SkuFormProps> = ({ initialData, productId, curren
                 control={form.control}
                 name='status'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
+                  <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
                     <FormControl>
-                      <Checkbox checked={field.value} onCheckedChange={field.onChange} className='m-5 mt-2' />
+                      <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
-                    <FormMessage />
+                    <div className='space-y-1 leading-none'>
+                      <FormLabel>Satus</FormLabel>
+                      <FormDescription>This product will appear on the home page</FormDescription>
+                    </div>
                   </FormItem>
                 )}
               />

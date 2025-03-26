@@ -17,15 +17,15 @@ import {
 } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { ProductResponse } from '@/types/products.type'
 import { ProductColumn } from './columns'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+// import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
-import axios from 'axios'
+// import axios from 'axios'
 import { DataTableToolbar } from './data-table-toolbar'
 import { useState } from 'react'
-import { Page } from '@/types/responses/page.type'
 import { DataTablePagination } from './data-table-pagination'
+// import { Product } from '@prisma/client'
+// import { mapAttributes } from '@/utils/convert'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -40,37 +40,36 @@ export function DataTable<TValue>({ columns, defaultData }: Readonly<DataTablePr
     pageSize: 10
   })
 
-  async function getAllData(pagination: PaginationState): Promise<Page<ProductResponse>> {
-    const res = await axios.get(`/api/products?page=${pagination.pageIndex + 1}&size=${pagination.pageSize}`)
+  // async function getAllData(pagination: PaginationState): Promise<Product[]> {
+  //   const res = await axios.get(`/api/products?page=${pagination.pageIndex + 1}&size=${pagination.pageSize}`)
+  //   return res.data
+  // }
 
-    return res.data
-  }
+  // const dataQuery = useQuery({
+  //   queryKey: ['data', pagination],
+  //   queryFn: () => getAllData(pagination),
+  //   placeholderData: keepPreviousData
+  // })
 
-  const dataQuery = useQuery({
-    queryKey: ['data', pagination],
-    queryFn: () => getAllData(pagination),
-    placeholderData: keepPreviousData
-  })
+  // const formattedData: ProductColumn[] | undefined = dataQuery.data?.map(item => ({
+  //   id: String(item.id),
+  //   productName: item.productName,
+  //   productLine: item.productLine,
+  //   status: item.status,
+  //   slug: item.slug,
+  //   description: item.description,
+  //   productSpecs: mapAttributes(item.productSpecs as Record<string, unknown>),
 
-  const formattedData: ProductColumn[] | undefined = dataQuery.data?.data.map((item: ProductResponse) => ({
-    id: String(item.id),
-    productName: item.productName,
-    productLine: item.productLine,
-    status: item.status,
-    slug: item.slug,
-    description: item.description,
-    productSpecs: item.productSpecs,
-    categoryName: item.categoryName,
-    categoryUrl: item.categoryUrl,
-    brandName: item.brandName,
-    brandUrl: item.brandUrl
-    // skus: item.skus
-  }))
+  //   brandName: '',
+  //   brandUrl: ''
+  // }))
 
   const table = useReactTable({
-    data: formattedData ?? defaultData, // Use formatted data or default
+    data: defaultData,
+    // ?? defaultData, // Use formatted data or default
     columns,
-    rowCount: dataQuery.data?.meta.itemCount ?? 0, // Total number of rows
+    rowCount: 10,
+    //dataQuery.data?.length ?? 0, //TODO: fix count here
     state: {
       pagination,
       columnFilters,

@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { PurchaseOrderDetailColumn } from './components/columns'
 import { PurchaseOrderDetailClient } from './components/client'
 import prisma from '@/lib/prisma'
-import { mapAttributes } from '@/utils/map'
+import { mapAttributes } from '@/utils/convert'
 
 export const metadata: Metadata = {
   title: 'Purchase Order Details',

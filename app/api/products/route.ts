@@ -1,30 +1,59 @@
 import prisma from '@/lib/prisma'
+import { convertAttributesToJson } from '@/utils/convert'
+import { createSlug } from '@/utils/slug'
+import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
+export async function POST(req: Request) {
+  try {
+    const { userId } = await auth()
 
-// export async function GET(req: NextRequest) {
-//   const searchParams = req.nextUrl.searchParams
-//   const page = searchParams.get('page') ?? '1'
-//   const size = searchParams.get('size') ?? '10'
+    const body = await req.json()
 
-//   const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/products?page=${page}&take=${size}&order=${OrderBy.ASCENDING}`
-//   const options = {
-//     method: 'GET',
-//     next: { revalidate: 0 }
-//   }
+    const { productName, productLine, brandId, status, description, productSpecs } = body
 
-//   try {
-//     const res = await fetch(URL, options)
-//     if (!res.ok) {
-//       const errorResponse = await res.json().catch(() => ({}))
-//       return NextResponse.json(errorResponse, { status: res.status })
-//     }
-//     const paginatedResponse: Page<ProductResponse> = await res.json()
-//     return NextResponse.json(paginatedResponse, { status: 200 })
-//   } catch (error) {
-//     console.error('Error fetching data:', error)
-//     return NextResponse.json({ message: 'Failed to fetch products', error: error }, { status: 500 })
-//   }
-// }
+    if (!userId) {
+      return new NextResponse('Unauthenticated', { status: 403 })
+    }
+
+    if (!productName) {
+      return new NextResponse('productName is required', { status: 400 })
+    }
+
+    if (!productLine) {
+      return new NextResponse('productLine is required', { status: 400 })
+    }
+
+    if (!brandId) {
+      return new NextResponse('brandId id is required', { status: 400 })
+    }
+    if (!status) {
+      return new NextResponse('status id is required', { status: 400 })
+    }
+    if (!description) {
+      return new NextResponse('description id is required', { status: 400 })
+    }
+    if (!productSpecs) {
+      return new NextResponse('productSpecs id is required', { status: 400 })
+    }
+
+    const product = await prisma.product.create({
+      data: {
+        productName: productName as string,
+        slug: `/${createSlug(productName)}`,
+        productLine: productLine as string,
+        status: status as boolean,
+        brandId: brandId as number,
+        description: description as string,
+        productSpecs: convertAttributesToJson(productSpecs)
+      }
+    })
+
+    return NextResponse.json(product)
+  } catch (error) {
+    console.log('[PRODUCTS_POST]', error)
+    return new NextResponse('Internal error', { status: 500 })
+  }
+}
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams

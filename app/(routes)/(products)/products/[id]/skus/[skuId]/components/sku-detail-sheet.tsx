@@ -22,9 +22,13 @@ import { Key } from 'react'
 import { Input } from '@/components/ui/input'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
+export type SkuDetail = {
+  skuAttributes: Attribute[]
+}
+
 interface SkuDetailSheetProps {
   setSkuAttributesForm: (attributes: Attribute[]) => void
-  data: Attribute[]
+  initDetail: SkuDetail
 }
 
 const formSchema = z.object({
@@ -38,13 +42,16 @@ const formSchema = z.object({
 
 type SkuDetailFormValues = z.infer<typeof formSchema>
 
-export const SkuDetailSheet: React.FC<SkuDetailSheetProps> = ({ setSkuAttributesForm, data }) => {
-  const title = data ? 'Edit Sku Detail' : 'Create Sku Detail'
+export const SkuDetailSheet: React.FC<SkuDetailSheetProps> = ({ setSkuAttributesForm, initDetail }) => {
+  const title = initDetail ? 'Edit Sku Detail' : 'Create Sku Detail'
 
-  const toastMessage = data ? 'Sku updated Successfully.' : 'Sku Detail created Successfully.'
+  const toastMessage = initDetail ? 'Sku updated Successfully.' : 'Sku Detail created Successfully.'
 
   const form = useForm<SkuDetailFormValues>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      skuAttributes: (initDetail.skuAttributes || [{ key: '', value: '' }]) as { key: string; value: string }[]
+    }
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -84,19 +91,19 @@ export const SkuDetailSheet: React.FC<SkuDetailSheetProps> = ({ setSkuAttributes
                             inputField: {
                               id: Key | null | undefined
                             },
-                            index: unknown
+                            index: number
                           ) => (
                             <div key={inputField.id} className='flex space-x-4 items-center'>
                               <Input
                                 type='text'
                                 className='max-w-xs'
-                                {...form.register(`skuAttributes.${index as number}.key`)}
+                                {...form.register(`skuAttributes.${index}.key`)}
                               />
 
                               <Input
                                 type='text'
                                 className='max-w-xs'
-                                {...form.register(`skuAttributes.${index as number}.value`)}
+                                {...form.register(`skuAttributes.${index}.value`)}
                               />
 
                               <div className='flex items-center space-x-2'>
@@ -104,7 +111,7 @@ export const SkuDetailSheet: React.FC<SkuDetailSheetProps> = ({ setSkuAttributes
                                   aria-label='remove'
                                   onClick={() => {
                                     if (fields.length > 1) {
-                                      remove(index as number)
+                                      remove(index)
                                     }
                                   }}
                                   disabled={fields.length <= 1}
@@ -134,11 +141,6 @@ export const SkuDetailSheet: React.FC<SkuDetailSheetProps> = ({ setSkuAttributes
               />
 
               <SheetClose asChild>
-                {/* <Tooltip content='Please fill in all required fields.' placement='top' color='warning'>
-                  <Button type='submit' size='md' color='primary' radius='lg' className='font-medium w-full'>
-                    {!form.formState.isValid ? 'No Confirm' : 'Confirm'}
-                  </Button>
-                </Tooltip> */}
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>

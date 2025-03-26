@@ -3,7 +3,7 @@ import ErrorComponent from '@/components/errors/error-component'
 import { Metadata } from 'next'
 import { ProductSkuClient } from './components/client'
 import prisma from '@/lib/prisma'
-import { mapAttributes } from '@/utils/map'
+import { convertJsonToAttributes } from '@/utils/convert'
 export const metadata: Metadata = {
   title: 'SKUs',
   description: 'Skus Management Table.'
@@ -34,7 +34,7 @@ const ProductSkusPage = async ({ params }: { params: Promise<{ id: string }> }) 
         image: item.productSku.image,
         status: item.productSku.status,
         slug: item.productSku.slug,
-        skuAttributes: mapAttributes(item.productSku.skuAttributes as Record<string, unknown>),
+        skuAttributes: convertJsonToAttributes(item.productSku.skuAttributes as Record<string, string>),
         stock: await getStock(item.productSku.id)
       }))
     )
