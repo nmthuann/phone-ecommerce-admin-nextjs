@@ -3,7 +3,7 @@ import { BrandColumn } from './components/columns'
 import { BrandClient } from './components/client'
 
 const BrandsPage = async () => {
-  const brands = await prisma.brand.findMany({})
+  const brands = await prisma.brand.findMany()
 
   const formattedbrands: BrandColumn[] = brands.map(item => ({
     id: String(item.id),

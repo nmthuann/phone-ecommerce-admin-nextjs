@@ -1,9 +1,10 @@
 'use client'
 
+import axios from 'axios'
 import { useState } from 'react'
-import { Copy, Edit, HandCoins, ListCollapseIcon, MoreHorizontal } from 'lucide-react'
+import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react'
 import { toast } from 'react-hot-toast'
-import { usePathname, useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -14,27 +15,42 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-import { ProductSkuColumn } from './columns'
-import SkuAttributeDialog from './sku-detail-modal'
+import { BrandColumn } from './columns'
+import { AlertModal } from '@/components/alert-modal'
 
 interface CellActionProps {
-  data: ProductSkuColumn
+  data: BrandColumn
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const pathname = usePathname()
   const router = useRouter()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const params = useParams()
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+
+  const onConfirm = async () => {
+    try {
+      setLoading(true)
+      await axios.delete(`/api/${params.storeId}/brands/${data.id}`)
+      toast.success('brand deleted.')
+      router.refresh()
+    } catch (error: unknown) {
+      console.log(error)
+      toast.error('Make sure you removed all categories using this brand first.')
+    } finally {
+      setOpen(false)
+      setLoading(false)
+    }
+  }
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
-    toast.success('SKU ID copied to clipboard.')
+    toast.success('brand ID copied to clipboard.')
   }
-  const handleClickViewSkuDetail = () => {
-    setIsOpen(true)
-  }
+
   return (
-    <div>
+    <>
+      <AlertModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onConfirm} loading={loading} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='h-8 w-8 p-0'>
@@ -47,23 +63,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => onCopy(data.id)}>
             <Copy className='mr-2 h-4 w-4' /> Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}`)}>
-            <Edit className='mr-2 h-4 w-4' /> Update Sku
+          <DropdownMenuItem onClick={() => router.push(`/brands/${data.id}`)}>
+            <Edit className='mr-2 h-4 w-4' /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}/prices`)}>
-            <HandCoins className='mr-2 h-4 w-4' /> Set up Prices
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleClickViewSkuDetail()}>
-            <ListCollapseIcon className='mr-2 h-4 w-4' /> View SKU Detail
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            <Trash className='mr-2 h-4 w-4' /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <SkuAttributeDialog
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        skuName={data.skuName}
-        attrs={data.skuAttributes}
-      />
-    </div>
+    </>
   )
 }

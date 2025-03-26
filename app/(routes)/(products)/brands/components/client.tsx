@@ -15,6 +15,7 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from '@/components/ui/data-table'
+import { useRouter } from 'next/navigation'
 
 interface BrandClientProps {
   brands: BrandColumn[]
@@ -24,6 +25,8 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
+  const router = useRouter()
+
   return (
     <div>
       <div>
@@ -42,7 +45,7 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
       <div className='flex items-center justify-between '>
         <Heading title={`Brands (${brands.length})`} description='Manage Brands for your store' />
         <div className='flex space-x-2'>
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
+          <Button onClick={() => router.push(`/brands/new`)} className='sm:px-4 sm:py-2 px-2 py-1'>
             <PlusCircle />
             Add New
           </Button>
