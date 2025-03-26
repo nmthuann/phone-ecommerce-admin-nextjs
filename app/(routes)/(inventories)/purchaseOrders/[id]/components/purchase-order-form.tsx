@@ -20,13 +20,13 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
-import { PurchaseOrder, Supplier } from '@/types/inventories.type'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format, isValid } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
+import { PurchaseOrder, Supplier } from '@prisma/client'
 
 const formSchema = z.object({
   orderDate: z.date(),

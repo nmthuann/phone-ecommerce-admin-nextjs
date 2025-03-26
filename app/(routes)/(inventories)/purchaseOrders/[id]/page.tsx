@@ -1,9 +1,8 @@
 import ErrorComponent from '@/components/errors/error-component'
 import { Metadata } from 'next'
 import PurchaseOrderForm from './components/purchase-order-form'
-import { getPurchaseOrderById } from '@/actions/inventories/get-purchase-order'
 import { Supplier } from '@/types/inventories.type'
-import { getSuppliers } from '@/actions/inventories/get-suppliers'
+import prisma from '@/lib/prisma'
 export const metadata: Metadata = {
   title: 'Brand',
   description: 'Brand Management.'
@@ -17,9 +16,13 @@ const PurchaseOrderPage = async ({ params }: { params: Promise<{ id: string }> }
 
   try {
     if (id !== 'new') {
-      purchaseOrder = await getPurchaseOrderById(parseInt(id, 10))
+      purchaseOrder = await prisma.purchaseOrder.findUnique({
+        where: {
+          id: parseInt(id)
+        }
+      })
     }
-    suppliers = await getSuppliers()
+    suppliers = await prisma.supplier.findMany()
   } catch (error) {
     console.error('Error:::', error)
     return (

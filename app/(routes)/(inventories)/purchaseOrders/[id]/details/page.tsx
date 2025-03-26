@@ -1,9 +1,10 @@
-import { getPurchaseOrderById } from '@/actions/inventories/get-purchase-order'
 import ErrorComponent from '@/components/errors/error-component'
-import { PurchaseOrder, PurchaseOrderDetail } from '@/types/inventories.type'
 import { Metadata } from 'next'
 import { PurchaseOrderDetailColumn } from './components/columns'
 import { PurchaseOrderDetailClient } from './components/client'
+import prisma from '@/lib/prisma'
+import { mapAttributes } from '@/utils/map'
+
 export const metadata: Metadata = {
   title: 'Purchase Order Details',
   description: 'PurchaseOrder Details Management Table.'
@@ -12,8 +13,17 @@ const PurchaseOrderDetailsPage = async ({ params }: { params: Promise<{ id: stri
   const { id } = await params
 
   try {
-    const purchaseOrder: PurchaseOrder | null = await getPurchaseOrderById(parseInt(id, 10))
-    if (!purchaseOrder) {
+    const purchaseOrderDetails = await prisma.purchaseOrderDetail.findMany({
+      where: {
+        purchaseOrderId: parseInt(id)
+      },
+      include: {
+        sku: true,
+        purchaseOrder: true
+      }
+    })
+
+    if (!purchaseOrderDetails) {
       return (
         <ErrorComponent
           page='Purchase Order Details Page'
@@ -21,29 +31,27 @@ const PurchaseOrderDetailsPage = async ({ params }: { params: Promise<{ id: stri
         />
       )
     }
-    const formattedData: PurchaseOrderDetailColumn[] | undefined = purchaseOrder.purchaseOrderDetails.map(
-      (item: PurchaseOrderDetail) => ({
-        id: String(purchaseOrder.id),
-        orderNumber: purchaseOrder.orderNumber,
-        quantity: String(item.quantity),
-        unitPrice: String(item.unitPrice),
-        skuId: String(item.sku.id),
-        barcode: item.sku.barcode,
-        skuNo: item.sku.skuNo,
-        skuName: item.sku.skuName,
-        image: item.sku.image,
-        status: item.sku.status,
-        skuAttributes: item.sku.skuAttributes,
-        slug: item.sku.slug
-      })
-    )
+    const formattedData: PurchaseOrderDetailColumn[] = purchaseOrderDetails.map(item => ({
+      id: String(item.purchaseOrderId),
+      orderNumber: item.purchaseOrder.orderNumber,
+      quantity: String(item.quantity),
+      unitPrice: String(item.unitPrice),
+      skuId: String(item.sku.id),
+      barcode: item.sku.barcode,
+      skuNo: item.sku.skuNo,
+      skuName: item.sku.skuName,
+      image: item.sku.image,
+      status: item.sku.status,
+      skuAttributes: mapAttributes(item.sku.skuAttributes as Record<string, unknown>),
+      slug: item.sku.slug
+    }))
 
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>
           <PurchaseOrderDetailClient
             poDetailColsData={formattedData}
-            length={purchaseOrder.purchaseOrderDetails.length}
+            length={purchaseOrderDetails.length}
             currentParam={id}
           />
         </div>

@@ -14,6 +14,8 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from './data-table'
+import { useState } from 'react'
+import WarehouseReceiptModal from './warehouse-receipt-modal'
 
 interface WarehouseReceiptClientProps {
   data: WarehouseReceiptColumn[]
@@ -21,6 +23,7 @@ interface WarehouseReceiptClientProps {
 }
 
 export const WarehouseReceiptClient: React.FC<WarehouseReceiptClientProps> = ({ data, length }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
@@ -42,11 +45,11 @@ export const WarehouseReceiptClient: React.FC<WarehouseReceiptClientProps> = ({ 
       <div className='flex items-center justify-between '>
         <Heading title={`Warehouse Receipts (${length})`} description='Manage Warehouse Receipts for your store' />
         <div className='flex space-x-2'>
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
+          <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1'>
             <PlusCircle />
             Add New
           </Button>
-
+          <WarehouseReceiptModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
             <DownloadCloudIcon />
             Export File
