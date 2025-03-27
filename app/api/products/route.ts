@@ -3,6 +3,7 @@ import { convertAttributesToJson } from '@/utils/convert'
 import { createSlug } from '@/utils/slug'
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth()

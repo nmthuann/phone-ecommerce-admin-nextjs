@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import { PurchaseOrderDetailColumn } from './components/columns'
 import { PurchaseOrderDetailClient } from './components/client'
 import prisma from '@/lib/prisma'
-import { mapAttributes } from '@/utils/convert'
+import { convertJsonToAttributes } from '@/utils/convert'
 
 export const metadata: Metadata = {
   title: 'Purchase Order Details',
@@ -42,7 +42,7 @@ const PurchaseOrderDetailsPage = async ({ params }: { params: Promise<{ id: stri
       skuName: item.sku.skuName,
       image: item.sku.image,
       status: item.sku.status,
-      skuAttributes: mapAttributes(item.sku.skuAttributes as Record<string, unknown>),
+      skuAttributes: convertJsonToAttributes(item.sku.skuAttributes as Record<string, string>),
       slug: item.sku.slug
     }))
 

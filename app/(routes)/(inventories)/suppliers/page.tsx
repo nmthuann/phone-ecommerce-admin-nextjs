@@ -1,6 +1,12 @@
 import prisma from '@/lib/prisma'
 import { SupplierColumn } from './components/columns'
 import { SupplierClient } from './components/client'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Suppliers',
+  description: 'Suppliers Managements.'
+}
 
 const SuppliersPage = async () => {
   const Suppliers = await prisma.supplier.findMany()

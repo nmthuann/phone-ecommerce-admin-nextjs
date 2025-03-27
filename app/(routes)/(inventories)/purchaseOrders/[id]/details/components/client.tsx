@@ -15,6 +15,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
+import PurchaseOrderDetailModal from './po-detail-modal'
+import { useState } from 'react'
 
 interface PurchaseOrderDetailClientProps {
   poDetailColsData: PurchaseOrderDetailColumn[]
@@ -30,6 +32,7 @@ export const PurchaseOrderDetailClient: React.FC<PurchaseOrderDetailClientProps>
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <div>
       <div>
@@ -59,11 +62,11 @@ export const PurchaseOrderDetailClient: React.FC<PurchaseOrderDetailClientProps>
           description='Manage Purchase Order Details for your store'
         />
         <div className='flex space-x-2'>
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
+          <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
             <PlusCircle />
             Add New
           </Button>
-
+          <PurchaseOrderDetailModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
             <DownloadCloudIcon />
             Export File

@@ -4,13 +4,10 @@ import { CalendarIcon, DownloadCloudIcon, PlusCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Heading } from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import LoadingOverlay from '@/components/loading-overlay'
 import { columns, PurchaseOrdersColumn } from './columns'
-import { PurchaseOrderResponse } from '@/types/inventories.type'
-import { getPurchaseOrdersByOrderDate } from '@/actions/inventories/get-purchase-orders'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
@@ -50,21 +47,22 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
         return
       }
 
-      const purchaseOrders = await getPurchaseOrdersByOrderDate(1, 10, orderDate)
-      console.log('purchaseOrders:::', purchaseOrders)
-      if (purchaseOrders.data.length === 0) {
-        setFilteredPurchaseOrders([])
-      } else {
-        const formatted = purchaseOrders.data.map((item: PurchaseOrderResponse) => ({
-          id: String(item.id),
-          orderNumber: item.orderNumber,
-          supplierId: String(item.supplierId),
-          employeeId: String(item.employeeId),
-          orderDate: String(item.orderDate),
-          createdAt: String(item.createdAt)
-        }))
-        setFilteredPurchaseOrders(formatted)
-      }
+      //const purchaseOrders = await getPurchaseOrdersByOrderDate(1, 10, orderDate)
+      //const purchaseOrders = await axios.get(`/api/purchaseOrders?page=${1}&size=${10}&orderDate=${orderDate}`)
+      // console.log('purchaseOrders:::', purchaseOrders)
+      // if (purchaseOrders.data.length === 0) {
+      //   setFilteredPurchaseOrders([])
+      // } else {
+      //   const formatted = purchaseOrders.data.map((item) => ({
+      //     id: String(item.id),
+      //     orderNumber: item.orderNumber,
+      //     supplierId: String(item.supplierId),
+      //     employeeId: String(item.employeeId),
+      //     orderDate: String(item.orderDate),
+      //     createdAt: String(item.createdAt)
+      //   }))
+      //   setFilteredPurchaseOrders(formatted)
+      // }
     } catch (error: unknown) {
       toastSonner('Failed to load Purchase order. Please try again.')
       console.log(error)
@@ -120,7 +118,7 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
           <Button
             onClick={() => {
               setLoading(true)
-              router.push(`/products/new`)
+              router.push(`/purchaseOrders/new`)
             }}
             disabled={loading}
             className='

@@ -4,8 +4,8 @@ import PurchaseOrderForm from './components/purchase-order-form'
 import { Supplier } from '@/types/inventories.type'
 import prisma from '@/lib/prisma'
 export const metadata: Metadata = {
-  title: 'Brand',
-  description: 'Brand Management.'
+  title: 'Purchase Order',
+  description: 'Purchase Order Management.'
 }
 
 const PurchaseOrderPage = async ({ params }: { params: Promise<{ id: string }> }) => {

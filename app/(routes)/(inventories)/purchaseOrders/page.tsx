@@ -32,9 +32,11 @@ const PurchaseOrdersPage = async () => {
       orderNumber: item.orderNumber,
       supplierId: String(item.supplierId),
       employeeId: String(item.employeeId),
-      orderDate: String(item.orderDate),
+
+      orderDate: item.orderDate.toISOString().split('T')[0], // Lấy YYYY-MM-DD
       createdAt: String(item.createdAt)
     }))
+
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>

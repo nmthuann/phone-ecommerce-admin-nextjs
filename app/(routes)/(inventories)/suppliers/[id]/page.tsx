@@ -18,11 +18,14 @@ async function getLocation(): Promise<City[]> {
 
 const SupplierPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
-  const supplier = await prisma.supplier.findUnique({
-    where: {
-      id: parseInt(id)
-    }
-  })
+  let supplier = null
+  if (id !== 'new') {
+    supplier = await prisma.supplier.findUnique({
+      where: {
+        id: parseInt(id)
+      }
+    })
+  }
 
   const location = await getLocation()
   return (

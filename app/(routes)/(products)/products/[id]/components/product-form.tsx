@@ -85,7 +85,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, brands })
     try {
       setLoading(true)
       if (initialData) {
-        await axios.patch(`/api/products/${params.productId}`, payload)
+        await axios.patch(`/api/products/${params.id}`, payload)
       } else {
         console.log(`Submit ${JSON.stringify(payload, null, 2)} `)
         await axios.post(`/api/products`, payload)

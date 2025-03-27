@@ -62,7 +62,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
     }
   })
 
-  const handleCityChange = (event: any) => {
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     //React.ChangeEvent<HTMLInputElement>
     const selectedCityId: string = event.target.value
     console.log('selectedCityId:::', city)
@@ -76,7 +76,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
     }
   }
 
-  const handleDistrictChange = (event: any) => {
+  const handleDistrictChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     //React.ChangeEvent<HTMLInputElement>
     const selectedDistrictId: string = event.target.value
     console.log('selectedCityId:::', district)
@@ -100,7 +100,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
     try {
       setLoading(true)
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/suppliers/${params.supplierId}`, {
+        await axios.patch(`/api/suppliers/${params.id}`, {
           name: data.name,
           phone: data.phone,
           email: data.email,
@@ -111,12 +111,11 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
           name: data.name,
           phone: data.phone,
           email: data.email,
-
           address: fullAddress
         })
       }
 
-      router.push(`/${params.storeId}/suppliers`)
+      router.push(`/suppliers`)
       router.refresh()
       toast.success(toastMessage)
     } catch (error: unknown) {
@@ -130,7 +129,7 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
   const onDelete = async () => {
     try {
       setLoading(true)
-      await axios.delete(`/api/${params.storeId}/suppliers/${params.supplierId}`)
+      await axios.delete(`/api/suppliers/${params.id}`)
       router.refresh()
       router.push(`/${params.storeId}/suppliers`)
       toast.success('Supplier deleted.')
@@ -156,8 +155,11 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
       </div>
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
-          <div className='md:grid md:grid-cols-3 gap-8'>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='max-w-md mx-auto space-y-5 p-6 bg-white shadow-md border-1 rounded-lg mt-5'
+        >
+          <div className='flex flex-row space-x-2'>
             <FormField
               control={form.control}
               name='name'
@@ -171,132 +173,21 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
                 </FormItem>
               )}
             />
-
-            {/* Địa Chỉ */}
             <FormField
               control={form.control}
-              name='address'
+              name='phone'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Địa Chỉ</FormLabel>
+                  <FormLabel>Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder='Your Address' {...field} />
+                    <Input disabled={loading} placeholder='Supplier Phone' {...field} />
                   </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='city'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tỉnh Thành</FormLabel>
-                  <div className='relative w-max'>
-                    <FormControl>
-                      <select
-                        onChangeCapture={handleCityChange}
-                        className={cn(
-                          buttonVariants({
-                            variant: 'outline'
-                          }),
-                          'w-[200px] appearance-none bg-transparent font-normal'
-                        )}
-                        {...field}
-                      >
-                        {location.map((city: City) => (
-                          <option key={city.Id} value={city.Name}>
-                            {city.Name}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='district'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quận/ Huyện</FormLabel>
-                  <div className='relative w-max'>
-                    <FormControl>
-                      <select
-                        onChangeCapture={handleDistrictChange}
-                        className={cn(
-                          buttonVariants({
-                            variant: 'outline'
-                          }),
-                          'w-[200px] appearance-none bg-transparent font-normal'
-                        )}
-                        {...field}
-                      >
-                        {districtList.map((district: Districts) => (
-                          <option key={district.Id} value={district.Name}>
-                            {district.Name}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='ward'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phường/ Xã</FormLabel>
-                  <div className='relative w-max'>
-                    <FormControl>
-                      <select
-                        className={cn(
-                          buttonVariants({
-                            variant: 'outline'
-                          }),
-                          'w-[200px] appearance-none bg-transparent font-normal'
-                        )}
-                        {...field}
-                      >
-                        {wardList.map((ward: Wards) => (
-                          <option key={ward.Id} value={ward.Name}>
-                            {ward.Name}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
-                  </div>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <FormField
-            control={form.control}
-            name='phone'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input disabled={loading} placeholder='Supplier Phone' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <FormField
             control={form.control}
             name='email'
@@ -310,8 +201,120 @@ export const SupplierForm: React.FC<SupplierFormProps> = ({ initialData, locatio
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name='city'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tỉnh Thành</FormLabel>
+                <div className='relative w-max'>
+                  <FormControl>
+                    <select
+                      onChangeCapture={handleCityChange}
+                      className={cn(
+                        buttonVariants({
+                          variant: 'outline'
+                        }),
+                        'w-[calc(100vw/4)] appearance-none bg-transparent font-normal'
+                      )}
+                      {...field}
+                    >
+                      {location.map((city: City) => (
+                        <option key={city.Id} value={city.Name}>
+                          {city.Name}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='district'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Quận/ Huyện</FormLabel>
+                <div className='relative w-max'>
+                  <FormControl>
+                    <select
+                      onChangeCapture={handleDistrictChange}
+                      className={cn(
+                        buttonVariants({
+                          variant: 'outline'
+                        }),
+                        'w-[calc(100vw/4)] appearance-none bg-transparent font-normal'
+                      )}
+                      {...field}
+                    >
+                      {districtList.map((district: Districts) => (
+                        <option key={district.Id} value={district.Name}>
+                          {district.Name}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='ward'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phường/ Xã</FormLabel>
+                <div className='relative w-max'>
+                  <FormControl>
+                    <select
+                      className={cn(
+                        buttonVariants({
+                          variant: 'outline'
+                        }),
+                        'w-[calc(100vw/4)] appearance-none bg-transparent font-normal'
+                      )}
+                      {...field}
+                    >
+                      {wardList.map((ward: Wards) => (
+                        <option key={ward.Id} value={ward.Name}>
+                          {ward.Name}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <ChevronDownIcon className='absolute right-3 top-2.5 h-4 w-4 opacity-50' />
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Địa Chỉ */}
+          <FormField
+            control={form.control}
+            name='address'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Địa Chỉ</FormLabel>
+                <FormControl>
+                  <Input placeholder='Your Address' {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* </div> */}
-          <Button disabled={loading} className='ml-auto' type='submit'>
+          <Button disabled={loading} className='ml-auto w-full' type='submit'>
             {action}
           </Button>
         </form>

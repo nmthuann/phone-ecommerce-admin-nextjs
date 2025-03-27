@@ -1,34 +1,55 @@
-// import { OrderBy } from '@/constants/order-by.enum'
 import prisma from '@/lib/prisma'
-// import { PurchaseOrderResponse } from '@/types/inventories.type'
-// import { Page } from '@/types/responses/page.type'
-import { NextApiResponse } from 'next'
-import { NextRequest } from 'next/server' //NextResponse
+import { auth, currentUser } from '@clerk/nextjs/server'
+import { NextRequest, NextResponse } from 'next/server' //NextResponse
+export async function POST(req: Request) {
+  try {
+    const user = await currentUser()
+    const { userId } = await auth()
 
-export async function GET(req: NextRequest, res: NextApiResponse) {
-  // const searchParams = req.nextUrl.searchParams
-  // const page = searchParams.get('page') ?? '1'
-  // const size = searchParams.get('size') ?? '10'
+    const body = await req.json()
 
-  // const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/purchaseOrders?page=${page}&take=${size}&order=${OrderBy.ASCENDING}`
-  // const options = {
-  //   method: 'GET',
-  //   next: { revalidate: 0 }
-  // }
+    const { orderNumber, supplierId, orderDate } = body
 
-  // try {
-  //   const res = await fetch(URL, options)
-  //   if (!res.ok) {
-  //     const errorResponse = await res.json().catch(() => ({}))
-  //     return NextResponse.json(errorResponse, { status: res.status })
-  //   }
-  //   const paginatedResponse: Page<PurchaseOrderResponse> = await res.json()
-  //   return NextResponse.json(paginatedResponse, { status: 200 })
-  // } catch (error) {
-  //   console.error('Error fetching data:', error)
-  //   return NextResponse.json({ message: 'Failed to fetch products', error: error }, { status: 500 })
-  // }
+    if (!userId) {
+      return new NextResponse('Unauthenticated', { status: 403 })
+    }
 
+    if (!user) {
+      return new NextResponse('Unauthenticated', { status: 403 })
+    }
+
+    if (!orderNumber) {
+      return new NextResponse('orderNumber is required', { status: 400 })
+    }
+
+    if (!supplierId) {
+      return new NextResponse('supplierId is required', { status: 400 })
+    }
+
+    if (!orderDate) {
+      return new NextResponse('orderDate id is required', { status: 400 })
+    }
+
+    console.log(userId)
+    console.log(user.emailAddresses[0].emailAddress)
+
+    const product = await prisma.purchaseOrder.create({
+      data: {
+        orderNumber: orderNumber as string,
+        supplierId: supplierId as number,
+        orderDate: new Date(orderDate),
+        employeeId: user.emailAddresses[0].emailAddress
+      }
+    })
+
+    return NextResponse.json(product)
+  } catch (error) {
+    console.log('[PURCHASES_POST]', error)
+    return new NextResponse('Internal error', { status: 500 })
+  }
+}
+
+export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams
     const orderNumber = searchParams.get('orderNumber') ?? '10'
@@ -37,7 +58,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
 
     if (orderNumber) {
       if (typeof orderNumber !== 'string') {
-        return res.status(400).json({ error: 'Invalid order number' })
+        return new NextResponse('Invalid order number', { status: 400 })
       }
 
       const purchaseOrder = await prisma.purchaseOrder.findUnique({
@@ -46,20 +67,18 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       })
 
       if (!purchaseOrder) {
-        return res.status(404).json({ error: 'Purchase order not found' })
+        return new NextResponse('Purchase order not found', { status: 404 })
       }
-
-      return res.status(200).json(purchaseOrder)
+      return NextResponse.json(purchaseOrder)
     } else {
       const purchaseOrders = await prisma.purchaseOrder.findMany({
         skip: (parseInt(page) - 1) * parseInt(size),
         take: parseInt(size)
       })
-
-      return res.status(200).json(purchaseOrders)
+      return NextResponse.json(purchaseOrders)
     }
   } catch (error) {
     console.error('Error fetching purchase orders:', error)
-    return res.status(500).json({ error: 'Internal Server Error' })
+    return new NextResponse('Internal error', { status: 500 })
   }
 }
