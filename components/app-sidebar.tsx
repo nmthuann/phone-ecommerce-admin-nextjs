@@ -24,17 +24,17 @@ import { NavUser } from './nav-user'
 const data = {
   teams: [
     {
-      name: 'Acme Inc',
+      name: 'Manager',
       logo: GalleryVerticalEnd,
       plan: 'Enterprise'
     },
     {
-      name: 'Acme Corp.',
+      name: 'Shipper.',
       logo: AudioWaveform,
       plan: 'Startup'
     },
     {
-      name: 'Evil Corp.',
+      name: 'Reporter',
       logo: Command,
       plan: 'Free'
     }

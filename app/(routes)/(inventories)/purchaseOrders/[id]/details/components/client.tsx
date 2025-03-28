@@ -66,7 +66,7 @@ export const PurchaseOrderDetailClient: React.FC<PurchaseOrderDetailClientProps>
             <PlusCircle />
             Add New
           </Button>
-          <PurchaseOrderDetailModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          <PurchaseOrderDetailModal isOpen={isOpen} onClose={() => setIsOpen(false)} poDetailColsData={null} />
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
             <DownloadCloudIcon />
             Export File
@@ -74,7 +74,7 @@ export const PurchaseOrderDetailClient: React.FC<PurchaseOrderDetailClientProps>
         </div>
       </div>
       <Separator />
-      <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
+      <div className='bg-white/90 dark:bg-slate-950 rounded-xl '>
         <DataTable searchKey='orderNumber' columns={pODetailColumns} data={poDetailColsData} />
       </div>
     </div>

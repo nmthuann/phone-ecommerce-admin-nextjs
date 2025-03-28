@@ -5,6 +5,7 @@ import { CellAction } from './cell-action'
 import { Attribute } from '@/types/products.type'
 import Currency from '@/components/utilities/currency'
 
+//TODO: Duplicate Type (path: warehouse/client)
 export type PurchaseOrderDetailColumn = {
   id: string
   orderNumber: string

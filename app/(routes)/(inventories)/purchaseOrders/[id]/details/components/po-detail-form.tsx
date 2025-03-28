@@ -11,6 +11,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { PurchaseOrderDetailColumn } from './columns'
 
 const formSchema = z.object({
   skuNo: z.string().min(1),
@@ -22,20 +23,28 @@ type PurchaseOrderDetailFormValues = z.infer<typeof formSchema>
 
 interface PurchaseOrderDetailFormProps {
   onClose(): void
+  poDetailColsData: PurchaseOrderDetailColumn | null
 }
 
-export const PurchaseOrderDetailForm: FC<PurchaseOrderDetailFormProps> = ({ onClose }) => {
+export const PurchaseOrderDetailForm: FC<PurchaseOrderDetailFormProps> = ({ onClose, poDetailColsData }) => {
   const [loading, setLoading] = useState(false)
   const params = useParams()
   const router = useRouter()
 
   const form = useForm<PurchaseOrderDetailFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      skuNo: '',
-      unitPrice: 0,
-      quantity: 0
-    }
+    defaultValues: poDetailColsData
+      ? {
+          skuNo: poDetailColsData.skuNo,
+          // TODO: convert decimal -> string -> number -> Lack of consistency
+          unitPrice: parseInt(poDetailColsData.unitPrice),
+          quantity: parseInt(poDetailColsData.quantity)
+        }
+      : {
+          skuNo: '',
+          unitPrice: 0,
+          quantity: 0
+        }
   })
 
   const onSubmit = async (data: PurchaseOrderDetailFormValues) => {
@@ -114,7 +123,7 @@ export const PurchaseOrderDetailForm: FC<PurchaseOrderDetailFormProps> = ({ onCl
             />
           </div>
           <Button disabled={loading} className='ml-auto w-full rounded-xl' type='submit'>
-            Create
+            {poDetailColsData ? 'Save Changes' : 'Create'}
           </Button>
         </form>
       </Form>

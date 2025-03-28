@@ -24,7 +24,10 @@ const WarehouseReceiptPage = async ({ params }: { params: Promise<{ id: string }
       }
 
       const purchaseOrderDetails = await tx.purchaseOrderDetail.findMany({
-        where: { purchaseOrderId: purchaseOrder.id }
+        where: { purchaseOrderId: purchaseOrder.id },
+        include: {
+          sku: true
+        }
       })
 
       const supplier = await tx.supplier.findUnique({
@@ -78,6 +81,9 @@ const WarehouseReceiptPage = async ({ params }: { params: Promise<{ id: string }
       )
     }
 
+    // let skus []
+    // const findSku = await
+
     const serials = await prisma.productSerial.findMany({
       where: {
         warehouseReceiptId: warehouseReceipt.id
@@ -90,7 +96,7 @@ const WarehouseReceiptPage = async ({ params }: { params: Promise<{ id: string }
     const formattedSerial: ProductSerialColumn[] = serials.map(item => ({
       id: item.id,
       serialNumber: item.serialNumber,
-      dateManufactured: String(item.dateManufactured),
+      dateManufactured: item.dateManufactured.toISOString().split('T')[0],
       productSkuId: String(item.productSku.id),
       barcode: item.productSku.barcode,
       skuNo: item.productSku.skuNo,
@@ -105,7 +111,8 @@ const WarehouseReceiptPage = async ({ params }: { params: Promise<{ id: string }
       purchaseOrderId: String(purchaseOrder.id),
       skuId: String(detail.skuId),
       quantity: String(detail.quantity),
-      unitPrice: String(detail.unitPrice)
+      unitPrice: String(detail.unitPrice),
+      sku: detail.sku
     }))
 
     return (

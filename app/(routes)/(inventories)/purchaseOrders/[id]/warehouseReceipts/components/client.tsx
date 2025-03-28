@@ -14,17 +14,21 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
-import { DataTable } from '@/components/ui/data-table'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Currency from '@/components/utilities/currency'
-import { PurchaseOrder, Supplier, WarehouseReceipt } from '@prisma/client'
+import { ProductSku, PurchaseOrder, Supplier, WarehouseReceipt } from '@prisma/client'
+import SerialModal from './serial-modal'
+import { useState } from 'react'
+import { DataTable } from './data-table'
 
+// TODO: Duplicate Type (path: purchaseOrders/columns)
 export type PurchaseOrderDetailColumn = {
   purchaseOrderId: string
   skuId: string
   quantity: string
   unitPrice: string
+  sku: ProductSku
 }
 
 interface ProductSerialClientProps {
@@ -46,6 +50,7 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
   pODetails,
   warehouseReceipt
 }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
@@ -59,15 +64,15 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href='/warehouseReceipts'>Warehouse Receipt</BreadcrumbLink>
+              <BreadcrumbLink href='/purchaseOrders'>Purchase Orders</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/warehouseReceipts/${currentParam}`}>{currentParam}</BreadcrumbLink>
+              <BreadcrumbLink href={`/purchaseOrders/${currentParam}`}>{currentParam}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Serials</BreadcrumbPage>
+              <BreadcrumbPage>Warehouse Receipt</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -90,11 +95,13 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
             <CardContent>
               <ul className='space-y-1 text-sm'>
                 <li>
+                  <strong>Employee ID:</strong> {warehouseReceipt?.employeeId}
+                </li>
+                <li>
                   <strong>Supplier:</strong> {supplier.name}
                 </li>
                 <li>
-                  <strong>Order Date:</strong>
-                  {purchaseOrder?.orderDate.toISOString().split('T')[0]}
+                  <strong>Order Date: </strong> {purchaseOrder?.orderDate.toISOString().split('T')[0]}
                 </li>
               </ul>
             </CardContent>
@@ -108,8 +115,10 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
             <CardContent>
               <ul className='space-y-1 text-sm'>
                 <li>
-                  <strong>Received Date:</strong>
-                  {warehouseReceipt?.receiptDate?.toISOString().split('T')[0]}
+                  <strong>Employee ID:</strong> {warehouseReceipt?.employeeId}
+                </li>
+                <li>
+                  <strong>Received Date:</strong> {warehouseReceipt?.receiptDate?.toISOString().split('T')[0]}
                 </li>
               </ul>
             </CardContent>
@@ -148,11 +157,31 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
           <div className='flex items-center justify-between '>
             <Heading title={`Product Serials (${length})`} description='Manage Product Serials for your store' />
             <div className='flex space-x-2'>
-              <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
+              <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1'>
                 <PlusCircle />
                 Add New
               </Button>
-
+              <SerialModal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                purchaseOrderId={purchaseOrder.id}
+                warehouseReceipt={{
+                  id: warehouseReceipt.id,
+                  receiptNumber: warehouseReceipt.receiptNumber
+                }}
+                data={pODetails
+                  .filter(detail => detail.sku)
+                  .map(detail => ({
+                    id: Number(detail.skuId), // Đảm bảo id là number
+                    skuNo: detail.sku.skuNo || '',
+                    barcode: detail.sku.barcode || '',
+                    skuName: detail.sku.skuName || '',
+                    image: detail.sku.image || '',
+                    status: detail.sku.status ?? true,
+                    skuAttributes: detail.sku.skuAttributes || {},
+                    slug: detail.sku.slug || ''
+                  }))}
+              />
               <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
                 <DownloadCloudIcon />
                 Export File

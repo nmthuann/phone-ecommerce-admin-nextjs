@@ -2,26 +2,27 @@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { FC } from 'react'
 import { PurchaseOrderDetailForm } from './po-detail-form'
+import { PurchaseOrderDetailColumn } from './columns'
 
 interface PurchaseOrderDetailModalProps {
   isOpen: boolean
   onClose: () => void
+  poDetailColsData: PurchaseOrderDetailColumn | null
 }
 
-const PurchaseOrderDetailModal: FC<PurchaseOrderDetailModalProps> = ({ isOpen, onClose }) => {
+const PurchaseOrderDetailModal: FC<PurchaseOrderDetailModalProps> = ({ isOpen, onClose, poDetailColsData }) => {
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogTitle>Set up Purchase Order Detail</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your account and remove your data from our
-              servers.
+              Manage the details of your purchase order, including item quantity, pricing, and supplier information.
             </DialogDescription>
           </DialogHeader>
 
-          <PurchaseOrderDetailForm onClose={onClose} />
+          <PurchaseOrderDetailForm poDetailColsData={poDetailColsData} onClose={onClose} />
         </DialogContent>
       </Dialog>
     </div>

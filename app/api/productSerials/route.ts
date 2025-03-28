@@ -1,29 +1,47 @@
-import { OrderBy } from '@/constants/order-by.enum'
-import { ProductSerialResponse } from '@/types/inventories.type'
-import { Page } from '@/types/responses/page.type'
-import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/prisma'
+import { auth } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-export async function GET(req: NextRequest) {
-  const searchParams = req.nextUrl.searchParams
-  const page = searchParams.get('page') ?? '1'
-  const size = searchParams.get('size') ?? '10'
-  const warehouseReceiptId = searchParams.get('warehouseReceiptId')
-  const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/productSerials?warehouseReceiptId=${warehouseReceiptId}&page=${page}&take=${size}&order=${OrderBy.ASCENDING}`
-  const options = {
-    method: 'GET',
-    next: { revalidate: 0 }
-  }
-
+export async function POST(req: Request) {
   try {
-    const res = await fetch(URL, options)
-    if (!res.ok) {
-      const errorResponse = await res.json().catch(() => ({}))
-      return NextResponse.json(errorResponse, { status: res.status })
+    const { userId } = await auth()
+
+    const body = await req.json()
+
+    const { serialNumber, dateManufactured, productSkuId, warehouseReceiptId } = body
+
+    if (!userId) {
+      return new NextResponse('Unauthenticated', { status: 403 })
     }
-    const paginatedResponse: Page<ProductSerialResponse> = await res.json()
-    return NextResponse.json(paginatedResponse, { status: 200 })
+
+    if (!serialNumber) {
+      return new NextResponse('serialNumber is required', { status: 400 })
+    }
+
+    if (!dateManufactured) {
+      return new NextResponse('dateManufactured is required', { status: 400 })
+    }
+
+    if (!productSkuId) {
+      return new NextResponse('productSkuId id is required', { status: 400 })
+    }
+
+    if (!warehouseReceiptId) {
+      return new NextResponse('warehouseReceiptId id is required', { status: 400 })
+    }
+
+    const serial = await prisma.productSerial.create({
+      data: {
+        serialNumber: serialNumber as string,
+        dateManufactured: new Date(dateManufactured),
+        productSkuId: productSkuId as number,
+        warehouseReceiptId: warehouseReceiptId as number
+      }
+    })
+
+    return NextResponse.json(serial)
   } catch (error) {
-    console.error('Error fetching data:', error)
-    return NextResponse.json({ message: 'Failed to fetch products', error: error }, { status: 500 })
+    console.log('[PRODUCT_SERIAL_POST]', error)
+    return new NextResponse('Internal error', { status: 500 })
   }
 }
