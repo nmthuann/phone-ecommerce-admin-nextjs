@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma'
 import { auth, currentUser } from '@clerk/nextjs/server'
-import { NextRequest, NextResponse } from 'next/server' //NextResponse
+import { NextRequest, NextResponse } from 'next/server'
+
 export async function POST(req: Request) {
   try {
     const user = await currentUser()
@@ -63,7 +64,7 @@ export async function GET(req: NextRequest) {
 
       const purchaseOrder = await prisma.purchaseOrder.findUnique({
         where: { orderNumber },
-        include: { WarehouseReceipt: true }
+        include: { warehouseReceipt: true }
       })
 
       if (!purchaseOrder) {

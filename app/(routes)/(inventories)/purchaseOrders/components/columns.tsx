@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
+import { CheckCircleIcon, XCircleIcon } from 'lucide-react'
 
 export type PurchaseOrdersColumn = {
   id: string
@@ -11,6 +12,8 @@ export type PurchaseOrdersColumn = {
   employeeId: string
   orderDate: string
   createdAt: string
+  hasDetail: boolean
+  hasWarehouseReceipt: boolean
 }
 
 export const columns: ColumnDef<PurchaseOrdersColumn>[] = [
@@ -37,6 +40,22 @@ export const columns: ColumnDef<PurchaseOrdersColumn>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => <DataTableColumnHeader column={column} title='created At' />
+  },
+  {
+    accessorKey: 'hasDetail',
+    header: 'Has Detail',
+    cell: ({ row }) => {
+      const hasDetail = row.original.hasDetail
+      return (
+        <div className='flex justify-center'>
+          {hasDetail ? (
+            <CheckCircleIcon className='text-green-500 w-6 h-6' />
+          ) : (
+            <XCircleIcon className='text-gray-400 w-6 h-6' />
+          )}
+        </div>
+      )
+    }
   },
   {
     id: 'actions',

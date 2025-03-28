@@ -15,7 +15,9 @@ const PurchaseOrdersPage = async () => {
   try {
     const purchaseOrders = await prisma.purchaseOrder.findMany({
       include: {
-        supplier: true
+        supplier: true,
+        warehouseReceipt: true,
+        purchaseOrderDetail: true
       },
       skip: (page - 1) * pageSize,
       take: pageSize
@@ -32,11 +34,12 @@ const PurchaseOrdersPage = async () => {
       orderNumber: item.orderNumber,
       supplierId: String(item.supplierId),
       employeeId: String(item.employeeId),
-
       orderDate: item.orderDate.toISOString().split('T')[0], // Lấy YYYY-MM-DD
-      createdAt: String(item.createdAt)
+      createdAt: String(item.createdAt),
+      hasDetail: item.purchaseOrderDetail && item.purchaseOrderDetail.length > 0, // Kiểm tra có detail không
+      hasWarehouseReceipt: Boolean(item.warehouseReceipt)
     }))
-
+    console.log(Boolean(purchaseOrders[0].warehouseReceipt))
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>

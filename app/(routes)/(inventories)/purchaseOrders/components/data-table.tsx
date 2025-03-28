@@ -19,13 +19,12 @@ import {
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DataTablePagination } from './data-table-pagination'
+// import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-
-import axios from 'axios'
+// import axios from 'axios'
 import { DataTableToolbar } from './data-table-toolbar'
-import { PurchaseOrderResponse } from '@/types/inventories.type'
-import { Page } from '@/types/responses/page.type'
+// import { PurchaseOrderResponse } from '@/types/inventories.type'
+// import { Page } from '@/types/responses/page.type'
 import { PurchaseOrdersColumn } from './columns'
 
 interface DataTableProps<TData, TValue> {
@@ -41,30 +40,30 @@ export function DataTable<TValue>({ columns, defaultData }: Readonly<DataTablePr
     pageSize: 10
   })
 
-  async function getAllData(pagination: PaginationState): Promise<Page<PurchaseOrderResponse>> {
-    const res = await axios.get(`/api/purchaseOrders?page=${pagination.pageIndex + 1}&take=${pagination.pageSize}`)
-    return res.data
-  }
+  // async function getAllData(pagination: PaginationState): Promise<Page<PurchaseOrderResponse>> {
+  //   const res = await axios.get(`/api/purchaseOrders?page=${pagination.pageIndex + 1}&take=${pagination.pageSize}`)
+  //   return res.data
+  // }
 
-  const dataQuery = useQuery({
-    queryKey: ['get-purchase-orders', pagination],
-    queryFn: () => getAllData(pagination),
-    placeholderData: keepPreviousData
-  })
+  // const dataQuery = useQuery({
+  //   queryKey: ['get-purchase-orders', pagination],
+  //   queryFn: () => getAllData(pagination),
+  //   placeholderData: keepPreviousData
+  // })
 
-  const formattedData: PurchaseOrdersColumn[] | undefined = dataQuery.data?.data.map((item: PurchaseOrderResponse) => ({
-    id: String(item.id),
-    orderNumber: item.orderNumber,
-    supplierId: String(item.supplierId),
-    employeeId: String(item.employeeId),
-    orderDate: String(item.orderDate),
-    createdAt: String(item.createdAt)
-  }))
+  // const formattedData: PurchaseOrdersColumn[] | undefined = dataQuery.data?.data.map((item: PurchaseOrderResponse) => ({
+  //   id: String(item.id),
+  //   orderNumber: item.orderNumber,
+  //   supplierId: String(item.supplierId),
+  //   employeeId: String(item.employeeId),
+  //   orderDate: String(item.orderDate),
+  //   createdAt: String(item.createdAt)
+  // }))
 
   const table = useReactTable({
-    data: formattedData ?? defaultData,
+    data: defaultData, // formattedData ?? defaultData,
     columns,
-    rowCount: dataQuery.data?.meta.itemCount ?? 0,
+    rowCount: defaultData.length, // dataQuery.data?.meta.itemCount ?? 0,
     state: {
       pagination,
       columnFilters,

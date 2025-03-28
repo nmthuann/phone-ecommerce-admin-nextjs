@@ -52,7 +52,7 @@ const data = {
         },
 
         {
-          title: 'Brands Management',
+          title: 'Brand Management',
           url: '/brands'
         }
       ]
@@ -63,16 +63,11 @@ const data = {
       icon: Warehouse,
       items: [
         {
-          title: 'Purchase Orders',
+          title: 'Purchase Order Management',
           url: '/purchaseOrders'
         },
         {
-          title: 'Warehouse Receipts',
-          url: '/warehouseReceipts'
-        },
-
-        {
-          title: 'Suppliers',
+          title: 'Supplier Management',
           url: '/suppliers'
         }
       ]
@@ -83,16 +78,12 @@ const data = {
       icon: PackagePlus,
       items: [
         {
-          title: 'Orders Management',
+          title: 'Order Management',
           url: '/orders'
         },
         {
-          title: 'Invoices Management',
+          title: 'Invoice Management',
           url: '/invoices'
-        },
-        {
-          title: 'Warranties Management',
-          url: '/warranties'
         }
       ]
     },

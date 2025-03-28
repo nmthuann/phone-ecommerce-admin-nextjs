@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, Edit, Ellipsis, List } from 'lucide-react'
+import { Copy, Edit, Ellipsis, FilePlus2, List } from 'lucide-react'
 
 import toast from 'react-hot-toast'
 import { Messages } from '@/constants/message.enum'
@@ -16,6 +16,8 @@ import {
 
 import { PurchaseOrdersColumn } from './columns'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import WarehouseReceiptModal from './warehouse-receipt-modal'
 
 interface DataTableRowActionsProps {
   dataRow: PurchaseOrdersColumn
@@ -23,6 +25,8 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsProps>) {
   const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success(`Purchase Order ${Messages.COPY_ID}`)
@@ -47,10 +51,30 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(`purchaseOrders/${dataRow.id}/details`)}>
             <List />
-            View Detail
+            View PO Detail
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              if (!dataRow.hasWarehouseReceipt) {
+                setIsOpen(true)
+              }
+              router.push(`/purchaseOrders/${dataRow.id}/warehouseReceipts`)
+            }}
+            disabled={!dataRow.hasDetail}
+          >
+            <FilePlus2 />
+            Import Warehouse Receipt
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <WarehouseReceiptModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        data={{
+          purchaseOrderId: parseInt(dataRow.id),
+          orderNumber: dataRow.orderNumber
+        }}
+      />
     </div>
   )
 }
