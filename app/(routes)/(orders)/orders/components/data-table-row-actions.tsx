@@ -1,6 +1,6 @@
 'use client'
 
-import { Copy, Edit, Ellipsis, List } from 'lucide-react'
+import { ClipboardPlus, Copy, Edit, Ellipsis, List } from 'lucide-react'
 
 import toast from 'react-hot-toast'
 import { Messages } from '@/constants/message.enum'
@@ -16,6 +16,7 @@ import {
 
 import { useRouter } from 'next/navigation'
 import { OrderColumn } from './columns'
+import { OrderStatus } from '@/constants/order-status.enum'
 
 interface DataTableRowActionsProps {
   dataRow: OrderColumn
@@ -41,13 +42,21 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
             <Copy />
             Copy Id
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`orders/${dataRow.id}`)}>
+          <DropdownMenuItem>
+            {/* onClick={() => router.push(`orders/${dataRow.id}`)} */}
             <Edit />
             Edit Order
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`orders/${dataRow.id}/details`)}>
+          <DropdownMenuItem onClick={() => router.push(`orders/${dataRow.id}`)}>
             <List />
             View Detail
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={dataRow.status !== OrderStatus.COMPLETED}
+            onClick={() => console.log('Export Invoice')}
+          >
+            <ClipboardPlus />
+            Export Invoice
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

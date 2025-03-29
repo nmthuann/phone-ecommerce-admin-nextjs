@@ -173,7 +173,7 @@ model Order {
   shippingFee     Decimal       @default(0.00) @map("shipping_fee") @db.Decimal(10, 2)
   discount        Decimal       @default(0) @map("discount") @db.Decimal(10, 2)
   orderDetail     OrderDetail[]
-  invoice         Invoice[]
+  invoice         Invoice?
 
   @@map("orders")
 }
@@ -194,10 +194,16 @@ model OrderDetail {
 model Invoice {
   id          Int      @id @default(autoincrement())
   invoiceCode String   @unique @map("invoice_code") @db.VarChar(50)
-  orderId     Int      @map("order_id")
+  orderId     Int      @unique @map("order_id")
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
-  taxCode     String   @map("tax_code") @db.VarChar(20)
   employeeId  String   @map("employee_id") @db.VarChar(100) // email admin 
+
+  taxCode     String  @map("tax_code") @db.VarChar(20)
+  subtotal    Decimal @map("subtotal") // Tổng tiền trước thuế
+  taxAmount   Decimal @map("tax_amount") // Tiền thuế
+  totalAmount Decimal @map("total_amount") // Tổng tiền sau thuế
+
+  notes String? @map("notes") @db.Text // Ghi chú hóa đơn
 
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 

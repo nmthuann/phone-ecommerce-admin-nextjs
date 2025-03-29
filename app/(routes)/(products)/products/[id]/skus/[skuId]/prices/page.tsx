@@ -1,10 +1,8 @@
 import ErrorComponent from '@/components/errors/error-component'
 import { PriceColumn } from './components/columns'
 import { Metadata } from 'next'
-import { format, parseISO } from 'date-fns'
 import { PriceClient } from './components/client'
 import prisma from '@/lib/prisma'
-import { PurchaseOrderDetail } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'Prices',
@@ -35,15 +33,17 @@ const PricesPage = async ({ params }: { params: Promise<{ id: string; skuId: str
       }
     }
   })
-  console.log(pODetail?.unitPrice)
-
+  // console.log(pODetail?.unitPrice)
+  if (!pODetail) {
+    return <ErrorComponent page='Prices Page' message='Failed to load Prices. Please try again later.' />
+  }
   try {
     const formattedData: PriceColumn[] = prices.map(item => ({
       productSkuId: String(item.productSkuId),
-      beginAt: format(parseISO(String(item.beginAt)), 'yyyy-MM-dd HH:mm:ss'),
+      beginAt: item.beginAt.toISOString().split('T')[0],
       displayPrice: String(item.displayPrice),
       sellingPrice: String(item.sellingPrice),
-      createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss')
+      createdAt: item.createdAt.toISOString().split('T')[0]
     }))
 
     return (
@@ -54,7 +54,10 @@ const PricesPage = async ({ params }: { params: Promise<{ id: string; skuId: str
             length={prices.length}
             previousParam={id}
             currentParam={skuId}
-            poDetail={pODetail as PurchaseOrderDetail}
+            poDetail={{
+              quantity: String(pODetail.quantity),
+              unitPrice: String(pODetail.unitPrice)
+            }}
           />
         </div>
       </div>

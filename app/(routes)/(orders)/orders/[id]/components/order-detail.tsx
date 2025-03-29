@@ -1,4 +1,5 @@
 'use client'
+import { Badge } from '@/components/ui/badge'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,26 +12,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Heading } from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Currency from '@/components/utilities/currency'
-import { Order } from '@/types/orders.type'
+import { OrderStatus } from '@/constants/order-status.enum'
 import { format } from 'date-fns'
-import { DownloadCloudIcon, PlusCircle } from 'lucide-react'
+import { ArrowLeft, DownloadIcon, PencilLine, PlusCircleIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FC } from 'react'
-import { toast } from 'sonner'
+import toast from 'react-hot-toast'
 
 interface OrderDetailProps {
-  order: Order
+  order: OrderWithDetails
   currentParam: string
 }
 
 const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
   const router = useRouter()
   const exportExcel = () => {
-    toast('Download excel file successfully.')
+    toast.success('Download excel file successfully.')
+
+    // toast()
   }
   return (
-    <div className='container mx-auto p-4'>
+    <div className='container mx-auto p-4 space-y-2'>
       <div>
         <Breadcrumb>
           <BreadcrumbList>
@@ -52,23 +56,50 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className='flex items-center justify-between m-2'>
+      <div className='flex items-center justify-between '>
         <Heading
-          title={`Order Details (${order.orderDetails.length})`}
+          title={`Order Details (${order.orderDetail.length})`}
           description='Manage Order Details for your store'
         />
         <div className='flex space-x-2'>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant={'outline'}
+                  // disabled={order.status !== OrderStatus.CONFIRMED}
+                  onClick={() => {
+                    if (order.status === OrderStatus.CONFIRMED) {
+                      toast.success('Download excel file successfully.')
+                    } else {
+                      toast.error('The order can only be exported when it is in the completed status.')
+                    }
+                  }}
+                  className='sm:px-4 sm:py-2 px-2 py-1 '
+                >
+                  <PlusCircleIcon />
+                  Create Invoice
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>The order can only be exported when it is in the completed status.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
-            <PlusCircle />
-            Add New
+            <PencilLine />
+            Update Order
           </Button>
 
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
-            <DownloadCloudIcon />
+            <DownloadIcon />
             Export File
           </Button>
         </div>
       </div>
+      <Separator />
+
       <Card>
         <CardHeader>
           <CardTitle>Order Details - #{order.id}</CardTitle>
@@ -77,7 +108,7 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div>
               <p>
-                <strong>Status:</strong> {order.status}
+                <strong>Status:</strong> <Badge variant='destructive'>{order.status}</Badge>
               </p>
               <p>
                 <strong>Order Type:</strong> {order.orderType ? 'Online' : 'Offline'}
@@ -95,10 +126,10 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
                 <strong>Contact Phone:</strong> {order.contactPhone}
               </p>
               <p>
-                <strong>Shipping Fee:</strong> {order.shippingFee} đ
+                <strong>Shipping Fee:</strong> {String(order.shippingFee)} đ
               </p>
               <p>
-                <strong>Discount:</strong> {order.discount} %
+                <strong>Discount:</strong> {String(order.discount)} %
               </p>
               <p>
                 <strong>Created At:</strong> {format(new Date(order.createdAt), 'yyyy-MM-dd HH:mm:ss')}
@@ -107,18 +138,19 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
             <div>
               <h2 className='text-lg font-semibold'>Customer Info</h2>
               <p>
-                <strong>Name:</strong> {order.user.firstName} {order.user.lastName}
+                <strong>Name:</strong> {order.firstName} {order.lastName}
               </p>
               <p>
-                <strong>Email:</strong> {order.user.email}
+                <strong>Phone:</strong> {order.contactPhone}
+              </p>
+              <p>
+                <strong>Email:</strong> {order.email}
               </p>
               <Separator className='my-2' />
               <h2 className='text-lg font-semibold'>Assigned Employee</h2>
+              <p></p>
               <p>
-                <strong>Name:</strong> {order.employee.firstName} {order.employee.lastName}
-              </p>
-              <p>
-                <strong>Email:</strong> {order.employee.email}
+                <strong>Email:</strong> {order.employeeId}
               </p>
             </div>
           </div>
@@ -134,19 +166,22 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
               </tr>
             </thead>
             <tbody>
-              {order.orderDetails.map(item => (
-                <tr key={item.productSerial.id} className='border'>
-                  <td className='border p-2'>{item.productSerial.serialNumber}</td>
-                  <td className='border p-2'>{format(new Date(item.productSerial.dateManufactured), 'yyyy-MM-dd')}</td>
+              {order.orderDetail.map(detail => (
+                <tr key={detail.productSerialId} className='border'>
+                  <td className='border p-2'>{detail.productSerial.serialNumber}</td>
                   <td className='border p-2'>
-                    <Currency className='text-base' value={item.unitPrice} />
+                    {format(new Date(detail.productSerial.dateManufactured), 'yyyy-MM-dd')}
                   </td>
-                  <td className='border p-2'>{item.tax}</td>
+                  <td className='border p-2'>
+                    <Currency className='text-base' value={detail.unitPrice} />
+                  </td>
+                  <td className='border p-2'>{detail.tax}</td>
                 </tr>
               ))}
             </tbody>
           </table>
           <Button className='mt-4' onClick={() => router.push('/orders')}>
+            <ArrowLeft className='w-4 h-4 ' />
             Back to Orders
           </Button>
         </CardContent>
@@ -156,3 +191,34 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
 }
 
 export default OrderDetail
+
+export interface OrderDetailItem {
+  productSerialId: string
+  productSerial: {
+    serialNumber: string
+    dateManufactured: string
+  }
+  unitPrice: string
+  tax: string
+}
+
+export interface OrderWithDetails {
+  id: string
+  status: string
+  orderType: boolean
+  shippingMethod: string
+  paymentMethod: string
+  shippingAddress: string
+  contactPhone: string
+  shippingFee: string
+  discount: string
+  createdAt: string // YYYY-MM-DD HH:mm:ss format
+
+  firstName: string
+  lastName: string
+  email: string
+
+  employeeId: string
+
+  orderDetail: OrderDetailItem[]
+}

@@ -69,7 +69,7 @@ export const ProductSkuClient: React.FC<ProductSkuClientProps> = ({ skus, length
         </div>
       </div>
       <Separator />
-      <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
+      <div className='bg-white/90 dark:bg-slate-950 rounded-xl'>
         <DataTable searchKey='skuName' columns={columns} data={skus} />
       </div>
     </div>

@@ -1,10 +1,12 @@
 import { Metadata } from 'next'
 import { OrdersClient } from './components/client'
 import ErrorComponent from '@/components/errors/error-component'
-import { getOrdersByPage } from '@/actions/orders/get-orders'
-import { OrderResponse } from '@/types/orders.type'
+// import { getOrdersByPage } from '@/actions/orders/get-orders'
+// import { OrderResponse } from '@/types/orders.type'
 import { OrderColumn } from './components/columns'
-import { format, parseISO } from 'date-fns'
+// import { format, parseISO } from 'date-fns'
+import prisma from '@/lib/prisma'
+import { Decimal } from '@prisma/client/runtime/library'
 
 export const metadata: Metadata = {
   title: 'Orders Page',
@@ -12,32 +14,39 @@ export const metadata: Metadata = {
 }
 
 const OrdersPage = async () => {
+  const page = 1
+  const pageSize = 10
   try {
-    const res = await getOrdersByPage(1, 10)
-    console.log(res)
-    if (!res) {
+    // const res = await getOrdersByPage(1, 10)
+    const orders = await prisma.order.findMany({
+      include: {
+        orderDetail: true
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize
+    })
+    if (!orders) {
       return <ErrorComponent page='Orders Page' message='Failed to load Orders. Please try again later.' />
     }
-    const formattedData: OrderColumn[] | undefined = res.data.map((item: OrderResponse) => ({
+
+    const count = await prisma.order.count()
+    const formattedData: OrderColumn[] = orders.map(item => ({
       id: String(item.id),
-      userId: item.userId,
-      employeeId: String(item.employeeId),
+      employeeId: item.employeeId,
+      fullName: `${item.firstName} ${item.lastName}`,
       status: item.status,
       orderType: item.orderType,
       shippingAddress: item.shippingAddress,
-      contactPhone: item.contactPhone,
       shippingMethod: item.shippingMethod,
       paymentMethod: item.paymentMethod,
-      shippingFee: String(item.shippingFee),
-      discount: String(item.discount),
-      postcode: item.postcode,
-      createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss'),
-      updatedAt: format(parseISO(String(item.updatedAt)), 'yyyy-MM-dd HH:mm:ss')
+      createdAt: item.createdAt.toISOString().split('T')[0],
+      total: String(item.orderDetail.reduce((sum, detail) => sum + new Decimal(detail.unitPrice).toNumber() * 1, 0))
     }))
+
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>
-          <OrdersClient formattedData={formattedData} length={res.meta.itemCount} />
+          <OrdersClient initialData={formattedData} length={count} />
         </div>
       </div>
     )

@@ -17,14 +17,16 @@ import {
 import { DataTable } from '@/components/ui/data-table'
 import { useState } from 'react'
 import PriceModal from './price-modal'
-import { PurchaseOrderDetail } from '@prisma/client'
 
 interface PriceClientProps {
   data: PriceColumn[]
   length: number
   previousParam: string
   currentParam: string
-  poDetail: PurchaseOrderDetail
+  poDetail: {
+    quantity: string
+    unitPrice: string
+  }
 }
 
 export const PriceClient: React.FC<PriceClientProps> = ({ data, length, previousParam, currentParam, poDetail }) => {
@@ -82,7 +84,7 @@ export const PriceClient: React.FC<PriceClientProps> = ({ data, length, previous
         </div>
       </div>
       <Separator />
-      <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
+      <div className='bg-white/90 dark:bg-slate-950 rounded-xl'>
         <DataTable searchKey='productSkuId' columns={columns} data={data} />
       </div>
     </div>

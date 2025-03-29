@@ -105,7 +105,7 @@ const data = {
   ],
   projects: [
     {
-      name: 'Analyis',
+      name: 'Analysis',
       url: '#',
       icon: PieChart
     },

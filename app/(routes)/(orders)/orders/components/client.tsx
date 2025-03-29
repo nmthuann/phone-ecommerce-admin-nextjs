@@ -8,8 +8,6 @@ import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import LoadingOverlay from '@/components/loading-overlay'
-import { columns, OrderColumn } from './columns'
-import { format, parseISO } from 'date-fns'
 import { toast as toastSonner } from 'sonner'
 import {
   Breadcrumb,
@@ -20,10 +18,9 @@ import {
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
 import { DataTable } from './data-table'
-import { OrderResponse } from '@/types/orders.type'
-import { getOrdersByStatus } from '@/actions/orders/get-orders'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { OrderStatus } from '@/constants/order-status.enum'
+import { columns, OrderColumn } from './columns'
 
 interface OrderClientProps {
   initialData: OrderColumn[]
@@ -40,7 +37,6 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }
   }
 
   const handleFilterByStatus = async (status: string) => {
-    // console.log('status:::', status)
     setLoading(true)
     try {
       if (!status) {
@@ -49,37 +45,36 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }
         return
       }
 
-      const orders = await getOrdersByStatus(status, 1, 10)
-      console.log('orders:::', orders)
-      if (orders.data.length === 0) {
-        setFilteredOrders([])
-      } else {
-        const formatted = orders.data.map((item: OrderResponse) => ({
-          id: String(item.id),
-          userId: item.userId,
-          employeeId: String(item.employeeId),
-          status: item.status,
-          orderType: item.orderType,
-          shippingAddress: item.shippingAddress,
-          contactPhone: item.contactPhone,
-          shippingMethod: item.shippingMethod,
-          paymentMethod: item.paymentMethod,
-          shippingFee: String(item.shippingFee),
-          discount: String(item.discount),
-          postcode: item.postcode,
-          createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss'),
-          updatedAt: format(parseISO(String(item.updatedAt)), 'yyyy-MM-dd HH:mm:ss')
-        }))
-        setFilteredOrders(formatted)
-      }
+      // const orders = await getOrdersByStatus(status, 1, 10)
+      // if (orders.data.length === 0) {
+      //   setFilteredOrders([])
+      // } else {
+      //   const formatted = orders.data.map((item: OrderResponse) => ({
+      //     id: String(item.id),
+      //     userId: item.userId,
+      //     employeeId: String(item.employeeId),
+      //     status: item.status,
+      //     orderType: item.orderType,
+      //     shippingAddress: item.shippingAddress,
+      //     contactPhone: item.contactPhone,
+      //     shippingMethod: item.shippingMethod,
+      //     paymentMethod: item.paymentMethod,
+      //     shippingFee: String(item.shippingFee),
+      //     discount: String(item.discount),
+      //     postcode: item.postcode,
+      //     createdAt: format(parseISO(String(item.createdAt)), 'yyyy-MM-dd HH:mm:ss'),
+      //     updatedAt: format(parseISO(String(item.updatedAt)), 'yyyy-MM-dd HH:mm:ss')
+      //   }))
+      //   setFilteredOrders(formatted)
+      // }
     } catch (error: unknown) {
-      toastSonner('Failed to load Purchase order. Please try again.')
       console.log(error)
+      toastSonner('Failed to load Purchase order. Please try again.')
     } finally {
       setLoading(false)
     }
   }
-  console.log('f::', filteredOrders)
+
   return (
     <div>
       <div>
@@ -111,32 +106,27 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }
               ))}
             </SelectContent>
           </Select>
+
           <Button
             onClick={() => {
               setLoading(true)
-              router.push(`/products/new`)
+              router.push(`/`)
             }}
             disabled={loading}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500 
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
+            className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'
           >
             <PlusCircle className='h-5 w-5' />
             <span className='hidden sm:block ml-2'>Add New</span>
           </Button>
 
-          <Button
-            onClick={exportExcel}
-            className='bg-white text-black dark:bg-slate-950 
-                   dark:text-white hover:text-white hover:bg-slate-500  
-                   flex items-center justify-center sm:px-4 sm:py-2 px-2 py-1 text-sm sm:text-base'
-          >
+          <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
             <DownloadCloudIcon className='h-5 w-5' />
             <span className='hidden sm:block ml-2'>Export File</span>
           </Button>
         </div>
       </div>
       <Separator />
+
       <div className='overflow-x-auto'>
         <DataTable columns={columns} defaultData={filteredOrders} />
       </div>

@@ -6,17 +6,15 @@ import { DataTableRowActions } from './data-table-row-actions'
 
 export type OrderColumn = {
   id: string
-  userId: string
   employeeId: string
+  fullName: string
   status: string
   orderType: boolean
-  contactPhone: string
+  shippingAddress: string
   shippingMethod: string
   paymentMethod: string
-  shippingFee: string
-  discount: string
   createdAt: string
-  updatedAt: string
+  total: string
 }
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -24,10 +22,13 @@ export const columns: ColumnDef<OrderColumn>[] = [
     accessorKey: 'id',
     header: ({ column }) => <DataTableColumnHeader column={column} title='ID' />
   },
-
   {
     accessorKey: 'employeeId',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='EmpId' />
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Employee' />
+  },
+  {
+    accessorKey: 'fullName',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='fullName' />
   },
   {
     accessorKey: 'status',
@@ -36,11 +37,6 @@ export const columns: ColumnDef<OrderColumn>[] = [
   {
     accessorKey: 'orderType',
     header: ({ column }) => <DataTableColumnHeader column={column} title='Type' />
-  },
-
-  {
-    accessorKey: 'contactPhone',
-    header: 'Contact'
   },
   {
     accessorKey: 'paymentMethod',
@@ -51,22 +47,12 @@ export const columns: ColumnDef<OrderColumn>[] = [
     header: 'Shipping'
   },
   {
-    accessorKey: 'shippingFee',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Fee' />
+    accessorKey: 'total',
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Total' />
   },
-
-  {
-    accessorKey: 'discount',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Discount' />
-  },
-
   {
     accessorKey: 'createdAt',
     header: ({ column }) => <DataTableColumnHeader column={column} title='Created' />
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Updated' />
   },
   {
     id: 'actions',
