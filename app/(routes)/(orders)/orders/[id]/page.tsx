@@ -65,7 +65,21 @@ const OrderPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         },
         unitPrice: String(detail.unitPrice),
         tax: String(detail.tax)
-      }))
+      })),
+
+      invoice: order.invoice
+        ? {
+            id: String(order.invoice.id),
+            invoiceCode: order.invoice.invoiceCode,
+            createdAt: order.invoice.createdAt.toISOString().split('T')[0],
+            employeeId: order.invoice.employeeId,
+            taxCode: order.invoice.taxCode,
+            subtotal: String(order.invoice.subtotal),
+            taxAmount: String(order.invoice.taxAmount),
+            totalAmount: String(order.invoice.totalAmount),
+            notes: order.invoice.notes ?? ''
+          }
+        : null
     }
 
     return <OrderDetail order={formattedOrder} currentParam={id} />

@@ -88,7 +88,7 @@ const data = {
       ]
     },
     {
-      title: 'User',
+      title: 'User (Beta)',
       url: '#',
       icon: UserCheck2,
       items: [

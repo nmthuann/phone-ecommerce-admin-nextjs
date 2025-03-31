@@ -16,10 +16,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import Currency from '@/components/utilities/currency'
 import { OrderStatus } from '@/constants/order-status.enum'
 import { format } from 'date-fns'
-import { ArrowLeft, DownloadIcon, PencilLine, PlusCircleIcon } from 'lucide-react'
+import { ArrowLeft, DownloadIcon, PencilLine, PlusCircleIcon, View } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import toast from 'react-hot-toast'
+import InvoiceModal from '../../components/invoice-modal'
+import InvoiceDetailModal from './inoivce-detail-modal'
 
 interface OrderDetailProps {
   order: OrderWithDetails
@@ -27,6 +29,9 @@ interface OrderDetailProps {
 }
 
 const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpenDetail, setIsOpenDetail] = useState<boolean>(false)
+
   const router = useRouter()
   const exportExcel = () => {
     toast.success('Download excel file successfully.')
@@ -62,30 +67,31 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
           description='Manage Order Details for your store'
         />
         <div className='flex space-x-2'>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant={'outline'}
-                  // disabled={order.status !== OrderStatus.CONFIRMED}
-                  onClick={() => {
-                    if (order.status === OrderStatus.CONFIRMED) {
-                      toast.success('Download excel file successfully.')
-                    } else {
-                      toast.error('The order can only be exported when it is in the completed status.')
-                    }
-                  }}
-                  className='sm:px-4 sm:py-2 px-2 py-1 '
-                >
-                  <PlusCircleIcon />
-                  Create Invoice
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>The order can only be exported when it is in the completed status.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {!order.invoice ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => setIsOpen(true)}
+                    disabled={order.status !== OrderStatus.COMPLETED}
+                    className='sm:px-4 sm:py-2 px-2 py-1 '
+                  >
+                    <PlusCircleIcon />
+                    Create Invoice
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>The order can only be exported when it is in the completed status.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <Button variant={'outline'} className='sm:px-4 sm:py-2 px-2 py-1' onClick={() => setIsOpenDetail(true)}>
+              <View />
+              View Invoice
+            </Button>
+          )}
 
           <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
             <PencilLine />
@@ -186,13 +192,17 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
           </Button>
         </CardContent>
       </Card>
+      <InvoiceModal isOpen={isOpen} onClose={() => setIsOpen(false)} orderId={order.id} />
+      {order.invoice && (
+        <InvoiceDetailModal isOpen={isOpenDetail} onClose={() => setIsOpenDetail(false)} invoice={order.invoice} />
+      )}
     </div>
   )
 }
 
 export default OrderDetail
 
-export interface OrderDetailItem {
+export type OrderDetailItem = {
   productSerialId: string
   productSerial: {
     serialNumber: string
@@ -202,7 +212,7 @@ export interface OrderDetailItem {
   tax: string
 }
 
-export interface OrderWithDetails {
+export type OrderWithDetails = {
   id: string
   status: string
   orderType: boolean
@@ -221,4 +231,18 @@ export interface OrderWithDetails {
   employeeId: string
 
   orderDetail: OrderDetailItem[]
+
+  invoice: Invoice | null
+}
+
+export type Invoice = {
+  id: string
+  invoiceCode: string
+  createdAt: string
+  employeeId: string
+  taxCode: string
+  subtotal: string
+  taxAmount: string
+  totalAmount: string
+  notes: string
 }

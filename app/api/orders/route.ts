@@ -1,6 +1,4 @@
-import { OrderBy } from '@/constants/order-by.enum'
-import { OrderResponse } from '@/types/orders.type'
-import { Page } from '@/types/responses/page.type'
+import prisma from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
@@ -8,20 +6,16 @@ export async function GET(req: NextRequest) {
   const page = searchParams.get('page') ?? '1'
   const size = searchParams.get('size') ?? '10'
 
-  const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/orders?page=${page}&take=${size}&order=${OrderBy.ASCENDING}`
-  const options = {
-    method: 'GET',
-    next: { revalidate: 0 }
-  }
-
   try {
-    const res = await fetch(URL, options)
-    if (!res.ok) {
-      const errorResponse = await res.json().catch(() => ({}))
-      return NextResponse.json(errorResponse, { status: res.status })
-    }
-    const paginatedResponse: Page<OrderResponse> = await res.json()
-    return NextResponse.json(paginatedResponse, { status: 200 })
+    const orders = await prisma.order.findMany({
+      include: {
+        orderDetail: true
+      },
+      skip: (parseInt(page) - 1) * parseInt(size),
+      take: parseInt(size)
+    })
+
+    return NextResponse.json(orders, { status: 200 })
   } catch (error) {
     console.error('Error fetching data:', error)
     return NextResponse.json({ message: 'Failed to fetch products', error: error }, { status: 500 })
