@@ -1,7 +1,7 @@
 import { OrderBy } from '@/constants/order-by.enum'
 import { SystemError } from '@/constants/errors.enum'
 import { ProductResponse } from '@/types/products.type'
-import { Page } from '@/types/responses/page.type'
+import { Page } from '@/types/page.type'
 
 export async function getProductsByPage(page: number, size: number): Promise<Page<ProductResponse>> {
   const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/products?page=${page}&take=${size}&order=${OrderBy.ASCENDING}`

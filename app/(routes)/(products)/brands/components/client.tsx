@@ -16,12 +16,15 @@ import {
 } from '@/components/ui/breadcrumb'
 import { DataTable } from '@/components/ui/data-table'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import LoadingOverlay from '@/components/loading-overlay'
 
 interface BrandClientProps {
   brands: BrandColumn[]
 }
 
 export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const exportExcel = () => {
     toast('Download excel file successfully.')
   }
@@ -45,7 +48,13 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
       <div className='flex items-center justify-between '>
         <Heading title={`Brands (${brands.length})`} description='Manage Brands for your store' />
         <div className='flex space-x-2'>
-          <Button onClick={() => router.push(`/brands/new`)} className='sm:px-4 sm:py-2 px-2 py-1'>
+          <Button
+            onClick={() => {
+              setLoading(true)
+              router.push(`/brands/new`)
+            }}
+            className='sm:px-4 sm:py-2 px-2 py-1'
+          >
             <PlusCircle />
             Add New
           </Button>
@@ -60,6 +69,7 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
       <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
         <DataTable searchKey='brandName' columns={columns} data={brands} />
       </div>
+      <LoadingOverlay loading={loading} text='Please wait...' />
     </div>
   )
 }

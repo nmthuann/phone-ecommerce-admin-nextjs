@@ -7,10 +7,19 @@ import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/ui/data-table'
 import { Heading } from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
-import { toast as toastSonner } from 'sonner'
 
 import { columns, SupplierColumn } from './columns'
 import { useState } from 'react'
+import LoadingOverlay from '@/components/loading-overlay'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
+import toast from 'react-hot-toast'
 
 interface SupplierClientProps {
   data: SupplierColumn[]
@@ -21,11 +30,22 @@ export const SupplierClient: React.FC<SupplierClientProps> = ({ data }) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const exportExcel = () => {
-    toastSonner('Download excel file successfully.')
+    toast.success('Download excel file successfully.')
   }
 
   return (
-    <>
+    <div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Suppliers</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className='flex items-center justify-between'>
         <Heading title={`Suppliers (${data.length})`} description='Manage Suppliers for your store' />
         <div className='flex flex-nowrap items-center space-x-2 overflow-x-auto'>
@@ -54,6 +74,7 @@ export const SupplierClient: React.FC<SupplierClientProps> = ({ data }) => {
       </div>
       <Separator />
       <DataTable searchKey='name' columns={columns} data={data} />
-    </>
+      <LoadingOverlay loading={loading} />
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@clerk/nextjs/server'
 import { BrandError } from '@/constants/errors.enum'
@@ -39,18 +39,43 @@ export async function POST(req: Request) {
 
     return NextResponse.json(brand)
   } catch (error) {
-    console.log('[brandS_POST]', error)
+    console.log('[BRANDS_POST]', error)
     return new NextResponse('Internal error', { status: 500 })
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  console.log('req.url::: ', req.url)
+  const searchParams = req.nextUrl.searchParams
+  const brandUrl = searchParams.get('brandUrl')
+  if (brandUrl) {
+    console.log('brandUrl', brandUrl)
+
+    const brand = await prisma.brand.findUnique({
+      where: {
+        brandUrl: brandUrl
+      }
+    })
+    if (!brand) {
+      return new NextResponse(JSON.stringify({ error: 'Brand not found' }), { status: 404 })
+    }
+    return NextResponse.json(brand)
+  }
+
   try {
     const brands = await prisma.brand.findMany()
+    // return NextResponse.json(brands)
 
-    return NextResponse.json(brands)
+    return new Response(JSON.stringify(brands), {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+      }
+    })
   } catch (error) {
-    console.log('[brandS_GET]', error)
+    console.log('[BRANDS_GET]', error)
     return new NextResponse('Internal error', { status: 500 })
   }
 }

@@ -74,8 +74,8 @@ model SpuSkuMapping {
 model Price {
   productSkuId Int      @map("product_sku_id")
   beginAt      DateTime @map("begin_at")
-  sellingPrice Decimal  @map("selling_price")
-  displayPrice Decimal  @map("display_price")
+  sellingPrice Int      @map("selling_price")
+  displayPrice Int      @map("display_price")
 
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -112,10 +112,10 @@ model PurchaseOrder {
 }
 
 model PurchaseOrderDetail {
-  purchaseOrderId Int     @map("purchase_order_id")
-  skuId           Int     @map("sku_id")
+  purchaseOrderId Int @map("purchase_order_id")
+  skuId           Int @map("sku_id")
   quantity        Int
-  unitPrice       Decimal @map("unit_price") @db.Decimal(10, 2)
+  unitPrice       Int @map("unit_price")
 
   purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
   sku           ProductSku    @relation(fields: [skuId], references: [id], onDelete: Cascade)
@@ -170,8 +170,8 @@ model Order {
   note            String?       @map("note")
   createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamp(0)
-  shippingFee     Decimal       @default(0.00) @map("shipping_fee") @db.Decimal(10, 2)
-  discount        Decimal       @default(0) @map("discount") @db.Decimal(10, 2)
+  shippingFee     Int           @default(0) @map("shipping_fee")
+  discount        Int           @default(0) @map("discount")
   orderDetail     OrderDetail[]
   invoice         Invoice?
 
@@ -179,10 +179,10 @@ model Order {
 }
 
 model OrderDetail {
-  orderId         Int     @map("order_id")
-  productSerialId String  @map("product_serial_id") @db.Uuid
-  unitPrice       Decimal @default(0.0) @map("unit_price") @db.Decimal(10, 2)
-  tax             Decimal @default(0.0) @map("tax") @db.Decimal(5, 2)
+  orderId         Int    @map("order_id")
+  productSerialId String @map("product_serial_id") @db.Uuid
+  unitPrice       Int    @default(0) @map("unit_price")
+  tax             Int    @default(0) @map("tax")
 
   order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productSerial ProductSerial @relation(fields: [productSerialId], references: [id], onDelete: Cascade)
@@ -198,10 +198,10 @@ model Invoice {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
   employeeId  String   @map("employee_id") @db.VarChar(100) // email admin 
 
-  taxCode     String  @map("tax_code") @db.VarChar(20)
-  subtotal    Decimal @map("subtotal") // Tổng tiền trước thuế
-  taxAmount   Decimal @map("tax_amount") // Tiền thuế
-  totalAmount Decimal @map("total_amount") // Tổng tiền sau thuế
+  taxCode     String @map("tax_code") @db.VarChar(20)
+  subtotal    Int    @map("subtotal") // Tổng tiền trước thuế
+  taxAmount   Int    @map("tax_amount") // Tiền thuế
+  totalAmount Int    @map("total_amount") // Tổng tiền sau thuế
 
   notes String? @map("notes") @db.Text // Ghi chú hóa đơn
 

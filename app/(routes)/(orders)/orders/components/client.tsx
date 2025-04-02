@@ -1,6 +1,6 @@
 'use client'
 
-import { DownloadCloudIcon, PlusCircle } from 'lucide-react'
+import { DownloadCloudIcon, FileChartPie } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Heading } from '@/components/ui/heading'
 import { Separator } from '@/components/ui/separator'
@@ -115,8 +115,8 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }
             disabled={loading}
             className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'
           >
-            <PlusCircle className='h-5 w-5' />
-            <span className='hidden sm:block ml-2'>Add New</span>
+            <FileChartPie className='h-5 w-5' />
+            <span className='hidden sm:block ml-2'>Create Report</span>
           </Button>
 
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>

@@ -16,6 +16,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Separator } from '@/components/ui/separator'
 import { Heading } from '@/components/ui/heading'
 import { AlertModal } from '@/components/alert-modal'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb'
 
 const formSchema = z.object({
   brandName: z.string().min(1),
@@ -90,6 +98,22 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
   return (
     <>
       <AlertModal isOpen={open} onClose={() => setOpen(false)} onConfirm={onDelete} loading={loading} />
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/'>Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/brands'>Brands</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{initialData?.id ?? 'new'}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className='flex items-center justify-between'>
         <Heading title={title} description={description} />
         {initialData && (
@@ -98,51 +122,53 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
           </Button>
         )}
       </div>
+
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full'>
-          <div className='md:grid md:grid-cols-3 gap-8'>
-            <FormField
-              control={form.control}
-              name='brandName'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='brand Name' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='brandAbbreviation'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Abbreviation</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='Brand Abbreviation' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder='brand Description' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className='ml-auto' type='submit'>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className='max-w-md mx-auto space-y-6 p-6 bg-white shadow-md border-1 rounded-lg mt-5'
+        >
+          <FormField
+            control={form.control}
+            name='brandName'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder='brand Name' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='brandAbbreviation'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Abbreviation</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder='Brand Abbreviation' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='description'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder='brand Description' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button disabled={loading} className='ml-auto w-full' type='submit'>
             {action}
           </Button>
         </form>

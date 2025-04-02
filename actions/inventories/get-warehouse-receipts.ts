@@ -1,7 +1,7 @@
 import { OrderBy } from '@/constants/order-by.enum'
 import { SystemError } from '@/constants/errors.enum'
 import { WarehouseReceiptResponse } from '@/types/inventories.type'
-import { Page } from '@/types/responses/page.type'
+import { Page } from '@/types/page.type'
 
 export async function getWarehouseReceiptsByPage(page: number, size: number): Promise<Page<WarehouseReceiptResponse>> {
   const URL = `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/warehouseReceipts?page=${page}&take=${size}&order=${OrderBy.ASCENDING}`

@@ -1,7 +1,7 @@
 import { OrderBy } from '@/constants/order-by.enum'
 import { SystemError } from '@/constants/errors.enum'
 import { ProductSerialResponse } from '@/types/inventories.type'
-import { Page } from '@/types/responses/page.type'
+import { Page } from '@/types/page.type'
 
 export async function getProductSerialsBywarehouseReceiptId(
   warehouseReceiptId: number,
