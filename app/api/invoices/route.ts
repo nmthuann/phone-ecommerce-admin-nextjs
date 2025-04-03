@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma'
 import { auth, currentUser } from '@clerk/nextjs/server'
-import { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
@@ -53,13 +52,9 @@ export async function POST(req: Request) {
         invoiceCode: invoiceCode as string,
         orderId: parseInt(orderId, 10),
         taxCode: taxCode,
-        subtotal: new Decimal(
-          order.orderDetail.reduce((sum, detail) => sum + new Decimal(detail.unitPrice).toNumber() * 1, 0)
-        ),
+        subtotal: order.orderDetail.reduce((sum, detail) => sum + detail.unitPrice * 1, 0),
         taxAmount: 0,
-        totalAmount: new Decimal(
-          order.orderDetail.reduce((sum, detail) => sum + new Decimal(detail.unitPrice).toNumber() * 1, 0)
-        ),
+        totalAmount: order.orderDetail.reduce((sum, detail) => sum + detail.unitPrice * 1, 0),
         notes: notes,
         employeeId: user.emailAddresses[0].emailAddress
       }

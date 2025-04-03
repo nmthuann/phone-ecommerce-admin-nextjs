@@ -1,16 +1,21 @@
 import prisma from '@/lib/prisma'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
     const { userId } = await auth()
+    const user = await currentUser()
 
     const body = await req.json()
 
     const { status } = body
 
     if (!userId) {
+      return new NextResponse('Unauthenticated', { status: 403 })
+    }
+
+    if (!user) {
       return new NextResponse('Unauthenticated', { status: 403 })
     }
 
@@ -23,7 +28,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
         id: parseInt(params.id)
       },
       data: {
-        status: status
+        status: status,
+        employeeId: user.emailAddresses[0].emailAddress
       }
     })
 

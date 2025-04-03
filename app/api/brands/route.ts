@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return new NextResponse(BrandError.DESCRIPTION_MISSING, { status: 400 })
     }
 
-    if (!description) {
+    if (!brandAbbreviation) {
       return new NextResponse('brandAbbreviation is missing', { status: 400 })
     }
 

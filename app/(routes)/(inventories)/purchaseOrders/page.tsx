@@ -39,7 +39,7 @@ const PurchaseOrdersPage = async () => {
       hasDetail: item.purchaseOrderDetail && item.purchaseOrderDetail.length > 0, // Kiểm tra có detail không
       hasWarehouseReceipt: Boolean(item.warehouseReceipt)
     }))
-    console.log(Boolean(purchaseOrders[0].warehouseReceipt))
+
     return (
       <div className='flex-col'>
         <div className='flex-1 space-y-4 p-8 pt-6 '>

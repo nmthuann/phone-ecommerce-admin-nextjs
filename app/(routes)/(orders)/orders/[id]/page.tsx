@@ -55,7 +55,7 @@ const OrderPage = async ({ params }: { params: Promise<{ id: string }> }) => {
       lastName: order.lastName,
       email: order.email,
 
-      employeeId: order.employeeId,
+      employeeId: order.employeeId ?? 'Empty',
 
       orderDetail: orderDetails.map(detail => ({
         productSerialId: detail.productSerialId,

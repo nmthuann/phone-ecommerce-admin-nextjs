@@ -1,12 +1,8 @@
 import { Metadata } from 'next'
 import { OrdersClient } from './components/client'
 import ErrorComponent from '@/components/errors/error-component'
-// import { getOrdersByPage } from '@/actions/orders/get-orders'
-// import { OrderResponse } from '@/types/orders.type'
 import { OrderColumn } from './components/columns'
-// import { format, parseISO } from 'date-fns'
 import prisma from '@/lib/prisma'
-import { Decimal } from '@prisma/client/runtime/library'
 
 export const metadata: Metadata = {
   title: 'Orders Page',
@@ -17,7 +13,6 @@ const OrdersPage = async () => {
   const page = 1
   const pageSize = 10
   try {
-    // const res = await getOrdersByPage(1, 10)
     const orders = await prisma.order.findMany({
       include: {
         orderDetail: true
@@ -32,7 +27,7 @@ const OrdersPage = async () => {
     const count = await prisma.order.count()
     const formattedData: OrderColumn[] = orders.map(item => ({
       id: String(item.id),
-      employeeId: item.employeeId,
+      employeeId: item.employeeId ?? 'Empty',
       fullName: `${item.firstName} ${item.lastName}`,
       status: item.status,
       orderType: item.orderType,
@@ -40,7 +35,7 @@ const OrdersPage = async () => {
       shippingMethod: item.shippingMethod,
       paymentMethod: item.paymentMethod,
       createdAt: item.createdAt.toISOString().split('T')[0],
-      total: String(item.orderDetail.reduce((sum, detail) => sum + new Decimal(detail.unitPrice).toNumber() * 1, 0))
+      total: String(item.orderDetail.reduce((sum, detail) => sum + detail.unitPrice * 1, 0))
     }))
 
     return (
