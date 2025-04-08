@@ -39,3 +39,10 @@ export type Brand = {
   description?: string
   brandAbbreviation: string
 }
+
+export type SearchProductResponse = {
+  id: number
+  productName: string
+  slug: string
+  brandUrl: string
+}
