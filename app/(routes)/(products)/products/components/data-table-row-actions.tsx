@@ -18,6 +18,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { ProductColumn } from './columns'
 import ProductDetailDialog from './product-detail-dialog'
 import { useState } from 'react'
+import LoadingOverlay from '@/components/loading-overlay'
 
 interface DataTableRowActionsProps {
   dataRow: ProductColumn
@@ -26,6 +27,7 @@ interface DataTableRowActionsProps {
 export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsProps>) {
   const router = useRouter()
   const pathname = usePathname()
+  const [loading, setLoading] = useState<boolean>(false)
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success(`Products ${Messages.COPY_ID}`)
@@ -55,7 +57,12 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
             <List />
             View Detail
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`${pathname}/${dataRow.id}/skus`)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setLoading(true)
+              router.push(`${pathname}/${dataRow.id}/skus`)
+            }}
+          >
             <Barcode />
             View Sku List
           </DropdownMenuItem>
@@ -69,6 +76,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
         specs={dataRow.productSpecs}
         description={dataRow.description}
       />
+      <LoadingOverlay loading={loading} />
     </div>
   )
 }

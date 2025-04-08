@@ -97,6 +97,7 @@ const WarehouseReceiptPage = async ({ params }: { params: Promise<{ id: string }
       id: item.id,
       serialNumber: item.serialNumber,
       dateManufactured: item.dateManufactured.toISOString().split('T')[0],
+      serialStatus: item.status,
       productSkuId: String(item.productSku.id),
       barcode: item.productSku.barcode,
       skuNo: item.productSku.skuNo,

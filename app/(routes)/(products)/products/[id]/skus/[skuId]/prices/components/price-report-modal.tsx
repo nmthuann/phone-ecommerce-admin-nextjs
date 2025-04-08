@@ -1,5 +1,5 @@
 'use client'
-import { PriceResponse } from '@/types/products.type'
+import { PriceResponse } from '@/types/responses.type'
 import { PriceReport } from './price-report'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 

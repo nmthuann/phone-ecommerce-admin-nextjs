@@ -24,6 +24,7 @@ interface PriceClientProps {
   previousParam: string
   currentParam: string
   poDetail: {
+    productSkuId: string
     quantity: string
     unitPrice: string
   }

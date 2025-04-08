@@ -55,6 +55,7 @@ const PricesPage = async ({ params }: { params: Promise<{ id: string; skuId: str
             previousParam={id}
             currentParam={skuId}
             poDetail={{
+              productSkuId: String(pODetail.skuId),
               quantity: String(pODetail.quantity),
               unitPrice: String(pODetail.unitPrice)
             }}

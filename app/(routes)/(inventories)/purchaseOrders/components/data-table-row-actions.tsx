@@ -18,6 +18,7 @@ import { PurchaseOrdersColumn } from './columns'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import WarehouseReceiptModal from './warehouse-receipt-modal'
+import LoadingOverlay from '@/components/loading-overlay'
 
 interface DataTableRowActionsProps {
   dataRow: PurchaseOrdersColumn
@@ -26,7 +27,7 @@ interface DataTableRowActionsProps {
 export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsProps>) {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-
+  const [loading, setLoading] = useState<boolean>(false)
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success(`Purchase Order ${Messages.COPY_ID}`)
@@ -58,7 +59,9 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
               if (!dataRow.hasWarehouseReceipt) {
                 setIsOpen(true)
               } else {
+                setLoading(true)
                 router.push(`/purchaseOrders/${dataRow.id}/warehouseReceipts`)
+                // setLoading(false)
               }
             }}
             disabled={!dataRow.hasDetail}
@@ -76,6 +79,7 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           orderNumber: dataRow.orderNumber
         }}
       />
+      <LoadingOverlay loading={loading} />
     </div>
   )
 }

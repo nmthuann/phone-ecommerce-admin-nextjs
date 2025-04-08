@@ -44,7 +44,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <Edit className='mr-2 h-4 w-4' /> Update
           </DropdownMenuItem>
           <DropdownMenuItem disabled onClick={() => router.push(`/warehouseReceipts/${data.id}/serials`)}>
-            <Barcode className='mr-2 h-4 w-4' /> Product Serials
+            <Barcode className='mr-2 h-4 w-4' /> View SKU
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

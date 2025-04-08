@@ -6,6 +6,7 @@ interface PriceModalProps {
   isOpen: boolean
   onClose: () => void
   data: {
+    productSkuId: string
     quantity: string
     unitPrice: string
   }
@@ -17,24 +18,23 @@ const PriceModal: FC<PriceModalProps> = ({ isOpen, onClose, data }) => {
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogTitle>Product Pricing Details</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your account and remove your data from our
-              servers.
+              Please review the current quantity and unit price. You can update the information below if needed.
             </DialogDescription>
           </DialogHeader>
 
           {/* Hiển thị thông tin sản phẩm */}
           <div className='space-y-3 p-4 bg-gray-100 rounded-md'>
             <p>
-              <b>Số lượng:</b> {String(data.quantity)}
+              <b>Quantity:</b> {String(data.quantity)}
             </p>
             <p>
-              <b>Giá nhập:</b> {String(data.unitPrice)} VND
+              <b>Unit Price (Purchase Order):</b> {String(data.unitPrice)} VND
             </p>
           </div>
 
-          <PriceForm />
+          <PriceForm onClose={onClose} productSkuId={data.productSkuId} />
         </DialogContent>
       </Dialog>
     </div>

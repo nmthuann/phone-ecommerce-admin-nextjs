@@ -2,7 +2,7 @@
 
 import * as z from 'zod'
 import axios from 'axios'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -21,13 +21,15 @@ import { Calendar } from '@/components/ui/calendar'
 const formSchema = z.object({
   sellingPrice: z.coerce.number().min(1),
   displayPrice: z.coerce.number().min(1),
-  beginAt: z.coerce.date(),
-  unitPrice: z.coerce.number().min(1)
+  beginAt: z.coerce.date()
 })
 
 type PriceFormValues = z.infer<typeof formSchema>
-
-export const PriceForm = () => {
+interface PriceFormProps {
+  onClose(): void
+  productSkuId: string
+}
+export const PriceForm: FC<PriceFormProps> = ({ productSkuId, onClose }) => {
   const [loading, setLoading] = useState(false)
   const params = useParams()
   const router = useRouter()
@@ -37,8 +39,7 @@ export const PriceForm = () => {
     defaultValues: {
       sellingPrice: 0,
       displayPrice: 0,
-      beginAt: new Date(),
-      unitPrice: 0
+      beginAt: new Date()
     }
   })
 
@@ -47,9 +48,13 @@ export const PriceForm = () => {
 
     try {
       setLoading(true)
-      await axios.post(`/api/skus/${params.skuId}/prices`, data)
+      await axios.post(`/api/skus/${params.skuId}/prices`, {
+        ...data,
+        productSkuId: parseInt(productSkuId)
+      })
       router.push(`/products/${params.id}/skus/${params.skuId}/prices`)
       router.refresh()
+      onClose()
       toast.success('Price created.')
     } catch (error: unknown) {
       console.log(error)

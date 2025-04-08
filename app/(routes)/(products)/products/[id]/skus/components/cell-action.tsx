@@ -17,6 +17,8 @@ import {
 import { ProductSkuColumn } from './columns'
 import SkuAttributeDialog from './sku-detail-modal'
 
+import LoadingOverlay from '@/components/loading-overlay'
+
 interface CellActionProps {
   data: ProductSkuColumn
 }
@@ -25,7 +27,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-
+  const [loading, setLoading] = useState<boolean>(false)
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success('SKU ID copied to clipboard.')
@@ -50,7 +52,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}`)}>
             <Edit className='mr-2 h-4 w-4' /> Update Sku
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push(`${pathname}/${data.id}/prices`)}>
+          <DropdownMenuItem
+            onClick={() => {
+              setLoading(true)
+              router.push(`${pathname}/${data.id}/prices`)
+            }}
+          >
             <HandCoins className='mr-2 h-4 w-4' /> Set up Prices
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleClickViewSkuDetail()}>
@@ -64,6 +71,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         skuName={data.skuName}
         attrs={data.skuAttributes}
       />
+      <LoadingOverlay loading={loading} />
     </div>
   )
 }

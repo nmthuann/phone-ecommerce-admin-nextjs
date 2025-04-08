@@ -3,11 +3,13 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Attribute } from '@/types/products.type'
 import { CellAction } from './cell-action'
+import { Badge } from '@/components/ui/badge'
 
 export type ProductSerialColumn = {
   id: string
   serialNumber: string
   dateManufactured: string
+  serialStatus: boolean
   productSkuId: string
   barcode: string
   skuNo: string
@@ -56,6 +58,21 @@ export const columns: ColumnDef<ProductSerialColumn>[] = [
   {
     accessorKey: 'dateManufactured',
     header: 'dateManufactured'
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.getValue<boolean>('status')
+      return (
+        <Badge
+          // variant={status ? 'success' : 'destructive'} // hoặc tuỳ variant bạn có
+          className={status ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}
+        >
+          {status ? 'Available' : 'Unavailable'}
+        </Badge>
+      )
+    }
   },
   {
     id: 'actions',
