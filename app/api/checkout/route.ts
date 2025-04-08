@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
 import { stripe } from '@/lib/stripe'
 import prisma from '@/lib/prisma'
 import Stripe from 'stripe'
 import { OrderType } from '@/constants/order-type.enum'
 import { OrderStatus } from '@/constants/order-status.enum'
+import { PaymentMethodEnum } from '@/constants/payment-method.enum'
 
 type CartItem = {
   skuId: number
-  quantity: number
 }
 
 const corsHeader = {
@@ -24,7 +23,9 @@ export async function OPTIONS() {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { firstName, lastName, email, contactPhone, shippingAddress, paymentMethod, shippingMethod, cart } = body
+    const { firstName, lastName, email, contactPhone, shippingAddress, paymentMethod, shippingMethod, note, cart } =
+      body
+    console.log('cart:::', cart)
 
     if (!firstName) {
       return new NextResponse('firstName', { status: 400 })
@@ -59,23 +60,21 @@ export async function POST(req: Request) {
     }
 
     // Kiểm tra tồn kho
-    for (const item of cart) {
+    for (const item of cart as CartItem[]) {
       const stockCount = await prisma.productSerial.count({
         where: {
-          productSkuId: item.skuId
+          productSkuId: item.skuId,
+          status: true // chỉ lấy serial còn hàng
         }
       })
 
-      if (stockCount < item.quantity) {
+      if (stockCount < 1) {
         return NextResponse.json(
           { error: `Sản phẩm SKU ${item.skuId} chỉ còn ${stockCount} sản phẩm.` },
           { status: 400 }
         )
       }
     }
-
-    const headersList = await headers()
-    const origin = headersList.get('origin')
 
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
@@ -98,9 +97,9 @@ export async function POST(req: Request) {
       }
 
       line_items.push({
-        quantity: item.quantity,
+        quantity: 1,
         price_data: {
-          currency: 'VND', // VND USD
+          currency: 'VND', // VND | USD
           product_data: {
             name: sku.skuName
           },
@@ -109,35 +108,98 @@ export async function POST(req: Request) {
       })
     }
 
-    // create Order
-    const order = await prisma.order.create({
-      data: {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        contactPhone: contactPhone,
-        shippingAddress: shippingAddress,
-        orderType: Boolean(OrderType.ORDER_ONLINE),
-        paymentMethod: paymentMethod,
-        shippingMethod: shippingMethod,
-        note: null,
-        status: OrderStatus.PENDING,
-        employeeId: null
-      }
-    })
+    // ✅ Bọc tạo order và orderDetail trong transaction
+    const order = await prisma.$transaction(
+      async tx => {
+        const createdOrder = await tx.order.create({
+          data: {
+            firstName,
+            lastName,
+            email,
+            contactPhone,
+            shippingAddress,
+            orderType: Boolean(OrderType.ORDER_ONLINE),
+            paymentMethod,
+            shippingMethod,
+            note,
+            status: OrderStatus.PENDING,
+            employeeId: null
+          }
+        })
 
-    // Create Checkout Sessions from body params.
-    const session = await stripe.checkout.sessions.create({
-      line_items,
-      mode: 'payment',
-      success_url: `${origin}/cart?success=1`,
-      cancel_url: `${origin}/cart?canceled=1`,
-      metadata: {
-        orderId: order.id // orderId
+        for (const item of cart as CartItem[]) {
+          const productSerial = await tx.productSerial.findFirst({
+            where: {
+              productSkuId: item.skuId,
+              status: true
+            },
+            include: {
+              productSku: {
+                include: {
+                  price: {
+                    orderBy: {
+                      beginAt: 'desc'
+                    }
+                  }
+                }
+              }
+            }
+          })
+
+          if (!productSerial) {
+            throw new Error(`Không tìm thấy serial hợp lệ cho SKU ${item.skuId}`)
+          }
+
+          await tx.orderDetail.create({
+            data: {
+              orderId: createdOrder.id,
+              productSerialId: productSerial.id,
+              tax: 0,
+              unitPrice: productSerial.productSku.price[0].sellingPrice
+            }
+          })
+
+          await tx.productSerial.update({
+            where: { id: productSerial.id },
+            data: { status: false }
+          })
+        }
+
+        return createdOrder
+      },
+      {
+        timeout: 15000
       }
-    })
-    console.log(session.url)
-    return NextResponse.json(session.url!)
+    )
+
+    if (paymentMethod === PaymentMethodEnum.COD_PAYMENT_METHOD) {
+      return NextResponse.json({
+        success: true,
+        message: 'Đơn hàng đã được tạo thành công (COD)',
+        data: {
+          orderId: order.id
+        }
+      })
+    } else {
+      // Create Checkout Sessions from body params.
+      const session = await stripe.checkout.sessions.create({
+        line_items,
+        mode: 'payment',
+        success_url: `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/cart?success=1`,
+        cancel_url: `${process.env.NEXT_PUBLIC_FRONTEND_API_URL}/cart?canceled=1`,
+        metadata: {
+          orderId: order.id // orderId
+        }
+      })
+      console.log(session.url)
+      return NextResponse.json({
+        success: true,
+        message: 'Stripe session created successfully',
+        data: {
+          url: session.url
+        }
+      })
+    }
   } catch (err) {
     console.log(err)
     return NextResponse.json({ error: err }, { status: 500 })

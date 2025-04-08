@@ -80,7 +80,7 @@ export const WarehouseReceiptForm: FC<WarehouseReceiptFormProps> = ({ onClose, p
                 <FormItem>
                   <FormLabel>Receipt Number</FormLabel>
                   <FormControl>
-                    <Input type='text' disabled={loading} placeholder='SKU No . . . ' {...field} />
+                    <Input type='text' disabled={loading} placeholder='Receipt Number . . . ' {...field} />
                   </FormControl>
                   <FormDescription>Receipt Number aculate from VAT + price of Supplier</FormDescription>
                   <FormMessage />

@@ -116,7 +116,7 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({ initialDat
             name='orderNumber'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Order Number</FormLabel>
+                <FormLabel>Order Number (PO-YYYYmmDd-XXXX) </FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder='Order Number' {...field} />
                 </FormControl>

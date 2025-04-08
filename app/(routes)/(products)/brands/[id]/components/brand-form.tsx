@@ -71,8 +71,19 @@ export const BrandForm: React.FC<BrandFormProps> = ({ initialData }) => {
       router.refresh()
       toast.success(toastMessage)
     } catch (error: unknown) {
-      console.log(error)
-      toast.error('Something went wrong.')
+      // console.log(error)
+      // toast.error('Something went wrong.')
+      // Kiểm tra nếu là lỗi từ Axios
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          toast.error('Please Login again.')
+          router.push('/sign-in')
+        } else {
+          toast.error(error.response?.data?.message || 'Đã xảy ra lỗi.')
+        }
+      } else {
+        toast.error('Something went wrong.')
+      }
     } finally {
       setLoading(false)
     }

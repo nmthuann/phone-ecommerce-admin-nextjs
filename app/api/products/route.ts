@@ -4,8 +4,11 @@ import { ProductDetailResponse, ProductResponse } from '@/types/responses.type'
 import { convertAttributesToJson } from '@/utils/convert'
 import { createSlug } from '@/utils/slug'
 import { auth } from '@clerk/nextjs/server'
-// import { Product } from '@prisma/client'
+import { Brand, Product } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
+export type ProductWithBrand = Product & {
+  brand: Brand
+}
 
 export async function POST(req: Request) {
   try {
@@ -119,6 +122,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(productDetail)
   }
+
   try {
     if (brandUrl) {
       const brand = await prisma.brand.findUnique({
@@ -160,7 +164,7 @@ export async function GET(req: NextRequest) {
           skuName: mapping.productSku.skuName,
           image: mapping.productSku.image,
           slug: mapping.productSku.slug,
-          skuAttributes: mapping.productSku.skuAttributes as Record<string, string>, // Ép kiểu JSON thành Record
+          skuAttributes: mapping.productSku.skuAttributes as Record<string, string>,
           sellingPrice: mapping.productSku.price[0]?.sellingPrice ?? 0, // Lấy giá mới nhất hoặc 0 nếu không có
           displayPrice: mapping.productSku.price[0]?.displayPrice ?? 0
         }))
@@ -182,6 +186,33 @@ export async function GET(req: NextRequest) {
 
       const response: Page<ProductResponse> = {
         data: productResponses,
+        meta
+      }
+
+      return NextResponse.json(response)
+    } else if (page && size) {
+      const products = await prisma.product.findMany({
+        include: {
+          brand: true
+        },
+        skip: (parseInt(page) - 1) * parseInt(size),
+        take: parseInt(size)
+      })
+
+      const itemCount = await prisma.product.count()
+
+      const pageCount = Math.ceil(itemCount / parseInt(size))
+      const meta: PageMeta = {
+        page: parseInt(page),
+        take: parseInt(size),
+        itemCount,
+        pageCount,
+        hasPreviousPage: parseInt(page) > 1,
+        hasNextPage: parseInt(page) < pageCount
+      }
+
+      const response: Page<ProductWithBrand> = {
+        data: products,
         meta
       }
 

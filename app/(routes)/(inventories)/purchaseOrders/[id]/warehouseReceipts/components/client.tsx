@@ -139,8 +139,8 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {pODetails?.map(detail => (
-                <TableRow key={detail.purchaseOrderId}>
+              {pODetails.map(detail => (
+                <TableRow key={detail.skuId}>
                   <TableCell className='font-medium'>{detail.skuId}</TableCell>
                   <TableCell>{detail.quantity}</TableCell>
                   <TableCell className='text-right'>

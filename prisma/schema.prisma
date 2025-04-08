@@ -139,15 +139,15 @@ model WarehouseReceipt {
 }
 
 model ProductSerial {
-  id                 String   @id @default(uuid()) @db.Uuid
-  serialNumber       String   @unique @map("serial_number") @db.VarChar(100)
-  dateManufactured   DateTime @map("date_manufactured") @db.Date
-  productSkuId       Int      @map("product_sku_id")
-  warehouseReceiptId Int      @map("warehouse_receipt_id")
-
-  productSku       ProductSku       @relation(fields: [productSkuId], references: [id], onDelete: Cascade)
-  warehouseReceipt WarehouseReceipt @relation(fields: [warehouseReceiptId], references: [id], onDelete: Cascade)
-  orderDetail      OrderDetail[]
+  id                 String           @id @default(uuid()) @db.Uuid
+  serialNumber       String           @unique @map("serial_number") @db.VarChar(100)
+  dateManufactured   DateTime         @map("date_manufactured") @db.Date
+  productSkuId       Int              @map("product_sku_id")
+  warehouseReceiptId Int              @map("warehouse_receipt_id")
+  status             Boolean          @default(true) // true là còn hàng, false là đã bán
+  productSku         ProductSku       @relation(fields: [productSkuId], references: [id], onDelete: Cascade)
+  warehouseReceipt   WarehouseReceipt @relation(fields: [warehouseReceiptId], references: [id], onDelete: Cascade)
+  orderDetail        OrderDetail[]
 
   @@map("product_serials")
 }

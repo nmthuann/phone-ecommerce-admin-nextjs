@@ -57,13 +57,14 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
             onClick={() => {
               if (!dataRow.hasWarehouseReceipt) {
                 setIsOpen(true)
+              } else {
+                router.push(`/purchaseOrders/${dataRow.id}/warehouseReceipts`)
               }
-              router.push(`/purchaseOrders/${dataRow.id}/warehouseReceipts`)
             }}
             disabled={!dataRow.hasDetail}
           >
             <FilePlus2 />
-            Import Warehouse Receipt
+            {dataRow.hasWarehouseReceipt ? ' Import Warehouse Receipt' : 'Create Warehouse Receipt'}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
