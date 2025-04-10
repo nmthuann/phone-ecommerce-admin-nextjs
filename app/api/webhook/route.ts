@@ -22,6 +22,7 @@ export async function POST(req: Request) {
     return new NextResponse('Missing orderId in metadata', { status: 400 })
   }
 
+  console.log('session.metadata.orderId::', session.metadata.orderId)
   if (event.type === 'checkout.session.completed') {
     await prisma.order.update({
       where: {

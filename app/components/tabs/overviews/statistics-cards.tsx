@@ -1,6 +1,11 @@
 'use client'
+import { TotalRevenue } from '@/actions/get-total-revenue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-const StatisticsCards = () => {
+import { FC } from 'react'
+interface StatisticsCardsProps {
+  totalRevenue: TotalRevenue
+}
+const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue }) => {
   return (
     <div className=' grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4 '>
       <Card>
@@ -20,8 +25,24 @@ const StatisticsCards = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className='text-2xl font-bold'>$45,231.89</div>
-          <p className='text-xs text-muted-foreground'>+20.1% from last month</p>
+          <div className='text-2xl font-bold'>{`${+(totalRevenue.currentRevenue / 1_000_000).toFixed(2)} tr VNĐ`}</div>
+          <p className='text-xs text-muted-foreground'>
+            {' '}
+            {(() => {
+              const prev = totalRevenue.previousRevenue
+              const current = totalRevenue.currentRevenue
+              const diff = current - prev
+
+              if (prev === 0) {
+                return '+∞% from last month' // hoặc hiển thị riêng "No data last month"
+              }
+
+              const percent = (diff / prev) * 100
+              const sign = percent >= 0 ? '+' : '-'
+
+              return `${sign}${Math.abs(percent).toFixed(2)}% from last month`
+            })()}
+          </p>
         </CardContent>
       </Card>
       <Card>
