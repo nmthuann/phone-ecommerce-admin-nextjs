@@ -25,8 +25,8 @@ import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { format, isValid } from 'date-fns'
 import { Calendar } from '@/components/ui/calendar'
-import { PurchaseOrder, Supplier } from '@prisma/client'
 import { Input } from '@/components/ui/input'
+import { PurchaseOrder, Supplier } from '@prisma/client'
 
 const formSchema = z.object({
   orderNumber: z.string().min(1),
@@ -37,7 +37,7 @@ const formSchema = z.object({
 type PurchaseOrderFormValues = z.infer<typeof formSchema>
 
 interface PurchaseOrderFormProps {
-  initialData?: PurchaseOrder | null
+  initialData: PurchaseOrder | null
   suppliers: Supplier[]
 }
 

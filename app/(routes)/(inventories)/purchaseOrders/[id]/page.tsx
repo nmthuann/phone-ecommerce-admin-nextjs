@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import PurchaseOrderForm from './components/purchase-order-form'
 import { Supplier } from '@/types/inventories.type'
 import prisma from '@/lib/prisma'
+
 export const metadata: Metadata = {
   title: 'Purchase Order',
   description: 'Purchase Order Management.'
