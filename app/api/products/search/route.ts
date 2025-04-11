@@ -1,5 +1,3 @@
-// app/api/products/search/route.ts
-
 import prisma from '@/lib/prisma'
 import { SearchProductResponse } from '@/types/products.type'
 import { NextResponse } from 'next/server'

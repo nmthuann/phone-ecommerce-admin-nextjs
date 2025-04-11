@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
-export async function GET(req: Request, { params }: { params: { storeId: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!params.storeId) {
+    const { id } = await params
+    if (!id) {
       return new NextResponse('Store id is required', { status: 400 })
     }
 

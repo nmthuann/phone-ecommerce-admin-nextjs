@@ -45,12 +45,9 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: NextRequest) {
-  console.log('req.url::: ', req.url)
   const searchParams = req.nextUrl.searchParams
   const brandUrl = searchParams.get('brandUrl')
   if (brandUrl) {
-    console.log('brandUrl', brandUrl)
-
     const brand = await prisma.brand.findUnique({
       where: {
         brandUrl: brandUrl

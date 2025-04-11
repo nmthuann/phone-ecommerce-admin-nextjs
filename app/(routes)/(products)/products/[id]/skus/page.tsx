@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { ProductSkuClient } from './components/client'
 import prisma from '@/lib/prisma'
 import { convertJsonToAttributes } from '@/utils/convert'
+import { getStock } from '@/actions/get-stock'
 export const metadata: Metadata = {
   title: 'SKUs',
   description: 'Skus Management Table.'
@@ -52,12 +53,3 @@ const ProductSkusPage = async ({ params }: { params: Promise<{ id: string }> }) 
 }
 
 export default ProductSkusPage
-
-export const getStock = async (skuId: number) => {
-  const stock = await prisma.productSerial.count({
-    where: {
-      productSkuId: skuId
-    }
-  })
-  return stock
-}

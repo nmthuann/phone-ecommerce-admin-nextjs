@@ -4,15 +4,16 @@ import { createSlug } from '@/utils/slug'
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    if (!params.id) {
+    const { id } = await params
+    if (!id) {
       return new NextResponse('brand id is required', { status: 400 })
     }
 
     const brand = await prisma.brand.findUnique({
       where: {
-        id: parseInt(params.id)
+        id: parseInt(id)
       }
     })
 
@@ -23,21 +24,22 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const { userId } = await auth()
 
     if (!userId) {
       return new NextResponse('Unauthenticated', { status: 403 })
     }
 
-    if (!params.id) {
+    if (!id) {
       return new NextResponse('brand id is required', { status: 400 })
     }
 
     const brand = await prisma.brand.delete({
       where: {
-        id: parseInt(params.id)
+        id: parseInt(id)
       }
     })
 
@@ -48,8 +50,9 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const { userId } = await auth()
 
     const body = await req.json()
@@ -70,13 +73,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       return new NextResponse(BrandError.DESCRIPTION_MISSING, { status: 400 })
     }
 
-    if (!params.id) {
+    if (!id) {
       return new NextResponse('brand id is required', { status: 400 })
     }
 
     const brand = await prisma.brand.update({
       where: {
-        id: parseInt(params.id)
+        id: parseInt(id)
       },
       data: {
         brandName,

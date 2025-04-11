@@ -2,8 +2,9 @@ import prisma from '@/lib/prisma'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params
     const { userId } = await auth()
     const user = await currentUser()
 
@@ -25,7 +26,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
     const order = await prisma.order.update({
       where: {
-        id: parseInt(params.id)
+        id: parseInt(id)
       },
       data: {
         status: status,
