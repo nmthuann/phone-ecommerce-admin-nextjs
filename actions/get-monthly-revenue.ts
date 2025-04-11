@@ -6,6 +6,14 @@ export type MonthlyRevenue = {
   total: number
 }
 
+export type OrderDetail = {
+  createdAt: Date
+  orderDetail: {
+    unitPrice: number
+    tax: number
+  }
+}
+
 export const getMonthlyRevenue = async (): Promise<MonthlyRevenue[]> => {
   const currentYear = new Date().getFullYear()
 
@@ -28,11 +36,19 @@ export const getMonthlyRevenue = async (): Promise<MonthlyRevenue[]> => {
   })
 
   const monthMap = new Map<string, number>()
-  orders.forEach(order => {
-    const monthName = format(order.createdAt, 'MMM')
-    const total = order.orderDetail.reduce((sum, item) => sum + item.unitPrice + item.tax, 0)
-    monthMap.set(monthName, (monthMap.get(monthName) ?? 0) + total)
-  })
+  orders.forEach(
+    (order: {
+      createdAt: Date
+      orderDetail: {
+        unitPrice: number
+        tax: number
+      }[]
+    }) => {
+      const monthName = format(order.createdAt, 'MMM')
+      const total = order.orderDetail.reduce((sum, item) => sum + item.unitPrice + item.tax, 0)
+      monthMap.set(monthName, (monthMap.get(monthName) ?? 0) + total)
+    }
+  )
 
   const result: MonthlyRevenue[] = Array.from({ length: 12 }, (_, i) => {
     const monthDate = new Date(currentYear, i)
