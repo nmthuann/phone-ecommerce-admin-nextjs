@@ -5,8 +5,9 @@ import { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 
 import { DataTableViewOptions } from './data-table-view-options'
-import { CheckCircleIcon, HandCoins, PackageCheck, RocketIcon, WalletCardsIcon, X } from 'lucide-react'
+import { CheckCircleIcon, CircleDashed, HandCoins, PackageCheck, RocketIcon, WalletCardsIcon, X } from 'lucide-react'
 import { DataTableFacetedFilter } from './data-table-faceted-filter'
+import { OrderStatus } from '@/constants/order-status.enum'
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -19,13 +20,18 @@ export const paymentMethods = [
     icon: HandCoins
   },
   {
-    label: 'BANK',
-    value: 'BANK',
+    label: 'STRIPE',
+    value: 'STRIPE',
     icon: WalletCardsIcon
   }
 ]
 
 export const statusList = [
+  {
+    value: OrderStatus.PENDING,
+    label: OrderStatus.PENDING,
+    icon: CircleDashed
+  },
   {
     value: 'CONFIRMED',
     label: 'CONFIRMED',

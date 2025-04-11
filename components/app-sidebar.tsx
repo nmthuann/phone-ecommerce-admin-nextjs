@@ -6,7 +6,7 @@ import {
   Command,
   FileChartColumn,
   GalleryVerticalEnd,
-  PackagePlus,
+  PackageCheck,
   PieChart,
   Settings,
   TabletSmartphone,
@@ -75,15 +75,11 @@ const data = {
     {
       title: 'Orders',
       url: '#',
-      icon: PackagePlus,
+      icon: PackageCheck,
       items: [
         {
           title: 'Order Management',
           url: '/orders'
-        },
-        {
-          title: 'Invoice Management',
-          url: '/invoices'
         }
       ]
     },

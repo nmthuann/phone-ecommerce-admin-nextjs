@@ -6,7 +6,7 @@ const reports = [
   {
     title: 'Báo cáo đơn hàng theo ngày',
     description: 'Xem danh sách đơn hàng đã tạo theo ngày, trạng thái, phương thức thanh toán và tổng giá trị.',
-    href: '/reports/orders-by-date'
+    href: '/orders'
   },
   {
     title: 'Báo cáo doanh thu theo sản phẩm',
@@ -16,17 +16,7 @@ const reports = [
   {
     title: 'Báo cáo nhập hàng theo nhà cung cấp',
     description: 'Theo dõi tổng giá trị hàng nhập từ mỗi nhà cung cấp theo thời gian để đánh giá hiệu quả hợp tác.',
-    href: '/reports/purchase-by-supplier'
-  },
-  {
-    title: 'Báo cáo tồn kho hiện tại',
-    description: 'Thống kê số lượng sản phẩm còn hàng (theo SKU) trong kho để đưa ra kế hoạch nhập hàng hợp lý.',
-    href: '/reports/current-stock'
-  },
-  {
-    title: 'Báo cáo lợi nhuận gộp',
-    description: 'Tính toán chênh lệch giữa giá bán và giá nhập của từng sản phẩm để đánh giá hiệu quả kinh doanh.',
-    href: '/reports/gross-profit'
+    href: '/purchaseOrders'
   }
 ]
 const ReportsTab = () => {

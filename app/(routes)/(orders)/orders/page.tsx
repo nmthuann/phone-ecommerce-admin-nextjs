@@ -15,7 +15,8 @@ const OrdersPage = async () => {
   try {
     const orders = await prisma.order.findMany({
       include: {
-        orderDetail: true
+        orderDetail: true,
+        invoice: true
       },
       skip: (page - 1) * pageSize,
       take: pageSize
@@ -35,7 +36,8 @@ const OrdersPage = async () => {
       shippingMethod: item.shippingMethod,
       paymentMethod: item.paymentMethod,
       createdAt: item.createdAt.toISOString().split('T')[0],
-      total: String(item.orderDetail.reduce((sum, detail) => sum + detail.unitPrice * 1, 0))
+      total: String(item.orderDetail.reduce((sum, detail) => sum + detail.unitPrice * 1, 0)),
+      hasInvoice: !!item.invoice
     }))
 
     return (

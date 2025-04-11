@@ -66,7 +66,7 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
         </div>
       </div>
       <Separator />
-      <div className='bg-white/90 dark:bg-slate-950 rounded-xl p-5'>
+      <div className='bg-white/90 dark:bg-slate-950 rounded-xl'>
         <DataTable searchKey='brandName' columns={columns} data={brands} />
       </div>
       <LoadingOverlay loading={loading} text='Please wait...' />

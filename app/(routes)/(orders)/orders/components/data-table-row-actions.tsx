@@ -20,6 +20,7 @@ import { OrderStatus } from '@/constants/order-status.enum'
 import { useState } from 'react'
 import { AlertModal } from '@/components/alert-modal'
 import axios from 'axios'
+import InvoiceModal from './invoice-modal'
 
 interface DataTableRowActionsProps {
   dataRow: OrderColumn
@@ -28,11 +29,12 @@ interface DataTableRowActionsProps {
 export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsProps>) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [openInvoiceModal, setOpenInvoiceModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
-    toast.success(`Purchase Order ${Messages.COPY_ID}`)
+    toast.success(`Order ${Messages.COPY_ID}`)
   }
 
   const onConfirm = async () => {
@@ -82,13 +84,20 @@ export function DataTableRowActions({ dataRow }: Readonly<DataTableRowActionsPro
           </DropdownMenuItem>
           <DropdownMenuItem
             disabled={dataRow.status !== OrderStatus.COMPLETED}
-            onClick={() => console.log('Export Invoice')}
+            onClick={() => {
+              if (dataRow.hasInvoice) {
+                router.push(`orders/${dataRow.id}`)
+              } else {
+                setOpenInvoiceModal(true)
+              }
+            }}
           >
             <ClipboardPlus />
-            Export Invoice
+            {dataRow.hasInvoice ? 'View Invoice' : 'Create Invoice'}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <InvoiceModal isOpen={openInvoiceModal} orderId={dataRow.id} onClose={() => setOpenInvoiceModal(false)} />
     </div>
   )
 }

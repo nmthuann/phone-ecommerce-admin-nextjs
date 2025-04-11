@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { FC } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Invoice } from './order-detail'
+import Currency from '@/components/utilities/currency'
 
 interface InvoiceDetailModalProps {
   isOpen: boolean
@@ -24,31 +25,33 @@ const InvoiceDetailModal: FC<InvoiceDetailModalProps> = ({ isOpen, onClose, invo
 
           <Card>
             <CardHeader>
-              <CardTitle>Invoice Details - #{invoice.invoiceCode}</CardTitle>
+              <CardTitle>#{invoice.invoiceCode}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className='grid grid-cols-2 gap-4'>
-                <p>
+              <div className='space-y-2'>
+                <div>
                   <strong>Invoice Code:</strong> {invoice.invoiceCode}
-                </p>
-                <p>
+                </div>
+                <div>
                   <strong>Created At:</strong> {invoice.createdAt}
-                </p>
-                <p>
+                </div>
+                <div>
                   <strong>Tax Code:</strong> {invoice.taxCode}
-                </p>
-                <p>
-                  <strong>Subtotal:</strong> {invoice.subtotal}
-                </p>
-                <p>
+                </div>
+                <div className='flex flex-row space-x-2 '>
+                  <strong>Subtotal:</strong>{' '}
+                  <Currency className='text-base justify-center text-blue-800' value={invoice.subtotal} />
+                </div>
+                <div>
                   <strong>Tax Amount:</strong> {invoice.taxAmount}
-                </p>
-                <p>
-                  <strong>Total Amount:</strong> {invoice.totalAmount}
-                </p>
-                <p>
+                </div>
+                <div className='flex flex-row space-x-2 '>
+                  <strong>Total Amount:</strong>
+                  <Currency className='text-base justify-center text-blue-800' value={invoice.totalAmount} />
+                </div>
+                <div>
                   <strong>Notes:</strong> {invoice.notes || 'No additional notes'}
-                </p>
+                </div>
               </div>
             </CardContent>
           </Card>

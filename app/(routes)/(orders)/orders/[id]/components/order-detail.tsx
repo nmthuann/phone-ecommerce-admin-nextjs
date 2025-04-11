@@ -16,7 +16,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import Currency from '@/components/utilities/currency'
 import { OrderStatus } from '@/constants/order-status.enum'
 import { format } from 'date-fns'
-import { ArrowLeft, DownloadIcon, PencilLine, PlusCircleIcon, View } from 'lucide-react'
+import { ArrowLeft, DownloadIcon, PlusCircleIcon, View } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FC, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -92,11 +92,6 @@ const OrderDetail: FC<OrderDetailProps> = ({ order, currentParam }) => {
               View Invoice
             </Button>
           )}
-
-          <Button onClick={() => console.log('onClick Add New')} className='sm:px-4 sm:py-2 px-2 py-1'>
-            <PencilLine />
-            Update Order
-          </Button>
 
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
             <DownloadIcon />

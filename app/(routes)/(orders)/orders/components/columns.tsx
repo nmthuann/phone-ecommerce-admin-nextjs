@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from './data-table-column-header'
 import { DataTableRowActions } from './data-table-row-actions'
+import Currency from '@/components/utilities/currency'
 
 export type OrderColumn = {
   id: string
@@ -15,6 +16,7 @@ export type OrderColumn = {
   paymentMethod: string
   createdAt: string
   total: string
+  hasInvoice: boolean
 }
 
 export const columns: ColumnDef<OrderColumn>[] = [
@@ -36,7 +38,15 @@ export const columns: ColumnDef<OrderColumn>[] = [
   },
   {
     accessorKey: 'orderType',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Type' />
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Type' />,
+    cell: ({ row }) => {
+      const value = row.getValue<boolean>('orderType')
+      return (
+        <span className={value ? 'text-green-600 font-medium' : 'text-red-800 font-medium'}>
+          {value ? 'ONLINE' : 'OFFLINE'}
+        </span>
+      )
+    }
   },
   {
     accessorKey: 'paymentMethod',
@@ -48,7 +58,10 @@ export const columns: ColumnDef<OrderColumn>[] = [
   },
   {
     accessorKey: 'total',
-    header: ({ column }) => <DataTableColumnHeader column={column} title='Total' />
+    header: ({ column }) => <DataTableColumnHeader column={column} title='Total' />,
+    cell: ({ row }) => {
+      return <Currency className='text-sm' value={row.getValue<string>('total')} />
+    }
   },
   {
     accessorKey: 'createdAt',
