@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import PurchaseOrderForm from './components/purchase-order-form'
 import { Supplier } from '@/types/inventories.type'
 import prisma from '@/lib/prisma'
+import { PurchaseOrder } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'Purchase Order',
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 const PurchaseOrderPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
 
-  let purchaseOrder = null
+  let purchaseOrder: PurchaseOrder | null = null
   let suppliers: Supplier[] = []
 
   try {
@@ -22,6 +23,9 @@ const PurchaseOrderPage = async ({ params }: { params: Promise<{ id: string }> }
           id: parseInt(id)
         }
       })
+      if (!purchaseOrder) {
+        return <ErrorComponent page='Purchase Order Page' message='Purchase Order not found.' />
+      }
     }
     suppliers = await prisma.supplier.findMany()
   } catch (error) {
