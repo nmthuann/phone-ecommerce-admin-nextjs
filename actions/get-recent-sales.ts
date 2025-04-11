@@ -33,9 +33,18 @@ export const getRecentSaleList = async (): Promise<RecentSale[]> => {
 
   const buyerMap = new Map<string, { name: string; totalAmount: number }>()
   for (const order of orders) {
-    const email = order.email
-    const name = `${order.firstName} ${order.lastName}`
-    const total = order.orderDetail.reduce((sum, item) => sum + item.unitPrice + item.tax, 0)
+    const email: string = order.email
+    const name: string = `${order.firstName} ${order.lastName}`
+    const total: number = order.orderDetail.reduce(
+      (
+        sum: number,
+        item: {
+          unitPrice: number
+          tax: number
+        }
+      ) => sum + item.unitPrice + item.tax,
+      0
+    )
 
     if (buyerMap.has(email)) {
       const existing = buyerMap.get(email)!

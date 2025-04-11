@@ -29,7 +29,16 @@ export const getTotalRevenue = async (): Promise<TotalRevenue> => {
   let previousRevenue = 0
   let currentRevenue = 0
   for (const order of orders) {
-    const total = order.orderDetail.reduce((sum, item) => sum + item.unitPrice + item.tax, 0)
+    const total = order.orderDetail.reduce(
+      (
+        sum: number,
+        item: {
+          unitPrice: number
+          tax: number
+        }
+      ) => sum + item.unitPrice + item.tax,
+      0
+    )
     if (order.createdAt > currentMonthStart) {
       currentRevenue += total
     } else {
