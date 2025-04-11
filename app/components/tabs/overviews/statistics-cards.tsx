@@ -1,11 +1,14 @@
 'use client'
+import { TotalOrder } from '@/actions/get-total-order'
 import { TotalRevenue } from '@/actions/get-total-revenue'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PackageIcon } from 'lucide-react'
 import { FC } from 'react'
 interface StatisticsCardsProps {
   totalRevenue: TotalRevenue
+  totalOrder: TotalOrder
 }
-const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue }) => {
+const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue, totalOrder }) => {
   return (
     <div className=' grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-4 '>
       <Card>
@@ -26,8 +29,11 @@ const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue }) => {
         </CardHeader>
         <CardContent>
           <div className='text-2xl font-bold'>{`${+(totalRevenue.currentRevenue / 1_000_000).toFixed(2)} tr VNĐ`}</div>
-          <p className='text-xs text-muted-foreground'>
-            {' '}
+          <p
+            className={`text-xs ${
+              totalRevenue.previousRevenue <= totalRevenue.currentRevenue ? 'text-green-500' : 'text-red-600'
+            } `}
+          >
             {(() => {
               const prev = totalRevenue.previousRevenue
               const current = totalRevenue.currentRevenue
@@ -71,7 +77,7 @@ const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue }) => {
       <Card>
         <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
           <CardTitle className='text-sm font-medium'>Sales</CardTitle>
-          <svg
+          {/* <svg
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 24 24'
             fill='none'
@@ -83,11 +89,30 @@ const StatisticsCards: FC<StatisticsCardsProps> = ({ totalRevenue }) => {
           >
             <rect width='20' height='14' x='2' y='5' rx='2' />
             <path d='M2 10h20' />
-          </svg>
+          </svg> */}
+          <PackageIcon className='h-5 w-5 text-muted-foreground' />
         </CardHeader>
         <CardContent>
-          <div className='text-2xl font-bold'>+12,234</div>
-          <p className='text-xs text-muted-foreground'>+19% from last month</p>
+          <div className='text-2xl font-bold'>{`${totalOrder.currentTotal > totalOrder.previousTotal ? '+' : '-'}${
+            totalOrder.currentTotal
+          }`}</div>
+          <p
+            className={`text-xs ${
+              totalOrder.previousTotal <= totalOrder.currentTotal ? 'text-green-500' : 'text-red-600'
+            } `}
+          >
+            {(() => {
+              const prev = totalOrder.previousTotal
+              const current = totalOrder.currentTotal
+              const diff = current - prev
+              if (prev === 0) {
+                return '+∞% from last month' // hoặc hiển thị riêng "No data last month"
+              }
+              const percent = (diff / prev) * 100
+              const sign = percent >= 0 ? '+' : '-'
+              return `${sign}${Math.abs(percent).toFixed(2)}% from last month`
+            })()}
+          </p>
         </CardContent>
       </Card>
       <Card>

@@ -6,14 +6,18 @@ import StatisticsCards from './overviews/statistics-cards'
 import { MonthlyRevenue } from '@/actions/get-monthly-revenue'
 import { FC } from 'react'
 import { TotalRevenue } from '@/actions/get-total-revenue'
+import { TotalOrder } from '@/actions/get-total-order'
+import { RecentSale } from '@/actions/get-recent-sales'
 interface OverviewTabProps {
   data: MonthlyRevenue[]
+  recentSales: RecentSale[]
   totalRevenue: TotalRevenue
+  totalOrder: TotalOrder
 }
-const OverviewTab: FC<OverviewTabProps> = ({ data, totalRevenue }) => {
+const OverviewTab: FC<OverviewTabProps> = ({ data, recentSales, totalRevenue, totalOrder }) => {
   return (
     <div>
-      <StatisticsCards totalRevenue={totalRevenue} />
+      <StatisticsCards totalRevenue={totalRevenue} totalOrder={totalOrder} />
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-7'>
         <Card className='col-span-4 '>
           <CardHeader>
@@ -26,10 +30,10 @@ const OverviewTab: FC<OverviewTabProps> = ({ data, totalRevenue }) => {
         <Card className='col-span-3'>
           <CardHeader>
             <CardTitle>Recent Sales</CardTitle>
-            <CardDescription>You made 265 sales this month.</CardDescription>
+            <CardDescription>{`You made ${recentSales.length} sales this month.`}</CardDescription>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <RecentSales recentSales={recentSales} />
           </CardContent>
         </Card>
       </div>

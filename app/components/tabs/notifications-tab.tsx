@@ -15,7 +15,7 @@ const notifications = [
   {
     id: 2,
     title: 'Thanh toán thành công',
-    description: 'Bạn đã thanh toán 550.000đ qua MoMo.',
+    description: 'Bạn đã thanh toán 15.550.000đ qua STRIPE GATEWAY.',
     icon: <CheckCircle className='w-5 h-5 text-green-500' />,
     time: '30 phút trước',
     read: true

@@ -7,12 +7,16 @@ import NotificationsTab from './tabs/notifications-tab'
 import { MonthlyRevenue } from '@/actions/get-monthly-revenue'
 import { FC } from 'react'
 import { TotalRevenue } from '@/actions/get-total-revenue'
+import { TotalOrder } from '@/actions/get-total-order'
+import { RecentSale } from '@/actions/get-recent-sales'
 
 interface TabsSectionProps {
   data: MonthlyRevenue[]
+  recentSales: RecentSale[]
   totalRevenue: TotalRevenue
+  totalOrder: TotalOrder
 }
-const TabsSection: FC<TabsSectionProps> = ({ data, totalRevenue }) => {
+const TabsSection: FC<TabsSectionProps> = ({ data, recentSales, totalRevenue, totalOrder }) => {
   return (
     <Tabs defaultValue='overview' className='space-y-4 '>
       <TabsList className='bg-slate-50 dark:bg-slate-900'>
@@ -22,7 +26,7 @@ const TabsSection: FC<TabsSectionProps> = ({ data, totalRevenue }) => {
         <TabsTrigger value='notifications'>Notifications</TabsTrigger>
       </TabsList>
       <TabsContent value='overview' className='space-y-4'>
-        <OverviewTab data={data} totalRevenue={totalRevenue} />
+        <OverviewTab data={data} recentSales={recentSales} totalRevenue={totalRevenue} totalOrder={totalOrder} />
       </TabsContent>
       <TabsContent value='analytics' className='space-y-4 w-full'>
         <AnalyticsTab />
