@@ -51,15 +51,14 @@ export const statusList = [
 
 export function DataTableToolbar<TData>({ table }: Readonly<DataTableToolbarProps<TData>>) {
   const isFiltered = table.getState().columnFilters.length > 0
-  // console.log(table.getColumn('category'))
   return (
-    <div className='flex items-center justify-between'>
-      <div className='flex flex-1 items-center space-x-2'>
+    <div className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3'>
+      <div className='flex flex-wrap items-center gap-2'>
         <Input
           placeholder='Filter Order Id...'
           value={(table.getColumn('id')?.getFilterValue() as string) ?? ''}
           onChange={event => table.getColumn('id')?.setFilterValue(event.target.value)}
-          className='h-8 w-[150px] lg:w-[250px]'
+          className='h-8 w-full sm:w-[200px] lg:w-[250px]'
         />
         {table.getColumn('status') && (
           <DataTableFacetedFilter column={table.getColumn('status')} title='Status' options={statusList} />
@@ -71,7 +70,6 @@ export function DataTableToolbar<TData>({ table }: Readonly<DataTableToolbarProp
             options={paymentMethods}
           />
         )}
-        {/* Filter */}
         {isFiltered && (
           <Button variant='ghost' onClick={() => table.resetColumnFilters()} className='h-8 px-2 lg:px-3'>
             Reset
@@ -79,7 +77,10 @@ export function DataTableToolbar<TData>({ table }: Readonly<DataTableToolbarProp
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+
+      <div className='flex justify-end'>
+        <DataTableViewOptions table={table} />
+      </div>
     </div>
   )
 }

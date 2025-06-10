@@ -46,23 +46,6 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
         setLoading(false)
         return
       }
-
-      //const purchaseOrders = await getPurchaseOrdersByOrderDate(1, 10, orderDate)
-      //const purchaseOrders = await axios.get(`/api/purchaseOrders?page=${1}&size=${10}&orderDate=${orderDate}`)
-      // console.log('purchaseOrders:::', purchaseOrders)
-      // if (purchaseOrders.data.length === 0) {
-      //   setFilteredPurchaseOrders([])
-      // } else {
-      //   const formatted = purchaseOrders.data.map((item) => ({
-      //     id: String(item.id),
-      //     orderNumber: item.orderNumber,
-      //     supplierId: String(item.supplierId),
-      //     employeeId: String(item.employeeId),
-      //     orderDate: String(item.orderDate),
-      //     createdAt: String(item.createdAt)
-      //   }))
-      //   setFilteredPurchaseOrders(formatted)
-      // }
     } catch (error: unknown) {
       toastSonner('Failed to load Purchase order. Please try again.')
       console.log(error)
@@ -94,10 +77,7 @@ export const PurchaseOrdersClient: React.FC<PurchaseOrdersClientProps> = ({ form
             <PopoverTrigger asChild>
               <Button
                 variant={'outline'}
-                className={cn(
-                  'w-[280px] justify-start text-left font-normal cursor-pointer',
-                  !date && 'text-muted-foreground'
-                )}
+                className={cn(' justify-start text-left font-normal cursor-pointer', !date && 'text-muted-foreground')}
               >
                 <CalendarIcon />
                 {date ? format(date, 'PPP') : <span>Chọn ngày tạo</span>}

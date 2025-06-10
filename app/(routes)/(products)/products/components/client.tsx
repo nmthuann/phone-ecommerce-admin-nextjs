@@ -45,25 +45,6 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ formattedData, l
         return
       }
       console.log('brandUrl', brandUrl)
-      // const products = await getProductsByBrandUrl(brandUrl)
-      // const products: ProductResponse[] = await axios.get(`/api/products?brandUrl=${brandUrl}&page=${1}&size=${10}`)
-      // console.log('Product:::', products)
-      // if (products.length === 0) {
-      //   setFilteredProducts([])
-      // } else {
-      //   const formattedData: ProductColumn[] = products.map((item: ProductResponse) => ({
-      //     id: String(item.id),
-      //     productName: item.productName,
-      //     productLine: item.productLine,
-      //     status: item.status,
-      //     slug: item.slug,
-      //     description: item.description,
-      //     productSpecs: item.productSpecs,
-      //     brandName: item.brandName,
-      //     brandUrl: item.brandUrl
-      //   }))
-      //   setFilteredProducts(formattedData)
-      // }
     } catch (error: unknown) {
       toastSonner('Failed to load Products. Please try again.')
       console.log(error)

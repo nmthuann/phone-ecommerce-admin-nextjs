@@ -17,8 +17,8 @@ interface CalendarDateRangePickerProps extends React.HTMLAttributes<HTMLDivEleme
 
 export function CalendarDateRangePicker({ className }: CalendarDateRangePickerProps) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2023, 0, 20),
-    to: addDays(new Date(2023, 0, 20), 20)
+    from: new Date(2025, 0, 20),
+    to: addDays(new Date(2025, 0, 20), 60)
   })
 
   // Extract the display text into a separate variable

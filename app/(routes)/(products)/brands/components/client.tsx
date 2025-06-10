@@ -53,15 +53,21 @@ export const BrandClient: React.FC<BrandClientProps> = ({ brands }) => {
               setLoading(true)
               router.push(`/brands/new`)
             }}
-            className='sm:px-4 sm:py-2 px-2 py-1'
+            disabled={loading}
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1 '
           >
-            <PlusCircle />
-            Add New
+            <PlusCircle className='h-5 w-5' />
+            <span className='hidden sm:block ml-2'>Add New</span>
           </Button>
 
-          <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
-            <DownloadCloudIcon />
-            Export File
+          <Button
+            onClick={exportExcel}
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1'
+          >
+            <DownloadCloudIcon className='h-5 w-5' />
+            <span className='hidden sm:block ml-2'>Export File</span>
           </Button>
         </div>
       </div>

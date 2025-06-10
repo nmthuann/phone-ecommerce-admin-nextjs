@@ -159,7 +159,7 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
             <div className='flex space-x-2'>
               <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1'>
                 <PlusCircle />
-                Add New
+                <span className='hidden sm:block ml-2'>Add New</span>
               </Button>
               <SerialModal
                 isOpen={isOpen}
@@ -184,7 +184,7 @@ export const ProductSerialClient: React.FC<ProductSerialClientProps> = ({
               />
               <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 '>
                 <DownloadCloudIcon />
-                Export File
+                <span className='hidden sm:block ml-2'>Export File</span>
               </Button>
             </div>
           </div>

@@ -16,9 +16,9 @@ export const RecentSales: FC<RecentSalesProps> = ({ recentSales }) => {
             <AvatarImage src={defaultAvatar.src} alt='Avatar' />
             <AvatarFallback>{'NO'}</AvatarFallback>
           </Avatar>
-          <div className='ml-4 space-y-1'>
-            <p className='text-sm font-medium leading-none'>{sale.name}</p>
-            <p className='text-sm text-muted-foreground'>{sale.email}</p>
+          <div className='min-w-0'>
+            <p className='text-sm font-medium leading-none truncate'>{sale.name}</p>
+            <p className='text-sm text-muted-foreground truncate'>{sale.email}</p>
           </div>
           <div className='ml-auto font-medium flex'>
             +<Currency className='text-base' value={sale.amount.toFixed(2)} />

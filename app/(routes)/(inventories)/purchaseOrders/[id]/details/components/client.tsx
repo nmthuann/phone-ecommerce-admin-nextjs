@@ -62,14 +62,18 @@ export const PurchaseOrderDetailClient: React.FC<PurchaseOrderDetailClientProps>
           description='Manage Purchase Order Details for your store'
         />
         <div className='flex space-x-2'>
-          <Button onClick={() => setIsOpen(true)} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
+          <Button
+            onClick={() => setIsOpen(true)}
+            className='
+                  sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'
+          >
             <PlusCircle />
-            Add New
+            <span className='hidden sm:block ml-2'>Add New</span>
           </Button>
           <PurchaseOrderDetailModal isOpen={isOpen} onClose={() => setIsOpen(false)} poDetailColsData={null} />
           <Button onClick={exportExcel} className='sm:px-4 sm:py-2 px-2 py-1 cursor-pointer'>
             <DownloadCloudIcon />
-            Export File
+            <span className='hidden sm:block ml-2'>Export File</span>
           </Button>
         </div>
       </div>

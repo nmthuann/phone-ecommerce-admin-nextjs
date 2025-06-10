@@ -77,7 +77,7 @@ export const OrdersClient: React.FC<OrderClientProps> = ({ initialData, length }
 
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-4 space-y-4 md:space-y-0'>
         <Heading title={`Orders (${length})`} description='Manage Orders for your store' />
-        <div className='flex flex-nowrap items-center space-x-2 overflow-x-auto'>
+        <div className='flex flex-wrap items-center space-x-2 overflow-x-auto space-y-2'>
           <Popover>
             <PopoverTrigger asChild>
               <Button

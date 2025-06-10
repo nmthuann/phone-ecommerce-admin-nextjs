@@ -19,7 +19,7 @@ export function DataTableToolbar<TData>({ table }: Readonly<DataTableToolbarProp
           placeholder='Filter Product name...'
           value={(table.getColumn('productName')?.getFilterValue() as string) ?? ''}
           onChange={event => table.getColumn('productName')?.setFilterValue(event.target.value)}
-          className='h-8 w-[150px] lg:w-[250px]'
+          className='max-w-sm'
         />
 
         {isFiltered && (
